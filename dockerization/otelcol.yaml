@@ -1,0 +1,61 @@
+receivers:
+  opencensus: {}
+  jaeger:
+    protocols:
+      thrift_compact:
+        endpoint: 0.0.0.0:6831
+      thrift_http:
+        endpoint: 0.0.0.0:14268
+      grpc:
+        endpoint: 0.0.0.0:14251
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:55680
+      http:
+        endpoint: 0.0.0.0:55681
+  zipkin:
+    endpoint: 0.0.0.0:9411
+processors:
+  memory_limiter:
+    # check_interval is the time between measurements of memory usage for the
+    # purposes of avoiding going over the limits. Defaults to zero, so no
+    # checks will be performed. Values below 1 second are not recommended since
+    # it can result in unnecessary CPU consumption.
+    check_interval: 5s
+    # Maximum amount of memory, in MiB, targeted to be allocated by the process heap.
+    # Note that typically the total memory usage of process will be about 50MiB higher
+    # than this value.
+    limit_mib: 1900
+    # The queued_retry processor uses a bounded queue to relay batches from the receiver or previous
+    # processor to the next processor.
+  queued_retry:
+    # Number of workers that dequeue batches
+    num_workers: 16
+    # Maximum number of batches kept in memory before data is dropped
+    queue_size: 10000
+    # Whether to retry on failure or give up and drop
+    retry_on_failure: true
+    # The batch processor accepts spans and places them into batches grouped by node and resource
+  batch:
+    # Number of spans after which a batch will be sent regardless of time
+    send_batch_size: 256
+    # Never more than this many spans are being sent in a batch
+    send_batch_max_size: 512
+    # Time duration after which a batch will be sent regardless of size
+    timeout: 5s
+extensions:
+  health_check: {}
+exporters:
+  logging:
+    loglevel: debug
+  jaeger:
+    endpoint: jaeger:14250
+    insecure: true
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [jaeger, opencensus, otlp, zipkin]
+      processors: [batch, queued_retry]
+      exporters: [logging, jaeger]

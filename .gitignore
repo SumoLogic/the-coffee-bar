@@ -1,5 +1,5 @@
 # IDE Ignores
-.idea
+.idea/
 
 # Python ignores
 __pycache__/
@@ -21,6 +21,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+*.pyc
 
 # Ruby ignores
 *.bridgesupport

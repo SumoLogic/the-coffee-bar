@@ -1,0 +1,45 @@
+the_coffee_lover:
+  host: the-coffee-bar
+  port: 8082
+  ratio: 5
+  exporter_host: otelcol
+  exporter_port: 6831
+  exporter: jaeger_thrift
+  service_name: the-coffee-lover
+  log_level: info
+the_coffee_bar:
+  host: the-coffee-bar
+  port: 8082
+  coffeemachine_host: the-coffee-machine
+  coffeemachine_port: 8083
+  cashdesk_host: the-cashdesk
+  cashdesk_port: 8084
+  exporter_host: otelcol
+  exporter_port: 6831
+  exporter: jaeger_thrift
+  service_name: the-coffee-bar
+  log_level: info
+the_coffee_machine:
+  host: the-coffee-machine
+  port: 8083
+  machine_svc_host: machine-svc
+  machine_svc_port: 9090
+  exporter_host: otelcol
+  exporter_port: 6831
+  exporter: jaeger_thrift
+  service_name: the-coffee-machine
+  cpu_increase_interval: 60
+  cpu_increase_duration: 5
+  cpu_increase_threads: 500
+  log_level: info
+the_cashdesk:
+  host: the-cashdesk
+  port: 8084
+  calculator_host: calculator-svc
+  calculator_port: 8090
+  exporter_host: otelcol
+  exporter_port: 6831
+  exporter: jaeger_thrift
+  service_name: the-cashdesk
+  connection_string: postgresql://account:account@postgres:5432/account
+  log_level: info
