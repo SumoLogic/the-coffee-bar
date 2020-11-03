@@ -2,8 +2,8 @@
 The Python application auto-instrumented by [OpenTelemetry-Python].
 
 ## Content
-* `dockerization`'s directory contains docker-compose files
-* `src`'s directory contains sources of the application
+* `dockerization` directory contains docker-compose files
+* `src` directory contains sources of the application
     * application client called `the-coffee-lover` is responsible for making coffee orders
     * `the-coffee-bar` is accepting the orders
     * `the-coffee-machine` is preparing coffee (sometimes by lack of ingredients is not providing coffee)
