@@ -29,10 +29,11 @@ class CoffeeMachine(HttpServer):
         self.add_all_endpoints()
 
         # Increase CPU usage for some time
-        self.scheduler = BackgroundScheduler()
-        self.scheduler.add_job(increase_cpu, 'interval', [self.cpu_increase_duration, self.cpu_increase_threads],
-                               minutes=self.cpu_increase_interval)
-        self.scheduler.start()
+        if self.cpu_increase_duration is not None:
+            self.scheduler = BackgroundScheduler()
+            self.scheduler.add_job(increase_cpu, 'interval', [self.cpu_increase_duration, self.cpu_increase_threads],
+                                   minutes=self.cpu_increase_interval)
+            self.scheduler.start()
 
     def add_all_endpoints(self):
         self.add_endpoint(endpoint=COFFEES['espresso'], endpoint_name='espresso', handler=self.prepare_espresso)
