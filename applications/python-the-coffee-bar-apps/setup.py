@@ -10,20 +10,16 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='the-coffee-bar',
     version='0.0.1',
-    description='The Coffee Bar - python auto instrumented application',
+    description='The Coffee Bar - OpenTelemetry instrumented demo application',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/Sanyaku/tracing-demo-java',
+    url='https://github.com/Sanyaku/the-coffee-bar',
     author='Mateusz "mat" Rumian',
     author_email='mrumian@sumologic.com',
-    classifiers=[  # Optional
+    classifiers=[
         'Development Status :: 3 - Alpha',
-
-        # Indicate who your project is intended for
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
-
-        # Pick your license as you wish
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 3.8',
     ],
@@ -34,15 +30,15 @@ setup(
 
     install_requires=['APScheduler==3.6.3',
                       'argparse==1.4.0',
-                      'opentelemetry-instrumentation==0.14b0',
-                      'opentelemetry-api==0.14b0',
-                      'opentelemetry-sdk==0.14b0',
-                      'opentelemetry-instrumentation-flask==0.14b0',
-                      'opentelemetry-instrumentation-requests==0.14b0',
-                      'opentelemetry-instrumentation-psycopg2==0.14b0',
-                      'opentelemetry-exporter-jaeger==0.14b0',
-                      'opentelemetry-exporter-otlp==0.14b0',
-                      'opentelemetry-exporter-zipkin==0.14b0',
+                      'opentelemetry-instrumentation==0.15b0',
+                      'opentelemetry-api==0.15b0',
+                      'opentelemetry-sdk==0.15b0',
+                      'opentelemetry-instrumentation-flask==0.15b0',
+                      'opentelemetry-instrumentation-requests==0.15b0',
+                      'opentelemetry-instrumentation-psycopg2==0.15b0',
+                      'opentelemetry-exporter-jaeger==0.15b0',
+                      'opentelemetry-exporter-otlp==0.15b0',
+                      'opentelemetry-exporter-zipkin==0.15b0',
                       'psycopg2-binary==2.8.6',
                       'pyjson==1.3.0',
                       'pyyaml==5.3.1',
