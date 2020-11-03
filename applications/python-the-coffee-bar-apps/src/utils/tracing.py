@@ -19,8 +19,10 @@ def configure_tracing(configuration: dict):
         }
         resource = Resource(service_name)
         trace.set_tracer_provider(TracerProvider(resource=resource))
-        exporter = OTLPSpanExporter(endpoint='{}:{}'.format(configuration['exporter_host'],
-                                                            configuration['exporter_port']))
+        exporter = OTLPSpanExporter(
+            endpoint=configuration['exporter_endpoint'],
+            insecure=configuration['exporter_insecure']
+        )
         trace.get_tracer(__name__)
         span_processor = BatchExportSpanProcessor(exporter)
         trace.get_tracer_provider().add_span_processor(span_processor)
@@ -29,8 +31,7 @@ def configure_tracing(configuration: dict):
     elif configuration['exporter'] == 'jaeger_http':
         exporter = JaegerSpanExporter(
             service_name=configuration['service_name'],
-            collector_host_name=configuration['exporter_host'],
-            collector_port=configuration['exporter_port'],
+            collector_endpoint=configuration['exporter_endpoint'],
         )
         trace.set_tracer_provider(TracerProvider())
         trace.get_tracer(__name__)
@@ -48,11 +49,12 @@ def configure_tracing(configuration: dict):
         trace.get_tracer(__name__)
         span_processor = BatchExportSpanProcessor(exporter)
         trace.get_tracer_provider().add_span_processor(span_processor)
+
     # Zipkin Exporter configuration
     elif configuration['exporter'] == 'zipkin':
         exporter = ZipkinSpanExporter(
             service_name=configuration['service_name'],
-            url=configuration['exporter_host']
+            url=configuration['exporter_endpoint']
         )
         trace.set_tracer_provider(TracerProvider())
         trace.get_tracer(__name__)
