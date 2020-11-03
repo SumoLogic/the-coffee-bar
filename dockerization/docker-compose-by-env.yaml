@@ -1,0 +1,121 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  the-coffee-bar:
+    image: sumo/the-coffee-bar-app:python-apps
+    container_name: the-coffee-bar
+    hostname: the-coffee-bar
+    ports:
+      - 8082:8082
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_bar.py", "--exporter=otlp",
+              "--host=the-coffee-bar", "--port=8082", "--coffeemachine-host=the-coffee-machine",
+              "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:55680
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+  the-coffee-machine:
+    image: sumo/the-coffee-bar-app:python-apps
+    container_name: the-coffee-machine
+    hostname: the-coffee-machine
+    ports:
+      - 8083:8083
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py", "--exporter=zipkin",
+              "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
+              "--machine-svc-port=9090"]
+    environment:
+      - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://otelcol:9411/api/v2/spans
+  the-cashdesk:
+    image: sumo/the-coffee-bar-app:python-apps
+    container_name: the-cashdesk
+    hostname: the-cashdesk
+    ports:
+      - 8084:8084
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_cashdesk.py", "--exporter=jaeger_http",
+              "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
+              "--connection-string=postgresql://account:account@postgres:5432/account"]
+    environment:
+      - OTEL_EXPORTER_JAEGER_ENDPOINT=http://otelcol:14268/api/traces
+  the-coffee-lover:
+    image: sumo/the-coffee-bar-app:python-apps
+    container_name: the-coffee-lover
+    hostname: the-coffee-lover
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py", "--exporter=jaeger_thrift",
+              "--host=the-coffee-bar", "--port=8082", "--ratio=5"]
+    environment:
+      - OTEL_EXPORTER_JAEGER_HOST=otelcol
+      - OTEL_EXPORTER_JAEGER_PORT=6831
+  machine-svc:
+    image: sumo/the-coffee-bar-app:ruby-apps
+    container_name: machine-svc
+    hostname: machine-svc
+    ports:
+      - 9090:9090
+    command: ["ruby", "/app/lib/machine.rb"]
+    environment:
+      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55681/v1/trace
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=machine-svc
+  coffee-svc:
+    image: sumo/the-coffee-bar-app:ruby-apps
+    container_name: coffee-svc
+    hostname: coffee-svc
+    ports:
+      - 9091:9091
+    command: ["ruby", "/app/lib/coffee.rb"]
+    environment:
+      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55681/v1/trace
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=coffee-svc
+  water-svc:
+    image: sumo/the-coffee-bar-app:ruby-apps
+    container_name: water-svc
+    hostname: water-svc
+    ports:
+      - 9092:9092
+    command: ["ruby", "/app/lib/water.rb"]
+    environment:
+      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55681/v1/trace
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=water-svc
+  calculator-svc:
+    image: sumo/the-coffee-bar-app:dotnet-core-calculator-svc
+    container_name: calculator-svc
+    hostname: calculator-svc
+    environment:
+      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55680
+      - SERVICE_NAME=calculator-svc
+      - SERVER_ENDPOINT=http://calculator-svc:8090
+    ports:
+      - 8090:8090
+  otelcol:
+    image: sumologic/opentelemetry-collector:0.12.0
+    container_name: otelcol
+    hostname: otelcol
+    command: ["--config=/etc/otel-collector-config_otlp.yaml"]
+    volumes:
+        - ./otelcol.yaml:/etc/otel-collector-config_otlp.yaml
+    ports:
+      - "6831:6831"
+      - "9411:9411"
+      - "14268:14268"
+      - "14251:14251"
+      - "55680:55680"
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    hostname: jaeger
+    ports:
+      - "16686:16686"
+      - "14250:14250"
+    expose:
+      - 16686
