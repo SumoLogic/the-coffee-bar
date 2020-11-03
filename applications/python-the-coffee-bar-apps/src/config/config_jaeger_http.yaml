@@ -2,8 +2,7 @@ the_coffee_lover:
   host: the-coffee-bar
   port: 8082
   ratio: 5
-  exporter_host: otelcol
-  exporter_port: 14268
+  exporter_endpoint: http://otelcol:14268/api/traces
   exporter: jaeger_http
   service_name: the-coffee-lover
   log_level: info
@@ -14,8 +13,7 @@ the_coffee_bar:
   coffeemachine_port: 8083
   cashdesk_host: the-cashdesk
   cashdesk_port: 8084
-  exporter_host: otelcol
-  exporter_port: 14268
+  exporter_endpoint: http://otelcol:14268/api/traces
   exporter: jaeger_http
   service_name: the-coffee-bar
   log_level: info
@@ -24,8 +22,7 @@ the_coffee_machine:
   port: 8083
   machine_svc_host: machine-svc
   machine_svc_port: 9090
-  exporter_host: otelcol
-  exporter_port: 14268
+  exporter_endpoint: http://otelcol:14268/api/traces
   exporter: jaeger_http
   service_name: the-coffee-machine
   cpu_increase_interval: 60
@@ -37,8 +34,7 @@ the_cashdesk:
   port: 8084
   calculator_host: calculator-svc
   calculator_port: 8090
-  exporter_host: otelcol
-  exporter_port: 14268
+  exporter_endpoint: http://otelcol:14268/api/traces
   exporter: jaeger_http
   service_name: the-cashdesk
   connection_string: postgresql://account:account@postgres:5432/account
