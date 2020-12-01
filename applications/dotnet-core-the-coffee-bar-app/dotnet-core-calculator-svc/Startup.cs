@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenTelemetry;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
 namespace dotnet_core_calculator_svc
@@ -21,10 +23,10 @@ namespace dotnet_core_calculator_svc
                 case "jaeger":
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
+                            System.Environment.GetEnvironmentVariable("SERVICE_NAME") ?? "calculator-svc"))
                         .AddJaegerExporter(jaegerOptions =>
                         {
-                            jaegerOptions.ServiceName = System.Environment.GetEnvironmentVariable(
-                                "SERVICE_NAME") ?? "calculator-svc";
                             jaegerOptions.AgentHost = System.Environment.GetEnvironmentVariable(
                                 "OTEL_EXPORTER_JAEGER_SPAN_HOST") ?? "localhost";
                             jaegerOptions.AgentPort = Int32.Parse(System.Environment.GetEnvironmentVariable(
@@ -45,7 +47,7 @@ namespace dotnet_core_calculator_svc
                 case "otlp":
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
-                        .SetResource(OpenTelemetry.Resources.Resources.CreateServiceResource(
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
                             System.Environment.GetEnvironmentVariable("SERVICE_NAME") ?? "calculator-svc"))
                         .AddOtlpExporter(otlpOptions =>
                         {
@@ -70,11 +72,8 @@ namespace dotnet_core_calculator_svc
             }
 
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
