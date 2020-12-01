@@ -17,43 +17,51 @@ services:
     hostname: the-coffee-bar
     ports:
       - 8082:8082
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_bar.py", "--exporter=otlp",
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_bar.py",
               "--host=the-coffee-bar", "--port=8082", "--coffeemachine-host=the-coffee-machine",
               "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
     environment:
+      - OTEL_EXPORTER=otlp_span
       - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:55680
       - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_SERVICE_NAME=the-coffee-bar
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-machine
     hostname: the-coffee-machine
     ports:
       - 8083:8083
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py", "--exporter=zipkin",
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py",
               "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
               "--machine-svc-port=9090"]
     environment:
+      - OTEL_EXPORTER=zipkin
       - OTEL_EXPORTER_ZIPKIN_ENDPOINT=http://otelcol:9411/api/v2/spans
+      - OTEL_SERVICE_NAME=the-coffee-machine
   the-cashdesk:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-cashdesk
     hostname: the-cashdesk
     ports:
       - 8084:8084
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_cashdesk.py", "--exporter=jaeger_http",
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_cashdesk.py",
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
     environment:
+      - OTEL_EXPORTER=jaeger
       - OTEL_EXPORTER_JAEGER_ENDPOINT=http://otelcol:14268/api/traces
+      - OTEL_SERVICE_NAME=the-cashdesk
   the-coffee-lover:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-lover
     hostname: the-coffee-lover
-    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py", "--exporter=jaeger_thrift",
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",
               "--host=the-coffee-bar", "--port=8082", "--ratio=5"]
     environment:
-      - OTEL_EXPORTER_JAEGER_HOST=otelcol
-      - OTEL_EXPORTER_JAEGER_PORT=6831
+      - OTEL_EXPORTER=jaeger
+      - OTEL_EXPORTER_JAEGER_AGENT_HOST=otelcol
+      - OTEL_EXPORTER_JAEGER_AGENT_PORT=6831
+      - OTEL_SERVICE_NAME=the-coffee-lover
   machine-svc:
     image: sumo/the-coffee-bar-app:ruby-apps
     container_name: machine-svc
@@ -98,7 +106,7 @@ services:
     ports:
       - 8090:8090
   otelcol:
-    image: sumologic/opentelemetry-collector:0.12.0
+    image: sumologic/opentelemetry-collector:0.14.1
     container_name: otelcol
     hostname: otelcol
     command: ["--config=/etc/otel-collector-config_otlp.yaml"]
