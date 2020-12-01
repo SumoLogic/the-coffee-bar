@@ -40,7 +40,7 @@ setup(
                       'pyyaml==5.3.1',
                       'requests==2.24.0',
                       ],
-    data_files=[('config', ['src/config/config_otlp.yaml'])],
+    data_files=[('config', ['src/config/config.yaml'])],
     entry_points={
         'console_scripts': [
             'the-coffee-bar=src.bin.the_coffee_bar:main',
