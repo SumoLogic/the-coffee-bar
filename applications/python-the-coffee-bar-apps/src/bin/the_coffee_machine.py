@@ -4,7 +4,6 @@ import logging as log
 from src.bar.coffee_machine import CoffeeMachine
 from src.utils.config import Config, args_to_conf_dict, merge_configuration
 from src.utils.logger import configure_logging
-from src.utils.tracing import configure_tracing
 
 
 def main():
@@ -16,12 +15,6 @@ def main():
     parser.add_argument('-m', '--machine-svc-host', type=str, help='Machine Service Host')
     parser.add_argument('-n', '--machine-svc-port', type=int, help='Machine Service Port')
     parser.add_argument('-c', '--config', type=str, help='Configuration file path')
-    parser.add_argument('-o', '--exporter-host', type=str, help='Jaeger Thrift Exporter Host')
-    parser.add_argument('-p', '--exporter-port', type=str, help='Jaeger Thrift Exporter Port')
-    parser.add_argument('-E', '--exporter-endpoint', type=str, help='Jaeger HTTP, Zipkin, OTLP Exporter Endpoint')
-    parser.add_argument('-I', '--exporter-insecure', type=str, help='OTLP Exporter insecure flag')
-    parser.add_argument('-e', '--exporter', type=str, help='Exporter type [jaeger_http, jaeger_thrift, otlp, zipkin]')
-    parser.add_argument('-s', '--service-name', type=str, help='Service Name', default='the-coffee-machine')
     parser.add_argument('-i', '--cpu-increase-interval', type=int, help='CPU increase interval [m]')
     parser.add_argument('-d', '--cpu-increase-duration', type=int, help='CPU increase duration [m]')
     parser.add_argument('-t', '--cpu-increase-threads', type=int, help='Number of threads for CPU increaser')
@@ -36,7 +29,6 @@ def main():
     else:
         configuration = args_to_conf_dict(args=args)
 
-    configure_tracing(configuration)
     configure_logging(args.log_level)
 
     log.info('********** Starting %s **********', APP_NAME)
