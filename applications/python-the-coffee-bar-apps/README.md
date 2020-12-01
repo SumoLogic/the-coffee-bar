@@ -32,13 +32,15 @@ The Python application auto-instrumented by [OpenTelemetry-Python].
     ```
     
 ## Usage
-For each of the application `the-coffe-lover`, `the-coffee-bar`, `the-coffee-machine` and `the-cashdesk` please execute `opentelemetry-auto-instrumentation python app_name -h`, e.g. `opentelemetry-auto-instrumentation python the-coffee-bar -h`. Configuration to the application can be provided by config file - example config file can be found in `src/config/config.yaml` or by application arguments.
+### Application usage
+For each of the application `the-coffe-lover`, `the-coffee-bar`, `the-coffee-machine` and `the-cashdesk` please 
+execute `opentelemetry-auto-instrumentation python app_name -h`, e.g. 
+`opentelemetry-auto-instrumentation python the-coffee-bar -h`. Configuration to the application can be provided 
+by config file - example config file can be found in `src/config/config.yaml` or by application arguments.
 ```
 usage: the_coffee_bar.py [-h] [-H HOST] [-P PORT] [-m COFFEEMACHINE_HOST]
                          [-n COFFEEMACHINE_PORT] [-j CASHDESK_HOST]
-                         [-k CASHDESK_PORT] [-c CONFIG] [-o EXPORTER_HOST]
-                         [-p EXPORTER_PORT] [-e EXPORTER] [-s SERVICE_NAME]
-                         [-l LOG_LEVEL]
+                         [-k CASHDESK_PORT] [-c CONFIG] [-l LOG_LEVEL]
 
 The Coffee Bar v0.0.1
 
@@ -56,25 +58,25 @@ optional arguments:
                         Cashdeks Port
   -c CONFIG, --config CONFIG
                         Configuration file path
-  -o EXPORTER_HOST, --exporter-host EXPORTER_HOST
-                        Tracing Exporter Host
-  -p EXPORTER_PORT, --exporter-port EXPORTER_PORT
-                        Tracing Exporter Port
-  -e EXPORTER, --exporter EXPORTER
-                        Exporter type [jaeger, otlp]
-  -s SERVICE_NAME, --service-name SERVICE_NAME
-                        Service Name
   -l LOG_LEVEL, --log-level LOG_LEVEL
                         Application log level
 ```
+
+## Instrumentation
+To configure OpenTelemetry exporters it is required to choose exporter and provide endpoints and service name.
+Configuration of the instrumentation and exporters can be set by environment variables - [OpenTelemetry Instrumentation Variables]
+
 
 # Contact
 In case of any issues please contact Mateusz 'mat' Rumian @ mrumian@sumologic.com
 
 
-[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
+[//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does 
+its job. There is no need to format nicely because it shouldn't be seen. 
+Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
 
    [pipenv]: <https://pypi.org/project/pipenv/>
    [jaeger]: <https://www.jaegertracing.io/docs/1.18/getting-started/#all-in-one>
    [docker-compose]: <https://docs.docker.com/compose/install/>
    [OpenTelemetry-Python]: <https://opentelemetry-python.readthedocs.io/en/stable/examples/auto-instrumentation/README.html>
+   [OpenTelemetry Instrumentation Variables]: <https://github.com/open-telemetry/opentelemetry-python/tree/v0.16b1/opentelemetry-instrumentation#opentelemetry-instrument>
