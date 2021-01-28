@@ -22,7 +22,7 @@ services:
               "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
     environment:
       - OTEL_EXPORTER=otlp_span
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:55680
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:4317
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_SERVICE_NAME=the-coffee-bar
   the-coffee-machine:
@@ -100,7 +100,7 @@ services:
     container_name: calculator-svc
     hostname: calculator-svc
     environment:
-      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55680
+      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:4317
       - SERVICE_NAME=calculator-svc
       - SERVER_ENDPOINT=http://calculator-svc:8090
     ports:
@@ -112,12 +112,6 @@ services:
     command: ["--config=/etc/otel-collector-config_otlp.yaml"]
     volumes:
         - ./otelcol.yaml:/etc/otel-collector-config_otlp.yaml
-    ports:
-      - "6831:6831"
-      - "9411:9411"
-      - "14268:14268"
-      - "14251:14251"
-      - "55680:55680"
   jaeger:
     image: jaegertracing/all-in-one:latest
     container_name: jaeger
