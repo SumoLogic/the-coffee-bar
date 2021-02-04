@@ -13,6 +13,6 @@ RUN pipenv lock --pre
 COPY src ./src
 RUN pipenv install --system
 
-#RUN opentelemetry-bootstrap --action=install
+RUN opentelemetry-bootstrap --action=install
 
-ENV OPENTELEMETRY_PYTHON_TRACER_PROVIDER sdk_tracer_provider
+ENV OTEL_PYTHON_TRACER_PROVIDER sdk_tracer_provider
