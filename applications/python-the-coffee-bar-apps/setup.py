@@ -33,8 +33,6 @@ setup(
                       'Flask==1.1.2',
                       'opentelemetry-sdk==0.17b0',
                       'opentelemetry-instrumentation==0.17b0',
-                      'opentelemetry-instrumentation-requests==0.17b0',
-                      'opentelemetry-instrumentation-flask==0.17b0',
                       'opentelemetry-exporter-jaeger==0.17b0',
                       'opentelemetry-exporter-otlp==0.17b0',
                       'opentelemetry-exporter-zipkin==0.17b0',
