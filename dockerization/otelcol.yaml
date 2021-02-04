@@ -1,0 +1,46 @@
+receivers:
+  opencensus: {}
+  jaeger:
+    protocols:
+      thrift_compact:
+        endpoint: 0.0.0.0:6831
+      thrift_http:
+        endpoint: 0.0.0.0:14268
+      grpc:
+        endpoint: 0.0.0.0:14251
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:55681
+  zipkin:
+    endpoint: 0.0.0.0:9411
+processors:
+  memory_limiter:
+    # check_interval is the time between measurements of memory usage for the
+    # purposes of avoiding going over the limits. Defaults to zero, so no
+    # checks will be performed. Values below 1 second are not recommended since
+    # it can result in unnecessary CPU consumption.
+    check_interval: 5s
+    # Maximum amount of memory, in MiB, targeted to be allocated by the process heap.
+    # Note that typically the total memory usage of process will be about 50MiB higher
+    # than this value.
+    limit_mib: 1900
+    # The queued_retry processor uses a bounded queue to relay batches from the receiver or previous
+    # processor to the next processor.
+extensions:
+  health_check: {}
+exporters:
+  logging:
+    loglevel: debug
+  jaeger:
+    endpoint: jaeger:14250
+    insecure: true
+service:
+  extensions: [health_check]
+  pipelines:
+    traces:
+      receivers: [jaeger, otlp, zipkin]
+      processors: []
+      exporters: [logging, jaeger]
