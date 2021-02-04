@@ -29,21 +29,6 @@ processors:
     limit_mib: 1900
     # The queued_retry processor uses a bounded queue to relay batches from the receiver or previous
     # processor to the next processor.
-  queued_retry:
-    # Number of workers that dequeue batches
-    num_workers: 16
-    # Maximum number of batches kept in memory before data is dropped
-    queue_size: 10000
-    # Whether to retry on failure or give up and drop
-    retry_on_failure: true
-    # The batch processor accepts spans and places them into batches grouped by node and resource
-  batch:
-    # Number of spans after which a batch will be sent regardless of time
-    send_batch_size: 256
-    # Never more than this many spans are being sent in a batch
-    send_batch_max_size: 512
-    # Time duration after which a batch will be sent regardless of size
-    timeout: 5s
 extensions:
   health_check: {}
 exporters:
@@ -57,5 +42,5 @@ service:
   pipelines:
     traces:
       receivers: [jaeger, otlp, zipkin]
-      processors: [batch, queued_retry]
+      processors: []
       exporters: [logging, jaeger]
