@@ -70,7 +70,7 @@ services:
       - 9090:9090
     command: ["ruby", "/app/lib/machine.rb"]
     environment:
-      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55681/v1/trace
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=service.name=machine-svc
   coffee-svc:
@@ -81,7 +81,7 @@ services:
       - 9091:9091
     command: ["ruby", "/app/lib/coffee.rb"]
     environment:
-      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55681/v1/trace
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=service.name=coffee-svc
   water-svc:
@@ -92,7 +92,7 @@ services:
       - 9092:9092
     command: ["ruby", "/app/lib/water.rb"]
     environment:
-      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:55681/v1/trace
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=service.name=water-svc
   calculator-svc:
@@ -100,7 +100,7 @@ services:
     container_name: calculator-svc
     hostname: calculator-svc
     environment:
-      - OTEL_EXPORTER_OTLP_SPAN_ENDPOINT=otelcol:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:4317
       - SERVICE_NAME=calculator-svc
       - SERVER_ENDPOINT=http://calculator-svc:8090
     ports:
