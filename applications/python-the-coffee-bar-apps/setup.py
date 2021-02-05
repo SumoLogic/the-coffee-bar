@@ -37,6 +37,7 @@ setup(
                       'opentelemetry-exporter-zipkin==0.17b0',
                       'opentelemetry-instrumentation==0.17b0',
                       'opentelemetry-sdk==0.17b0',
+                      'opentelemetry-sdk-extension-aws==0.17b0',
                       'psycopg2-binary==2.8.6',
                       'pyjson==1.3.0',
                       'pyyaml==5.4.1',
