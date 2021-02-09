@@ -3,6 +3,7 @@ $stdout.sync = true
 require 'rubygems'
 require 'bundler/setup'
 require 'sinatra'
+require 'sinatra/json'
 require 'net/http'
 require 'uri'
 require 'json'
@@ -37,6 +38,10 @@ class Machine < Sinatra::Base
     water_port = ENV['WATER_PORT'] || 9092
     water_uri = URI.parse('http://%s:%s/get_water' % [water_host, water_port])
 
+    before do
+        content_type :json
+    end
+
     post '/prepare_coffee' do
         span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
         trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
@@ -47,19 +52,19 @@ class Machine < Sinatra::Base
         water = make_request(water_uri, payload)
 
         if coffee.code == "200" && water.code == "200"
-            body "Coffee done"
+            json body: { coffee_status: true, reason: "Coffee done" }
             status 200
             puts "INFO - Coffee is ready - trace_id=#{trace_id} - span_id=#{span_id}"
         elsif coffee.code == "200" && water.code != "200"
-            body water.body
+            json body: { coffee_status: false, reason: water.body }
             status water.code
             puts "ERROR - No water. I'm sorry - trace_id=#{trace_id} - span_id=#{span_id}"
         elsif coffee.code != "200" && water.code == "200"
-            body coffee.body
+            json body: { coffee_status: false, reason: coffee.body }
             status coffee.code
             puts "ERROR - No grains. I'm sorry - trace_id=#{trace_id} - span_id=#{span_id}"
         else
-            body "No water, no coffee"
+            json body: { coffee_status: false, reason: "No water, no coffee grains" }
             status 500
             puts "ERROR - No water, no grains. I'm sorry - trace_id=#{trace_id} - span_id=#{span_id}"
 

@@ -18,20 +18,20 @@ class Coffee < Sinatra::Base
         trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
 
         payload = JSON.parse(request.body.read)
-        puts "INFO - Received order for coffee grains #{payload['coffee']} - trace_id=#{trace_id} - span_id=#{span_id}"
+        puts "INFO - Received order for coffee grains #{payload['grains']} - trace_id=#{trace_id} - span_id=#{span_id}"
 
         content_type :json
 
-        if payload['coffee'] < 0
+        if payload['grains'] < 0
             status 502
-            body "Lack of coffee"
-            puts "ERROR - Lack of coffee grains in amount #{payload['coffee']} - trace_id=#{trace_id} - span_id=#{span_id}"
+            body "Lack of coffee grains"
+            puts "ERROR - Lack of coffee grains in amount #{payload['grains']} - trace_id=#{trace_id} - span_id=#{span_id}"
 
             ## Add event into span
             OpenTelemetry::Trace.current_span.add_event("exception", attributes: { 'exception.code' => '502', 'exception.message' => 'Lack of coffee' })
         else
-            body "Coffee provided"
-            puts "INFO - Coffee grains in amount #{payload['coffee']} provided - trace_id=#{trace_id} - span_id=#{span_id}"
+            body "Grains provided"
+            puts "INFO - Coffee grains in amount #{payload['grains']} provided - trace_id=#{trace_id} - span_id=#{span_id}"
         end
     end
 
