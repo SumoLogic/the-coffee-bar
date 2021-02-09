@@ -1,25 +1,30 @@
 import json
 import logging as log
-from random import randint
+from random import choice, randint
 from time import sleep
 
 import requests
 
 
+SWEETS = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin_alla_ricotta', 'budini_fiorentini', 'tiramisu']
+
+
 class CoffeeLover:
     def __init__(self, bar_host: str = 'localhost', bar_port: int = 8082, ratio: int = 5):
-        self.bar_url = 'http://{}:{}/do_espresso'.format(bar_host, bar_port)
+        self.bar_url = 'http://{}:{}/order'.format(bar_host, bar_port)
         self.ratio = ratio
 
         log.info('The Coffee Bar URL: %s', self.bar_url)
 
     def get_coffee(self):
         order = {
-            'product': 'espresso',
-            'bill': randint(1, 20),
+            'coffee': 'espresso',
+            'coffee_amount': randint(1, 3),
             'water': randint(-5, 50),
-            'coffee': randint(-5, 50),
-            'amount': randint(1, 3),
+            'grains': randint(-5, 50),
+            'sweets_amount': randint(1, 3),
+            'sweets': choice(SWEETS),
+            'bill': randint(1, 20),
         }
 
         data = json.dumps(order)
