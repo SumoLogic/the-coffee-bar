@@ -1,9 +1,9 @@
 import logging as log
 
 from apscheduler.schedulers.background import BackgroundScheduler
+from flask import Response
 import requests
 
-from src.common.http_server import CustomResponse
 from src.common.http_server import HttpServer
 from src.utils.utils import increase_cpu
 
@@ -44,14 +44,9 @@ class CoffeeMachine(HttpServer):
 
         coffee_status = requests.post(url=coffee_machine_svc_url, json=data)
 
-        response = CustomResponse()
-
         if coffee_status.status_code == 200:
-            response.msg = 'Coffee done'
             log.info('Coffee done')
+            return Response(coffee_status.text, status=coffee_status.status_code, mimetype='application/json')
         else:
-            response.code = coffee_status.status_code
-            response.error = coffee_status.text
             log.error('Missing some ingredients')
-
-        return response
+            return Response(coffee_status.text, status=coffee_status.status_code, mimetype='application/json')
