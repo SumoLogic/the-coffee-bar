@@ -13,8 +13,6 @@ COFFEES = {
 
 
 class CoffeeMachine(HttpServer):
-    water_status = 1000
-    coffee_status = 1000
 
     def __init__(self, name: str = 'The Coffee Machine', host: str = 'localhost', port: int = 8084,
                  machine_svc_host: str = 'localhost', machine_svc_port: int = 9090, cpu_increase_interval: int = 60,
