@@ -47,7 +47,8 @@ namespace dotnet_core_calculator_svc
                         }));
                     break;
                 case "otlp":
-                    // gRPC exported doesn't support HTTPS
+                    // If your application is .NET Standard 2.1 or above, and you are using an insecure (http) endpoint, 
+                    // the following switch must be set before adding OtlpExporter.
                     AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
                     services.AddOpenTelemetryTracing((builder) => builder
