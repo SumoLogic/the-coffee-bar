@@ -36,24 +36,28 @@ namespace dotnet_core_calculator_svc
                 case "zipkin":
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
+                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
+                            System.Environment.GetEnvironmentVariable(
+                                "SERVICE_NAME") ?? "calculator-svc"
+                            ))
                         .AddZipkinExporter(zipkinOptions =>
                         {
-                            zipkinOptions.ServiceName = System.Environment.GetEnvironmentVariable(
-                                "SERVICE_NAME") ?? "calculator-svc";
                             zipkinOptions.Endpoint = new Uri(System.Environment.GetEnvironmentVariable(
-                                "OTEL_EXPORTER_ZIPKIN_SPAN_ENDPOINT") ?? "localhost:9411/api/v2/spans");
+                                "OTEL_EXPORTER_ZIPKIN_SPAN_ENDPOINT") ?? "http://localhost:9411/api/v2/spans");
                         }));
                     break;
                 case "otlp":
+                    // gRPC exported doesn't support HTTPS
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
                         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
                             System.Environment.GetEnvironmentVariable("SERVICE_NAME") ?? "calculator-svc"))
                         .AddOtlpExporter(otlpOptions =>
                         {
-                            otlpOptions.Endpoint =
-                                new Uri(System.Environment.GetEnvironmentVariable(
-                                    "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT") ?? "localhost:55680").ToString();
+                            otlpOptions.Endpoint = new Uri(System.Environment.GetEnvironmentVariable(
+                                    "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT") ?? "http://localhost:4317");
                         }));
                     break;
                 case "console":
@@ -70,8 +74,7 @@ namespace dotnet_core_calculator_svc
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseHttpsRedirection();
+            
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
