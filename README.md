@@ -2,7 +2,7 @@
 The demo application instrumented by [OpenTelemetry] framework.
 
 ## Content
-* `dockerization` directory contains docker-compose files
+* `deployments` directory contains specific deployments templates files
 * `applications` directory contains sources of the application
     * `dotnet-core-calculator-svc` - contains sources of the `calculator-svc` application
     * `ruby-the-coffee-bar-apps` - contains sources of `machine-svc, coffee-svc and water-svc` applications
