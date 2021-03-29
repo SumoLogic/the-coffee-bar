@@ -26,7 +26,7 @@ Resources:
       Timeout: 15
       Policies:
         - AWSLambdaBasicExecutionRole
-        - AWSLambdaReadOnlyAccess
+        - AWSLambda_ReadOnlyAccess
         - AWSXrayWriteOnlyAccess
         - Statement:
               - Sid: AWSLambdaInvokeFunctionAccess
@@ -39,11 +39,10 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
-          SUMO_HTTP_TRACES_URL: https://....
-          OTEL_PYTHON_TRACER_PROVIDER: sdk_tracer_provider
+          GRPC_TRACES_ENDPOINT_URL: GRPC_TRACES_HOST_NAME:4317
           AWS_LAMBDA_EXEC_WRAPPER: /opt/python/adot-instrument
-          ADOT_CONFIG_CONTENT: 'receivers:\n  otlp:\n    protocols:\n      grpc:\n        endpoint: "localhost:55680"\nexporters:\n  otlphttp:\n    endpoint: "${SUMO_HTTP_TRACES_URL}"\n    insecure: true\n  logging:\n    logLevel: debug\nservice:\n  pipelines:\n    traces:\n      receivers: [otlp]\n      exporters: [logging, otlphttp]'
-      Tracing: Active
+          OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑SweetsFunction
+          OTEL_PROPAGATORS: aws_xray
       Layers:
         - !Ref AwsObservability
       Events:
@@ -65,7 +64,7 @@ Resources:
       Timeout: 15
       Policies:
         - AWSLambdaBasicExecutionRole
-        - AWSLambdaReadOnlyAccess
+        - AWSLambda_ReadOnlyAccess
         - AWSXrayWriteOnlyAccess
         - Statement:
               - Sid: AWSLambdaInvokeFunctionAccess
@@ -78,11 +77,11 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
-          SUMO_HTTP_TRACES_URL: https://....
-          OTEL_PYTHON_TRACER_PROVIDER: sdk_tracer_provider
+          GRPC_TRACES_ENDPOINT_URL: GRPC_TRACES_HOST_NAME:4317
+          OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑CheckSweetsFunction
           AWS_LAMBDA_EXEC_WRAPPER: /opt/python/adot-instrument
-          ADOT_CONFIG_CONTENT: 'receivers:\n  otlp:\n    protocols:\n      grpc:\n        endpoint: "localhost:55680"\nexporters:\n  otlphttp:\n    endpoint: "${SUMO_HTTP_TRACES_URL}"\n    insecure: true\n  logging:\n    logLevel: debug\nservice:\n  pipelines:\n    traces:\n      receivers: [otlp]\n      exporters: [logging, otlphttp]'
-      Tracing: Active
+          SWEETS_URL: SWEETS_API_URL
+          OTEL_PROPAGATORS: aws_xray
       Layers:
         - !Ref AwsObservability
       Events:
