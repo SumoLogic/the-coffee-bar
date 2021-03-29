@@ -1,7 +1,8 @@
 import json
+import os
 import requests
 
-URL = 'URL TO THE SweetsFunction'
+URL = os.getenv('SWEETS_URL')
 
 
 def get_data(sweets):
