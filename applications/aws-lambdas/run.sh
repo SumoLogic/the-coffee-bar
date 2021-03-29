@@ -23,7 +23,7 @@ main () {
     debug=false
     invoke=false
     layer=false
-    stack=${STACK-"adot-py38-sample"}
+    stack=${STACK-"the-coffee-lover"}
     region=${AWS_REGION-$(aws configure get region)}
 
     while getopts "hbdxnlr:t:s:" opt; do
@@ -69,7 +69,7 @@ main () {
         rm -rf .aws-sam
         rm -rf aws_observability/aws_observability_collector
         mkdir -p aws_observability/aws_observability_collector
-        cp -r ../../extensions/aoc-extension/* aws_observability/aws_observability_collector
+        cp -r ./extensions/aoc-extension/* aws_observability/aws_observability_collector
         sam build -u -t $template
         # find . -name __pycache__ -exec rm -rf  {} \; &>/dev/null
     fi
