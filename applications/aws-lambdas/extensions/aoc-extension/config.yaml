@@ -5,11 +5,12 @@ receivers:
         endpoint: "localhost:55680"
 
 exporters:
-  otlp:
-    endpoint: $GRPC_TRACES_ENDPOINT_URL
+  otlphttp:
+    traces_endpoint: $SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL
     insecure: true
+
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [otlp]
+      exporters: [otlphttp]

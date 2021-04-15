@@ -39,7 +39,7 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
-          GRPC_TRACES_ENDPOINT_URL: GRPC_TRACES_HOST_NAME:4317
+          SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: SUMO_HTTP_TRACES_URL
           AWS_LAMBDA_EXEC_WRAPPER: /opt/python/adot-instrument
           OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑SweetsFunction
           OTEL_PROPAGATORS: aws_xray
@@ -77,7 +77,7 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
-          GRPC_TRACES_ENDPOINT_URL: GRPC_TRACES_HOST_NAME:4317
+          SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: SUMO_HTTP_TRACES_URL
           OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑CheckSweetsFunction
           AWS_LAMBDA_EXEC_WRAPPER: /opt/python/adot-instrument
           SWEETS_URL: SWEETS_API_URL
