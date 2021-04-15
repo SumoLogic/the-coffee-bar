@@ -37,10 +37,13 @@ exporters:
   jaeger:
     endpoint: jaeger:14250
     insecure: true
+#  otlphttp:
+#    traces_endpoint: ""
+#    insecure: true
 service:
   extensions: [health_check]
   pipelines:
     traces:
       receivers: [jaeger, otlp, zipkin]
-      processors: []
+      processors: [memory_limiter]
       exporters: [logging, jaeger]

@@ -1,4 +1,3 @@
-import json
 from flask import Flask, Response, request
 import requests
 
@@ -6,13 +5,6 @@ from src.utils.utils import to_json
 
 from opentelemetry import trace
 from opentelemetry.util import time_ns
-
-
-class CustomResponse:
-    def __init__(self, code: int = 200, msg: str = None, error: str = None):
-        self.code = code
-        self.msg = msg
-        self.error = error
 
 
 class EndpointAction:
@@ -28,20 +20,20 @@ class EndpointAction:
             self.response.status_code = result.status_code
             self.response.set_data(result.content)
             try:
-                res_json = json.loads(result.content)
                 if result.status_code == 402:
                     trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
-                                                                     "exception.message": res_json['error']},
+                                                                     "exception.message": str(result.content)},
                                                        time_ns())
             except:
                 pass
         else:
-            self.response.status_code = result.code
-            self.response.set_data(str({'msg': result.msg, 'error': result.error}))
+            self.response.status_code = result.status_code
+            self.response.set_data(str(result.response))
 
-            if result.code == 402:
-                trace.get_current_span().add_event("exception", {"exception.code": int(result.code),
-                                                                 "exception.message": str(result.error)}, time_ns())
+            if result.status_code == 402:
+                trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
+                                                                 "exception.message": str(result.response)},
+                                                   time_ns())
 
         return self.response
 

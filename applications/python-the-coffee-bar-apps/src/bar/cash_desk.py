@@ -1,11 +1,21 @@
 import json
 import logging as log
 
+from flask import Response
 import requests
 
 from src.bar.storage import Storage
-from src.common.http_server import CustomResponse
 from src.common.http_server import HttpServer
+
+
+def calculation_order(product: str, price: int, amount: int):
+    order = {
+        'product': product,
+        'price': price,
+        'amount': amount,
+    }
+
+    return order
 
 
 class CashDesk(HttpServer):
@@ -26,51 +36,63 @@ class CashDesk(HttpServer):
 
         calculator_svc_url = 'http://{}:{}/Calculator'.format(self.calculator_host, self.calculator_port)
 
-        res = None
         try:
             res = requests.post(url=calculator_svc_url, data=json.dumps(data))
             log.info('Calculation result: %s', res.text)
+            return res.json()
         except requests.exceptions.RequestException as ex:
             log.error(ex)
-        finally:
-            return res
+            return Response({'result': 'Error during calculation'},
+                            status=500, mimetype='application/json')
 
     def payment(self, data):
         log.info('Payment in progress: %s', data)
 
         log.info('Get product price')
-        price = self.get_product_price(data=data)
-        data['price'] = price
 
-        response = CustomResponse()
+        sweets_amount_to_pay = 0
+        if data['sweets_status'] is True:
+            sweets_price = self.get_product_price(product=data['sweets'])
+            calculation_data = calculation_order(product=data['sweets'], price=sweets_price,
+                                                 amount=data['sweets_amount'])
+            sweets_amount_to_pay = self.call_calculator(data=calculation_data)['total']
 
-        calculation_res = self.call_calculator(data=data)
-        if calculation_res:
-            result = calculation_res.json()
-            payout = data['bill'] - result['total']
+        coffee_amount_to_pay = 0
+        if data['coffee_status'] is True:
+            coffee_price = self.get_product_price(product=data['coffee'])
+            calculation_data = calculation_order(product=data['coffee'], price=coffee_price,
+                                                 amount=data['coffee_amount'])
+            coffee_amount_to_pay = self.call_calculator(data=calculation_data)['total']
 
-            if payout >= 0:
-                log.info('Process payment')
-                items_sold = self.get_items_sold(data=data)
+        total_amount_to_pay = sweets_amount_to_pay + coffee_amount_to_pay
+
+        payout = data['bill'] - total_amount_to_pay
+        if payout >= 0:
+            log.info('Process payment')
+
+            if data['sweets_status'] is True:
+                items_sold = self.get_items_sold(product=data['sweets'])
                 total_items = items_sold + 1
-                self.db.update_items((total_items, data['product']))
-                response.msg = 'Money rest: %s' % payout
-                log.info('Payment processed successfully. Money rest %s', payout)
-            else:
-                response.code = 402
-                response.error = 'Not enough money'
-                log.error('Not enough money')
+                self.db.update_items((total_items, data['sweets']))
+
+            if data['coffee_status'] is True:
+                items_sold = self.get_items_sold(product=data['coffee'])
+                total_items = items_sold + 1
+                self.db.update_items((total_items, data['coffee']))
+
+            log.info('Payment processed successfully. Money rest %s', payout)
+
+            return Response({'result': 'Money rest: %s' % payout},
+                            status=200, mimetype='application/json')
         else:
-            response.code = calculation_res.status_code
-            response.error = 'Error during calculation'
-            log.error('Error during calculation')
+            log.error('Payment failed. Not enough money')
+            return Response({'result': 'Not enough money'},
+                            status=402, mimetype='application/json')
 
-        return response
-
-    def get_product_price(self, data):
-        product = self.db.get_price_of_product(product_name=data['product'])
+    def get_product_price(self, product: str):
+        product = self.db.get_price_of_product(product_name=product)
         return product['price']
 
-    def get_items_sold(self, data):
-        product = self.db.get_items_sold(product_name=data['product'])
+    def get_items_sold(self, product: str):
+        product = self.db.get_items_sold(product_name=product)
         return product['items_sold']
