@@ -51,7 +51,7 @@ class CashDesk(HttpServer):
         log.info('Get product price')
 
         sweets_amount_to_pay = 0
-        if data['sweets_status'] is True:
+        if 'sweets_status' in data:
             sweets_price = self.get_product_price(product=data['sweets'])
             calculation_data = calculation_order(product=data['sweets'], price=sweets_price,
                                                  amount=data['sweets_amount'])
@@ -70,7 +70,7 @@ class CashDesk(HttpServer):
         if payout >= 0:
             log.info('Process payment')
 
-            if data['sweets_status'] is True:
+            if 'sweets_status' in data:
                 items_sold = self.get_items_sold(product=data['sweets'])
                 total_items = items_sold + 1
                 self.db.update_items((total_items, data['sweets']))
