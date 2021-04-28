@@ -4,7 +4,7 @@ import requests
 from src.utils.utils import to_json
 
 from opentelemetry import trace
-from opentelemetry.util import time_ns
+from opentelemetry.util._time import _time_ns
 
 
 class EndpointAction:
@@ -23,7 +23,7 @@ class EndpointAction:
                 if result.status_code == 402:
                     trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
                                                                      "exception.message": str(result.content)},
-                                                       time_ns())
+                                                       _time_ns())
             except:
                 pass
         else:
@@ -33,7 +33,7 @@ class EndpointAction:
             if result.status_code == 402:
                 trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
                                                                  "exception.message": str(result.response)},
-                                                   time_ns())
+                                                   _time_ns())
 
         return self.response
 
@@ -47,7 +47,8 @@ class HttpServer:
         self.port = port
 
     def run(self):
-        self.app.run(host=self.host, port=self.port, debug=True)
+        # Debug=True is causing issue with Flask application instrumentation
+        self.app.run(host=self.host, port=self.port, debug=False)
 
     def add_endpoint(self, endpoint: str = None, endpoint_name: str = None, handler: staticmethod = None):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=['POST', 'GET', 'HEAD'])
