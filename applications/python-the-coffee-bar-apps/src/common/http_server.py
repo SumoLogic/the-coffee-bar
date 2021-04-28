@@ -47,7 +47,8 @@ class HttpServer:
         self.port = port
 
     def run(self):
-        self.app.run(host=self.host, port=self.port, debug=True)
+        # Debug=True is causing issue with Flask application instrumentation
+        self.app.run(host=self.host, port=self.port, debug=False)
 
     def add_endpoint(self, endpoint: str = None, endpoint_name: str = None, handler: staticmethod = None):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=['POST', 'GET', 'HEAD'])
