@@ -61,7 +61,8 @@ class OrderForm extends Component {
     
     fetch('http://localhost:8082/order', {
       method: 'POST',
-      body: this.state,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(this.state),
     });
     alert('You have submitted the form.')
   }
