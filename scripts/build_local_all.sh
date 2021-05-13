@@ -30,7 +30,7 @@ docker build -t "${MAIN_DOCKER_TAG}:${JS_APP_TAG}" .
 if [[ "$(docker images -q ${MAIN_DOCKER_TAG}:/${DOTNET_APP_TAG} 2> /dev/null)" == "" &&
       "$(docker images -q ${MAIN_DOCKER_TAG}:/${PYTHON_APP_TAG} 2> /dev/null)" == "" &&
       "$(docker images -q ${MAIN_DOCKER_TAG}:/${RUBY_APP_TAG} 2> /dev/null)" == "" &&
-      "$(docker images -q ${MAIN_DOCKER_TAG}:/${JS_APP_TAG} 2> /dev/null)" == "" &&]]; then
+      "$(docker images -q ${MAIN_DOCKER_TAG}:/${JS_APP_TAG} 2> /dev/null)" == ""]]; then
 
   echo "****************************************************************************************"
   echo "All images are built. Please go to 'deployments/docker-compose' directory and run 'docker-compose up'"

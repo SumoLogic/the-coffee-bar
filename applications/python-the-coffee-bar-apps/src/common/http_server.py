@@ -1,4 +1,5 @@
 from flask import Flask, Response, request
+from flask_cors import CORS
 import requests
 
 from src.utils.utils import to_json
@@ -43,6 +44,7 @@ class HttpServer:
 
     def __init__(self, name: str, host: str, port: int):
         self.app = Flask(name)
+        CORS(self.app, origins='*')
         self.host = host
         self.port = port
 
