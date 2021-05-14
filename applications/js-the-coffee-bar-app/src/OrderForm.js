@@ -16,19 +16,19 @@ class OrderForm extends Component {
   }
 
   handleAmountChange = event => {
-    this.setState({coffee_amount: event.target.value});
+    this.setState({coffee_amount: event.target.valueAsNumber});
   }
 
   handleWaterChange = event => {
-    this.setState({water: event.target.value});
+    this.setState({water: event.target.valueAsNumber});
   }
 
   handleGrainsChange = event => {
-    this.setState({grains: event.target.value});
+    this.setState({grains: event.target.valueAsNumber});
   }
 
   handleBillChange = event => {
-    this.setState({bill: event.target.value});
+    this.setState({bill: event.target.valueAsNumber});
   }
 
   handleChange = event => {
