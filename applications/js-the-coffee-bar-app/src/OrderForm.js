@@ -63,8 +63,18 @@ class OrderForm extends Component {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state),
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((data) => {
+      console.log('Success:', data);
+      alert(JSON.stringify(data));
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert(JSON.stringify(error))
     });
-    alert('You have submitted the form.')
   }
 
 	render() {

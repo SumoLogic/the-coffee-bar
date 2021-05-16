@@ -1,6 +1,6 @@
 import logging as log
 
-from flask import Response
+from flask import make_response
 import requests
 
 from src.bar.coffee_machine import COFFEES
@@ -65,7 +65,7 @@ class Bar(HttpServer):
                 'reason': 'Lack of requested products',
                 'products': [data['coffee'], data['sweets']],
             }
-            return Response(result, status=404, mimetype='application/json')
+            return make_response(result, 404)
 
     def get_sweets(self, data):
         log.info('Check if %s is available', data['sweets'])

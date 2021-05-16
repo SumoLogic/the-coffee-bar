@@ -42,8 +42,7 @@ class CashDesk(HttpServer):
             return res.json()
         except requests.exceptions.RequestException as ex:
             log.error(ex)
-            return Response({'result': 'Error during calculation'},
-                            status=500, mimetype='application/json')
+            return make_response({'result': 'Error during calculation'}, 500)
 
     def payment(self, data):
         log.info('Payment in progress: %s', data)
@@ -85,8 +84,7 @@ class CashDesk(HttpServer):
             return make_response({'result': 'Money rest: %s' % payout}, 200)
         else:
             log.error('Payment failed. Not enough money')
-            return Response({'result': 'Not enough money'},
-                            status=402, mimetype='application/json')
+            return make_response({'result': 'Not enough money'}, 402)
 
     def get_product_price(self, product: str):
         product = self.db.get_price_of_product(product_name=product)
