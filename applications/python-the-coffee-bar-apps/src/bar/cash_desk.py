@@ -1,7 +1,7 @@
 import json
 import logging as log
 
-from flask import Response
+from flask import make_response, Response
 import requests
 
 from src.bar.storage import Storage
@@ -82,8 +82,7 @@ class CashDesk(HttpServer):
 
             log.info('Payment processed successfully. Money rest %s', payout)
 
-            return Response({'result': 'Money rest: %s' % payout},
-                            status=200, mimetype='application/json')
+            return make_response({'result': 'Money rest: %s' % payout}, 200)
         else:
             log.error('Payment failed. Not enough money')
             return Response({'result': 'Not enough money'},

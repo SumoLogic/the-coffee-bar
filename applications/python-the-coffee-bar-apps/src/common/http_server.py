@@ -29,7 +29,7 @@ class EndpointAction:
                 pass
         else:
             self.response.status_code = result.status_code
-            self.response.set_data(str(result.response))
+            self.response.set_data(result.get_data())
 
             if result.status_code == 402:
                 trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
