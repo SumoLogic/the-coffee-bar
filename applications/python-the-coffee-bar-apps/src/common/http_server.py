@@ -1,4 +1,5 @@
 from flask import Flask, Response, request
+from flask_cors import CORS
 import requests
 
 from src.utils.utils import to_json
@@ -28,7 +29,7 @@ class EndpointAction:
                 pass
         else:
             self.response.status_code = result.status_code
-            self.response.set_data(str(result.response))
+            self.response.set_data(result.get_data())
 
             if result.status_code == 402:
                 trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
@@ -43,6 +44,7 @@ class HttpServer:
 
     def __init__(self, name: str, host: str, port: int):
         self.app = Flask(name)
+        CORS(self.app, origins='*')
         self.host = host
         self.port = port
 

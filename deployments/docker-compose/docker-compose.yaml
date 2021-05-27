@@ -24,6 +24,15 @@ services:
       - OTEL_TRACES_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
       - OTEL_RESOURCE_ATTRIBUTES=service.name=the-coffee-bar
+  the-coffee-bar-ui:
+    image: sumo/the-coffee-bar-app:js-apps
+    container_name: the-coffee-bar-ui
+    hostname: the-coffee-bar-ui
+    ports:
+      - 3001:3000
+    command: ["npm", "start"]
+    environment:
+      - CHOKIDAR_USEPOLLING=true
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps
     container_name: the-coffee-machine
