@@ -59,7 +59,7 @@ class OrderForm extends Component {
   handleOrder = event => {
     event.preventDefault();
     
-    fetch('http://localhost:8082/order', {
+    fetch(process.env.REACT_APP_COFFEE_BAR_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.state),
