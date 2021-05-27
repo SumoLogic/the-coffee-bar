@@ -15,6 +15,10 @@ class OrderForm extends Component {
     this.setState({coffee: event.target.value});
   }
 
+  handleSweetsChange = event => {
+    this.setState({sweets: event.target.value});
+  }
+
   handleAmountChange = event => {
     this.setState({coffee_amount: event.target.valueAsNumber});
   }
@@ -31,30 +35,30 @@ class OrderForm extends Component {
     this.setState({bill: event.target.valueAsNumber});
   }
 
-  handleChange = event => {
-    if(event.target.checked) {
-      let new_sweets = [...this.state.sweets];
-      new_sweets.push(event.target.name);
-      this.setState(prevState => {
-        return {
-          sweets_amount: prevState.sweets_amount+1,
-          sweets: new_sweets
-        }
-      });
-    } else {
-      let new_sweets = [...this.state.sweets];
-      let index = new_sweets.indexOf(event.target.name);
-      if(index !== -1) {
-        new_sweets.splice(index, 1);
-      }
-      this.setState(prevState => {
-        return {
-          sweets_amount: prevState.sweets_amount-1,
-          sweets: new_sweets
-        }
-      });
-    }
-  }
+//  handleChange = event => {
+//    if(event.target.checked) {
+//      let new_sweets = [...this.state.sweets];
+//      new_sweets.push(event.target.name);
+//      this.setState(prevState => {
+//        return {
+//          sweets_amount: prevState.sweets_amount+1,
+//          sweets: new_sweets
+//        }
+//      });
+//    } else {
+//      let new_sweets = [...this.state.sweets];
+//      let index = new_sweets.indexOf(event.target.name);
+//      if(index !== -1) {
+//        new_sweets.splice(index, 1);
+//      }
+//      this.setState(prevState => {
+//        return {
+//          sweets_amount: prevState.sweets_amount-1,
+//          sweets: new_sweets
+//        }
+//      });
+//    }
+//  }
 
   handleOrder = event => {
     event.preventDefault();
@@ -82,7 +86,7 @@ class OrderForm extends Component {
     	<form onSubmit={this.handleOrder}>
       <fieldset>
         <label>
-           <p>Coffee type</p>
+           <p>Coffees</p>
            <select name="coffee" value={this.state.coffee} onChange={this.handleCoffeeChange} required>
                <option value="espresso">espresso</option>
                <option value="cappuccino">cappuccino</option>
@@ -102,28 +106,15 @@ class OrderForm extends Component {
            <input type="number" name="grains" step="1" onChange={this.handleGrainsChange} required/>
          </label>
          <label>
-         <p>Cornetto</p>
-          <input type="checkbox" name="cornetto" checked={this.state.sweets.includes("cornetto")} onChange={this.handleChange}/>
-         </label>
-         <label>
-         <p>Cannolo siciliano</p>
-          <input type="checkbox" name="cannolo_siciliano" checked={this.state.sweets.includes("cannolo_siciliano")} onChange={this.handleChange}/>
-         </label>
-         <label>
-         <p>Torta</p>
-          <input type="checkbox" name="torta" checked={this.state.sweets.includes("torta")} onChange={this.handleChange}/>
-         </label>
-         <label>
-         <p>Muffin alla ricotta</p>
-          <input type="checkbox" name="muffin_alla_ricotta" checked={this.state.sweets.includes("muffin_alla_ricotta")} onChange={this.handleChange}/>
-         </label>
-         <label>
-         <p>Budini fiorentini</p>
-          <input type="checkbox" name="budini_fiorentini" checked={this.state.sweets.includes("budini_fiorentini")} onChange={this.handleChange}/>
-         </label>
-         <label>
-         <p>Tiramisu</p>
-          <input type="checkbox" name="tiramisu" checked={this.state.sweets.includes("tiramisu")} onChange={this.handleChange}/>
+           <p>Sweets</p>
+           <select name="sweets" value={this.state.sweets} onChange={this.handleSweetsChange} required>
+               <option value="cornetto">cornetto</option>
+               <option value="cannolo_siciliano">cannolo siciliano</option>
+               <option value="torta">torta</option>
+               <option value="muffin_alla_ricotta">muffin alla ricotta</option>
+               <option value="budini_fiorentini">budini fiorentini</option>
+               <option value="tiramisu">tiramisu</option>
+           </select>
          </label>
          <label>
            <p>Bill</p>
