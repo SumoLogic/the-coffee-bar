@@ -53,6 +53,8 @@ class Bar(HttpServer):
         if self.sweets_url:
             sweets_status = self.get_sweets(data=data)
             data.update(sweets_status)
+        else:
+            log.warning('Sweets URL not configured. Sweets will be not provided.')
 
         # Get coffee_status
         coffee_status = self.get_coffee(data=data)
