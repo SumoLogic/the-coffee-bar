@@ -5,7 +5,8 @@ function App() {
 
   return (
     <div>
-      <h1>Order Coffee</h1>
+      <h1>The Coffee Bar</h1>
+      <img src="/img/sumo.png" alt="Sumo" style={{width: "200px"}}/>
       <OrderForm />
     </div>
   );
