@@ -1,3 +1,1 @@
-aws-wsgi
-Flask
-asgiref
+boto3

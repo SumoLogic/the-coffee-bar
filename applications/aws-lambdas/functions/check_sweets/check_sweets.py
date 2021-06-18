@@ -1,19 +1,27 @@
 import json
 import os
-import requests
+import boto3
 
-URL = os.getenv('SWEETS_URL')
+FUNCTION_NAME = os.getenv('INVOKE_FUNCTION_NAME')
+
+client = boto3.client('lambda')
 
 
-def get_data(sweets):
-    return requests.post(url=URL, json=sweets)
+def invoke(sweets):
+    print('Invoke %s with data: %s' % (FUNCTION_NAME, sweets))
+    response = client.invoke(
+        FunctionName=FUNCTION_NAME,
+        InvocationType='RequestResponse',
+        Payload=json.dumps(sweets),
+    )
+    return response
 
 
 def get_sweets(event, context):
     body = event['body']
-    requested_sweets = json.loads(body)
 
-    response = get_data(requested_sweets)
-    response_body = response.json()
+    print('Check if %s is available' % str(body))
+    response = invoke(body)
+    payload = json.loads(response["Payload"].read())
 
-    return {'statusCode': response.status_code, 'body': json.dumps(response_body)}
+    return {'statusCode': payload['statusCode'], 'body': json.dumps(payload['body'])}

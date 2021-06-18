@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
-Description: An AWS Lambda application that calls the Lambda API.
+Description: The Coffee Bar App Lambda Functions
 Resources:
   SweetsApi:
     Type: AWS::Serverless::Api
@@ -17,17 +17,17 @@ Resources:
   SweetsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: SweetsFunction
       Handler: sweets.lambda_handler
       Runtime: python3.8
       CodeUri: ./functions/sweets
       Description: Build AWS Observability layer
       MemorySize: 512
-      Timeout: 15
+      Timeout: 35
       Policies:
         - AWSLambdaBasicExecutionRole
         - AWSLambda_ReadOnlyAccess
         - AWSXrayWriteOnlyAccess
+        - AmazonS3ReadOnlyAccess
         - Statement:
               - Sid: AWSLambdaInvokeFunctionAccess
                 Effect: Allow
@@ -39,12 +39,11 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
-          SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: SUMO_HTTP_TRACES_URL
-          AWS_LAMBDA_EXEC_WRAPPER: /opt/python/adot-instrument
-          OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑SweetsFunction
-          OTEL_PROPAGATORS: aws_xray
+          SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/python/otel-instrument
+          OTEL_RESOURCE_ATTRIBUTES: service.name=ui-lambda‑SweetsFunction,application=the-coffee-bar-with-ui
       Layers:
-        - !Ref AwsObservability
+        - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
       Events:
         getEndpoint:
           Type: Api
@@ -55,13 +54,12 @@ Resources:
   CheckSweetsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: CheckSweetsFunction
       Handler: check_sweets.get_sweets
       Runtime: python3.8
       CodeUri: ./functions/check_sweets
       Description: Build AWS Observability layer
       MemorySize: 512
-      Timeout: 15
+      Timeout: 35
       Policies:
         - AWSLambdaBasicExecutionRole
         - AWSLambda_ReadOnlyAccess
@@ -77,13 +75,13 @@ Resources:
       ReservedConcurrentExecutions: 1
       Environment:
         Variables:
-          SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: SUMO_HTTP_TRACES_URL
-          OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑CheckSweetsFunction
-          AWS_LAMBDA_EXEC_WRAPPER: /opt/python/adot-instrument
-          SWEETS_URL: SWEETS_API_URL
+          SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
+          OTEL_RESOURCE_ATTRIBUTES: service.name=ui-lambda‑CheckSweetsFunction,application=the-coffee-bar-with-ui
           OTEL_PROPAGATORS: aws_xray
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/python/otel-instrument
+          INVOKE_FUNCTION_NAME: !Ref SweetsFunction
       Layers:
-        - !Ref AwsObservability
+        - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
       Events:
         getEndpoint:
           Type: Api
@@ -91,25 +89,48 @@ Resources:
             RestApiId: !Ref CheckSweetsApi
             Path: /
             Method: POST
-  AwsObservability:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      LayerName: aws-distro-for-opentelemetry-python-38-preview
-      Description: Lambda AWS Observability Python38 layer.
-      ContentUri: ./aws_observability
-      CompatibleRuntimes:
-        - python3.8
-    Metadata:
-      BuildMethod: makefile
+Mappings:
+  RegionLayers:
+    ap-northeast-1:
+      layer: "arn:aws:lambda:ap-northeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    ap-northeast-2:
+      layer: "arn:aws:lambda:ap-northeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    ap-south-1:
+      layer: "arn:aws:lambda:ap-south-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    ap-southeast-1:
+      layer: "arn:aws:lambda:ap-southeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    ap-southeast-2:
+      layer: "arn:aws:lambda:ap-southeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    ca-central-1:
+      layer: "arn:aws:lambda:ca-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    eu-central-1:
+      layer: "arn:aws:lambda:eu-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    eu-north-1:
+      layer: "arn:aws:lambda:eu-north-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    eu-west-1:
+      layer: "arn:aws:lambda:eu-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    eu-west-2:
+      layer: "arn:aws:lambda:eu-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    eu-west-3:
+      layer: "arn:aws:lambda:eu-west-3:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    sa-east-1:
+      layer: "	arn:aws:lambda:sa-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    us-east-1:
+      layer: "arn:aws:lambda:us-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    us-east-2:
+      layer: "arn:aws:lambda:us-east-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    us-west-1:
+      layer: "arn:aws:lambda:us-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+    us-west-2:
+      layer: "arn:aws:lambda:us-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
 Metadata:
   AWS::ServerlessRepo::Application:
-    Name: AWS-Distro-for-OpenTelemetry-Python-38-Sample
-    Description: AWS Distro for Opentelemetry Python38 Sample
-    Author: aws-observability
+    Name: The-Coffee-Bar-App-Functions
+    Description: The Coffee Bar App
+    Author: Sumologic, Mateusz 'mat' Rumian
     SpdxLicenseId: Apache-2.0
-    LicenseUrl: LICENSE
     ReadmeUrl: README.md
-    Labels: ['opentelemetry', 'python38', 'sample']
-    HomePageUrl: https://aws.amazon.com/products/management-and-governance/use-cases/monitoring-and-observability/
-    SemanticVersion: 0.1.0
-    SourceCodeUrl: https://github.com/aws-observability/aws-otel-lambda/sample-apps/python-lambda
+    Labels: ['opentelemetry', 'python38', 'the-coffee-bar']
+    HomePageUrl: https://github.com/SumoLogic/the-coffee-bar
+    SemanticVersion: 1.0.0
+    SourceCodeUrl: https://github.com/SumoLogic/the-coffee-bar/tree/main/applications/aws-lambdas
