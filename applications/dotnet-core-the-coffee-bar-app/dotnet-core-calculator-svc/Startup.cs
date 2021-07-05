@@ -13,6 +13,10 @@ namespace dotnet_core_calculator_svc
     {
         public void ConfigureServices(IServiceCollection services)
         {
+            // If your application is .NET Standard 2.1 or above, and you are using an insecure (http) endpoint,
+            // the following switch must be set before adding Exporter.
+            AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+
             services.AddControllers();
             
             // Switch between zipkin/jaeger/otlp by setting EXPORTER environment variable
@@ -47,10 +51,6 @@ namespace dotnet_core_calculator_svc
                         }));
                     break;
                 case "otlp":
-                    // If your application is .NET Standard 2.1 or above, and you are using an insecure (http) endpoint, 
-                    // the following switch must be set before adding OtlpExporter.
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
                         .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
@@ -58,7 +58,7 @@ namespace dotnet_core_calculator_svc
                         .AddOtlpExporter(otlpOptions =>
                         {
                             otlpOptions.Endpoint = new Uri(System.Environment.GetEnvironmentVariable(
-                                    "OTEL_EXPORTER_OTLP_SPAN_ENDPOINT") ?? "http://localhost:4317");
+                                    "OTEL_EXPORTER_OTLP_ENDPOINT") ?? "http://localhost:4317");
                         }));
                     break;
                 case "console":
