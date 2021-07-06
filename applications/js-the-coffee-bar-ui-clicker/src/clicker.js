@@ -50,7 +50,7 @@ const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_
         // Navigate to The Coffee Bar UI
         await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), 10000);
 
-        await utils.sleep(DELAY * 1000)
+        await utils.sleep(DELAY)
         // Select Coffee to order
         await clickAndSelect(SELECTORS['coffee'], utils.getItemFromList(COFFEE));
         // Set Coffee amount
@@ -76,7 +76,7 @@ const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_
             await dialog.dismiss();
         });
 
-        await utils.sleep(DELAY * 1000)
+        await utils.sleep(DELAY)
         await browser.close();
 
     }

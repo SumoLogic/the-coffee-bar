@@ -7,8 +7,8 @@ module.exports = {
         return list[Math.floor((Math.random() * list.length))];
     },
 
-    sleep: async function (millis) {
-        return new Promise(resolve => setTimeout(resolve, millis));
+    sleep: async function (seconds) {
+        return new Promise(resolve => setTimeout(resolve, seconds * 1000));
     },
 
     getRandomNumber: function (min, max) {
