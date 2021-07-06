@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "console-stamp": "^3.0.2",
+    "puppeteer": "^10.1.0"
+  }
+}
