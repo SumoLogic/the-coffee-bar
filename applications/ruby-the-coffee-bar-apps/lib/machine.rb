@@ -27,16 +27,22 @@ end
 
 
 class Machine < Sinatra::Base
-    set :port, ENV['PORT'] || 9090
-    set :bind, ENV['HOST'] || 'machine-svc'
+    host = ARGV[0] || 'machine-svc'
+    port = ARGV[1] || 9090
 
-    coffee_host = ENV['COFFEE_HOST'] || 'coffee-svc'
-    coffee_port = ENV['COFFEE_PORT'] || 9091
+    set :bind, host
+    set :port, port
+    puts "INFO - Starting Machine Service: #{host}:#{port}"
+
+    coffee_host = ARGV[2] || 'coffee-svc'
+    coffee_port = ARGV[3] || 9091
     coffee_uri = URI.parse('http://%s:%s/get_coffee' % [coffee_host, coffee_port])
+    puts "INFO - Coffee Service URI: #{coffee_uri}"
 
-    water_host = ENV['WATER_HOST'] || 'water-svc'
-    water_port = ENV['WATER_PORT'] || 9092
+    water_host = ARGV[4] || 'water-svc'
+    water_port = ARGV[5] || 9092
     water_uri = URI.parse('http://%s:%s/get_water' % [water_host, water_port])
+    puts "INFO - Water Service URI: #{water_uri}"
 
     before do
         content_type :json

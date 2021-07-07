@@ -10,8 +10,12 @@ require_relative "version"
 
 
 class Water < Sinatra::Base
-    set :port, ENV['PORT'] || 9092
-    set :bind, ENV['HOST'] || 'water-svc'
+    host = ARGV[0] || 'water-svc'
+    port = ARGV[1] || 9092
+
+    set :bind, host
+    set :port, port
+    puts "INFO - Starting Water Service: #{host}:#{port}"
 
     post '/get_water' do
 
