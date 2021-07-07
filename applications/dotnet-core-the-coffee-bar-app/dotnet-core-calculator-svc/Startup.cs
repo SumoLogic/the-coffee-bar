@@ -22,13 +22,15 @@ namespace dotnet_core_calculator_svc
             // Switch between zipkin/jaeger/otlp by setting EXPORTER environment variable
             var exporter = System.Environment.GetEnvironmentVariable(
                 "EXPORTER") ?? "otlp";
+
+            var resource = ResourceBuilder.CreateDefault().AddEnvironmentVariableDetector();
+            
             switch (exporter)
             {
                 case "jaeger":
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
-                            System.Environment.GetEnvironmentVariable("SERVICE_NAME") ?? "calculator-svc"))
+                        .SetResourceBuilder(resource)
                         .AddJaegerExporter(jaegerOptions =>
                         {
                             jaegerOptions.AgentHost = System.Environment.GetEnvironmentVariable(
@@ -40,10 +42,7 @@ namespace dotnet_core_calculator_svc
                 case "zipkin":
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
-                            System.Environment.GetEnvironmentVariable(
-                                "SERVICE_NAME") ?? "calculator-svc"
-                            ))
+                        .SetResourceBuilder(resource)
                         .AddZipkinExporter(zipkinOptions =>
                         {
                             zipkinOptions.Endpoint = new Uri(System.Environment.GetEnvironmentVariable(
@@ -53,8 +52,7 @@ namespace dotnet_core_calculator_svc
                 case "otlp":
                     services.AddOpenTelemetryTracing((builder) => builder
                         .AddAspNetCoreInstrumentation()
-                        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(
-                            System.Environment.GetEnvironmentVariable("SERVICE_NAME") ?? "calculator-svc"))
+                        .SetResourceBuilder(resource)
                         .AddOtlpExporter(otlpOptions =>
                         {
                             otlpOptions.Endpoint = new Uri(System.Environment.GetEnvironmentVariable(
