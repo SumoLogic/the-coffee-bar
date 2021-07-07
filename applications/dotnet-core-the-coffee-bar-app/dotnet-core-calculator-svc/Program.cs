@@ -21,8 +21,7 @@ namespace dotnet_core_calculator_svc
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls(System.Environment.GetEnvironmentVariable(
-                        "SERVER_ENDPOINT"));
+                    webBuilder.UseUrls(args[0]);
                 });
     }
 }
