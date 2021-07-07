@@ -10,8 +10,13 @@ require_relative "version"
 
 
 class Coffee < Sinatra::Base
-    set :port, ENV['PORT'] || 9091
-    set :bind, ENV['HOST'] || 'coffee-svc'
+
+    host = ARGV[0] || 'coffee-svc'
+    port = ARGV[1] || 9091
+
+    set :bind, host
+    set :port, port
+    puts "INFO - Starting Coffee Service: #{host}:#{port}"
 
     post '/get_coffee' do
         span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
