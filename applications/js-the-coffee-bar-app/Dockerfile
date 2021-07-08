@@ -14,3 +14,5 @@ RUN npm install
 
 # add app
 COPY . ./
+
+ENV CHOKIDAR_USEPOLLING=true
