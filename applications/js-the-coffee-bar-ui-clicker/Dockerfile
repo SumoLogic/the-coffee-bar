@@ -16,6 +16,3 @@ RUN npm install
 
 # add app
 COPY . ./
-
-# start app
-CMD ["node", "src/clicker.js"]

@@ -2,7 +2,8 @@ const puppeteer = require('puppeteer');
 const utils = require('./utils')
 require('console-stamp')( console );
 
-const COFFEE_BAR_UI_URL = process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
+const UI_URL_ARG = process.argv.slice(2);
+const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
 const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 5; // Browser sleep interval in seconds
 
 const SELECTORS = {
@@ -48,7 +49,7 @@ const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_
         }
 
         // Navigate to The Coffee Bar UI
-        await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), 10000);
+        await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), 60000);
 
         await utils.sleep(DELAY)
         // Select Coffee to order

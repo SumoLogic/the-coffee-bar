@@ -18,6 +18,15 @@ class Coffee < Sinatra::Base
     set :port, port
     puts "INFO - Starting Coffee Service: #{host}:#{port}"
 
+    # For K8s livenessProbe
+    get '/' do
+        span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
+        trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
+        puts "INFO - Received possible K8s LivnessProbe request - trace_id=#{trace_id} - span_id=#{span_id}"
+        status 200
+        body 'I\'m alive!'
+    end
+
     post '/get_coffee' do
         span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
         trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
