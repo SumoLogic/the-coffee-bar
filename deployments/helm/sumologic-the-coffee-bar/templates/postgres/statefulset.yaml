@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "sumologic.thecoffeebar.metadata.name.postgres.statefulset" . }}
+  labels:
+    app: {{ include "sumologic.thecoffeebar.labels.app.postgres.statefulset" . }}
+    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+spec:
+  serviceName: {{ include "sumologic.thecoffeebar.metadata.name.postgres.statefulset" . }}
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}
+      {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}
+        {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sumologic.thecoffeebar.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: the-coffee-bar-postgres
+          securityContext:
+            {{- toYaml .Values.securityContext.common | nindent 12 }}
+          image: "{{ .Values.image.postgres.repository }}:{{ .Values.image.postgres.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+          {{- toYaml .Values.envs.postgres | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - name: postgres-init-script
+              mountPath: /docker-entrypoint-initdb.d/init.sql
+              subPath: init.sql
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
+                  [ -f /tmp/sumologic/postgresql/tmp/.initialized ] || [ -f /sumologic/postgresql/.initialized ]
+            failureThreshold: 6
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: {{ include "sumologic.thecoffeebar.metadata.name.postgres.volume.claim" . }}
+        - configMap:
+            name: {{ include "sumologic.thecoffeebar.metadata.name.postgres.configmap" . }}
+            items:
+              - key: init-sql
+                path: init.sql
+          name: postgres-init-script
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

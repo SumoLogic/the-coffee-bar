@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "sumologic.thecoffeebar.metadata.name.postgres.volume.claim" . }}
+  labels:
+    volumeClaim: {{ include "sumologic.thecoffeebar.labels.app.postgres.volume.claim" . }}
+    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      volume: {{ include "sumologic.thecoffeebar.selectorLabels.postgres.volume" . }}
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi

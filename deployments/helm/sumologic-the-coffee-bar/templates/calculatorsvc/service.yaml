@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "sumologic.thecoffeebar.metadata.name.calculatorsvc.service" . }}
+  labels:
+    app: {{ include "sumologic.thecoffeebar.labels.app.calculatorsvc.service" . }}
+    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8090
+      targetPort: 8090
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "sumologic.thecoffeebar.selectorLabels.calculatorsvc" . }}
