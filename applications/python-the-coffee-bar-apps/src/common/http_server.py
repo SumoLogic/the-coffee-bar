@@ -53,7 +53,7 @@ class HttpServer:
 
     def index(self, *args, **kwargs):
         log.info('Possible K8s livenessProbe request')
-        return Response('I\'m alive!', status=200, mimetype='text/plain')
+        return Response("I'm alive!", status=200, mimetype='text/plain')
 
     def run(self):
         # Debug=True is causing issue with Flask application instrumentation
