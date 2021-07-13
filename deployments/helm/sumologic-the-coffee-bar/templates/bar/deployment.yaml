@@ -35,32 +35,30 @@ spec:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.python.repository }}:{{ .Values.image.python.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-          {{- include "sumologic.thecoffeebar.args.bar" . | nindent 12 }}
+          command:
+          {{- include "sumologic.thecoffeebar.command.bar" . | nindent 12 }}
           env:
-          {{- toYaml .Values.envs.bar | nindent 12 }}
+          {{- include "sumologic.thecoffeebar.envs.bar" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 8082
               protocol: TCP
-#          {{- if .Values.healthChecks.pythonApps.livenessProbe.enabled }}
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.pythonApps.livenessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.pythonApps.livenessProbe.initialDelaySeconds }}
-#          {{- end }}
-#          {{- if .Values.healthChecks.pythonApps.readinessProbe.enabled }}
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.initialDelaySeconds }}
-#          {{- end }}
+          {{- if .Values.healthChecks.pythonApps.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.pythonApps.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.pythonApps.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.pythonApps.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.pythonApps.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.pythonApps.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.initialDelaySeconds }}
+          {{- end }}
           resources:
-            {{- toYaml .Values.resources.js | nindent 12 }}
+            {{- toYaml .Values.resources.python.common | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

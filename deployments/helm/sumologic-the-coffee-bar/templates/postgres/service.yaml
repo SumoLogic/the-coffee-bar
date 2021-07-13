@@ -14,20 +14,3 @@ spec:
       name: http
   selector:
     app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ include "sumologic.thecoffeebar.metadata.name.postgres.service" . }}-public
-  labels:
-    app: {{ include "sumologic.thecoffeebar.labels.app.postgres.service" . }}
-    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 5432
-      targetPort: 5432
-      protocol: TCP
-      name: http
-  selector:
-    app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}

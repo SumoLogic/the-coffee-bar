@@ -36,7 +36,7 @@ spec:
           image: "{{ .Values.image.postgres.repository }}:{{ .Values.image.postgres.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          {{- toYaml .Values.envs.postgres | nindent 12 }}
+          {{- include "sumologic.thecoffeebar.envs.postgres" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 5432

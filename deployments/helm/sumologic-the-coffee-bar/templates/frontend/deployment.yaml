@@ -35,29 +35,28 @@ spec:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["npm", "start"]
+          command:
+          {{- include "sumologic.thecoffeebar.command.frontend" . | nindent 12 }}
           env:
-          {{- toYaml .Values.envs.frontend | nindent 12 }}
+          {{- include "sumologic.thecoffeebar.envs.frontend" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
-#          {{- if .Values.healthChecks.frontend.livenessProbe.enabled }}
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.frontend.livenessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.frontend.livenessProbe.initialDelaySeconds }}
-#          {{- end }}
-#          {{- if .Values.healthChecks.frontend.readinessProbe.enabled }}
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.frontend.readinessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.frontend.readinessProbe.initialDelaySeconds }}
-#          {{- end }}
+          {{- if .Values.healthChecks.frontend.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.frontend.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.frontend.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.frontend.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.frontend.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.frontend.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.frontend.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.frontend.readinessProbe.initialDelaySeconds }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources.frontend | nindent 12 }}
       {{- with .Values.nodeSelector }}

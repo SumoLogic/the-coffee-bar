@@ -35,31 +35,30 @@ spec:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.dotnet.repository }}:{{ .Values.image.dotnet.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://0.0.0.0:8090"]
+          command:
+          {{- include "sumologic.thecoffeebar.command.calculatorsvc" . | nindent 12 }}
           env:
-          {{- toYaml .Values.envs.calculatorsvc | nindent 12 }}
+          {{- include "sumologic.thecoffeebar.envs.calculatorsvc" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 8090
               protocol: TCP
-#          {{- if .Values.healthChecks.calculator.livenessProbe.enabled }}
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.calculator.livenessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.calculator.livenessProbe.initialDelaySeconds }}
-#          {{- end }}
-#          {{- if .Values.healthChecks.calculator.readinessProbe.enabled }}
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.calculator.readinessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.calculator.readinessProbe.initialDelaySeconds }}
-#          {{- end }}
+          {{- if .Values.healthChecks.calculator.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.calculator.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.calculator.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.calculator.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.calculator.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.calculator.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.calculator.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.calculator.readinessProbe.initialDelaySeconds }}
+          {{- end }}
           resources:
-            {{- toYaml .Values.resources.dotnet.common | nindent 12 }}
+            {{- toYaml .Values.resources.calculatorsvc.common | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

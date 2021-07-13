@@ -35,30 +35,28 @@ spec:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.ruby.repository }}:{{ .Values.image.ruby.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args:
-          {{- include "sumologic.thecoffeebar.args.machinesvc" . | nindent 12 }}
+          command:
+          {{- include "sumologic.thecoffeebar.command.machinesvc" . | nindent 12 }}
           env:
-          {{- toYaml .Values.envs.machinesvc | nindent 12 }}
+          {{- include "sumologic.thecoffeebar.envs.machinesvc" . | nindent 12 }}
           ports:
             - name: http
               containerPort: 9090
               protocol: TCP
-#          {{- if .Values.healthChecks.rubyApps.livenessProbe.enabled }}
-#          livenessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.rubyApps.livenessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.rubyApps.livenessProbe.initialDelaySeconds }}
-#          {{- end }}
-#          {{- if .Values.healthChecks.rubyApps.readinessProbe.enabled }}
-#          readinessProbe:
-#            httpGet:
-#              path: /
-#              port: http
-#            periodSeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.periodSeconds }}
-#            initialDelaySeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.initialDelaySeconds }}
-#          {{- end }}
+          {{- if .Values.healthChecks.rubyApps.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.rubyApps.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.rubyApps.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.rubyApps.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.rubyApps.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.rubyApps.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.initialDelaySeconds }}
+          {{- end }}
           resources:
             {{- toYaml .Values.resources.ruby.common | nindent 12 }}
       {{- with .Values.nodeSelector }}
