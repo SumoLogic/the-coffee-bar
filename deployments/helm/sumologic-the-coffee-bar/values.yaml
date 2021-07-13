@@ -95,7 +95,7 @@ resources:
       limits:
         cpu: 500m
         memory: 250Mi
-  dotnet:
+  calculatorsvc:
     common:
       requests:
         cpu: 100m
@@ -111,123 +111,121 @@ resources:
       cpu: 500m
       memory: 250Mi
 
-envs:
-  frontend:
-    - name: REACT_APP_COFFEE_BAR_URL
-      value: "http://sumologic-the-coffee-bar-bar:8082/order"
-    - name: REACT_APP_SUMO_OT_JS_URL
-      value: "https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
-    - name: REACT_APP_SERVICE_NAME
-      value: "sumo-the-coffee-bar-frontend"
-    - name: REACT_APP_APPLICATION_NAME
-      value: "sumo-the-coffee-bar-app"
-    - name: REACT_APP_COLLECTION_SOURCE_URL
-      value: RUM_ENDPOINT_URL
-  bar:
-    - name: OTEL_TRACES_EXPORTER
-      value: "otlp"
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=the-coffee-bar,application=sumo-the-coffee-bar-app"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:4317"
-    - name: OTEL_PROPAGATORS
-      value: "aws_xray,tracecontext,baggage"
-  cashdesk:
-    - name: OTEL_TRACES_EXPORTER
-      value: "otlp"
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=the-cashdesk,application=sumo-the-coffee-bar-app"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:4317"
-  coffeemachine:
-    - name: OTEL_TRACES_EXPORTER
-      value: "otlp"
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=the-coffee-machine,application=sumo-the-coffee-bar-app"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:4317"
-  machinesvc:
-    - name: MY_POD_IP
-      valueFrom:
-        fieldRef:
-          fieldPath: status.podIP
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=machine-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:55681"
-  watersvc:
-    - name: MY_POD_IP
-      valueFrom:
-        fieldRef:
-          fieldPath: status.podIP
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=water-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:55681"
-  coffeesvc:
-    - name: MY_POD_IP
-      valueFrom:
-        fieldRef:
-          fieldPath: status.podIP
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=coffee-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:55681"
-  dotnet:
-    - name: OTEL_RESOURCE_ATTRIBUTES
-      value: "service.name=coffee-svc,application=sumo-the-coffee-bar-app"
-    - name: EXPORTER
-      value: "otlp"
-    - name: OTEL_EXPORTER_OTLP_ENDPOINT
-      value: "http://collection-sumologic-otelcol.sumologic:4317"
-  clicker:
-    - name: DELAY
-      value: "5"
-  postgres:
-    - name: POSTGRES_HOST_AUTH_METHOD
-      value: trust
-
-commands:
-  extras:
-    bar:
-      sweetsUrl: CHECK_SWEETS_URL
-
 healthChecks:
-  pythonApps:
-    livenessProbe:
-      enabled: false
-      periodSeconds: 300
-      initialDelaySeconds: 15
-    readinessProbe:
-      enabled: true
-      periodSeconds: 300
-      initialDelaySeconds: 15
-  frontend:
-    livenessProbe:
-      enabled: false
-      periodSeconds: 300
-      initialDelaySeconds: 90
-    readinessProbe:
-        enabled: true
-        periodSeconds: 300
-        initialDelaySeconds: 60
   calculator:
     livenessProbe:
       enabled: false
-      periodSeconds: 300
-      initialDelaySeconds: 30
-    readinessProbe:
-      enabled: true
-      periodSeconds: 300
-      initialDelaySeconds: 30
-  rubyApps:
-    livenessProbe:
-      enabled: false
-      periodSeconds: 300
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep dotnet | grep -v grep
+      periodSeconds: 5
       initialDelaySeconds: 15
     readinessProbe:
       enabled: true
-      periodSeconds: 30
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep dotnet | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+  clicker:
+    livenessProbe:
+      enabled: false
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep node | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+    readinessProbe:
+      enabled: true
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep node | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+  frontend:
+    livenessProbe:
+      enabled: false
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep npm | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+    readinessProbe:
+        enabled: true
+        exec:
+          command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep npm | grep -v grep
+        periodSeconds: 5
+        initialDelaySeconds: 15
+  pythonApps:
+    livenessProbe:
+      enabled: true
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep python | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+    readinessProbe:
+      enabled: true
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep python | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+  rubyApps:
+    livenessProbe:
+      enabled: false
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep ruby | grep -v grep
+      periodSeconds: 5
+      initialDelaySeconds: 15
+    readinessProbe:
+      enabled: true
+      exec:
+        command:
+          - /bin/sh
+          - -c
+          - -e
+          - |
+            ps aux | grep ruby | grep -v grep
+      periodSeconds: 5
       initialDelaySeconds: 15
 
 nodeSelector: {}
@@ -235,3 +233,33 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+envs:
+  bar:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-bar,application=sumo-the-coffee-bar-app"
+    OTEL_PROPAGATORS: "aws_xray,tracecontext,baggage"
+  calculatorsvc:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=sumo-the-coffee-bar-app"
+  cashdesk:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-cashdesk,application=sumo-the-coffee-bar-app"
+  clicker:
+    DELAY: "5"
+  coffeemachine:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=sumo-the-coffee-bar-app"
+  coffeesvc:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+  frontend:
+    REACT_APP_SUMO_OT_JS_URL: "https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
+    REACT_APP_SERVICE_NAME: "sumo-the-coffee-bar-frontend"
+    REACT_APP_APPLICATION_NAME: "sumo-the-coffee-bar-app"
+  machinesvc:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+  postgres:
+    POSTGRES_HOST_AUTH_METHOD: trust
+  watersvc:
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+
+extras:
+  otelColHostName: collection-sumologic-otelcol.sumologic
+  lambdaSweetsUrl:
+  rumColSourceUrl:
