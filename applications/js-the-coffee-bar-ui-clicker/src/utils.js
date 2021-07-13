@@ -17,14 +17,14 @@ module.exports = {
         return Math.floor(Math.random() * (max - min + 1) + min);
     },
 
-    retry: async (fn, retryDelay = 100, numRetries = 3) => {
+    retry: async (fn, retryDelay = 10, numRetries = 3) => {
         for (let i = 0; i < numRetries; i++) {
             try {
                 return await fn()
             } catch (e) {
                 console.error(e)
                 if (i === numRetries - 1) throw e
-                await delay(retryDelay)
+                await delay(retryDelay * 1000)
                 retryDelay = retryDelay * 2
             }
         }

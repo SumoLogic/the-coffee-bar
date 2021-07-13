@@ -20,7 +20,7 @@ const COFFEE = ['americano', 'cappuccino', 'espresso'];
 const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_alla_ricotta', 'budini_fiorentini',
     'tiramisu'];
 
-const NAVIGATE_RETRY_SECONDS = 60 * 1000;
+const NAVIGATE_RETRY_SECONDS = 60;
 
 (async () => {
     console.info('Starting The Coffee Bar UI Clicker');
