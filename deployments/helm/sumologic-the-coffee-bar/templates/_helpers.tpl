@@ -449,72 +449,192 @@ Create the name of the service account to use
 {{/*
 Create commands/args
 */}}
-{{ define "sumologic.thecoffeebar.args.bar" }}
-- /bin/bash
-- -c
-- "opentelemetry-instrument python3 src/bin/the_coffee_bar.py \
-  --host={{ template "sumologic.thecoffeebar.metadata.name.bar.service" . }} \
-  --port=8082 \
-  --coffeemachine-host={{ template "sumologic.thecoffeebar.metadata.name.coffeemachine.service" . }} \
-  --coffeemachine-port=8083 \
-  --cashdesk-host={{ template "sumologic.thecoffeebar.metadata.name.cashdesk.service" . }} \
-  --cashdesk-port=8084 \
-  --sweets-url={{ .Values.commands.extras.bar.sweetsUrl }}"
+
+/usr/local/bin/the-coffee-bar --host=sumologic-the-coffee-bar-bar --port=8082 --coffeemachine-host=sumologic-the-coffee-bar-coffeemachine --coffeemachine-port=8083 --cashdesk-host=sumologic-the-coffee-bar-cashdesk --cashdesk-port=8084 --sweets-url=CHECK_SWEETS_URL
+{{ define "sumologic.thecoffeebar.command.bar" }}
+- opentelemetry-instrument
+- the-coffee-bar
+- --host={{ template "sumologic.thecoffeebar.metadata.name.bar.service" . }}
+- --port=8082
+- --coffeemachine-host={{ template "sumologic.thecoffeebar.metadata.name.coffeemachine.service" . }}
+- --coffeemachine-port=8083
+- --cashdesk-host={{ template "sumologic.thecoffeebar.metadata.name.cashdesk.service" . }}
+- --cashdesk-port=8084
+{{- if .Values.extras.lambdaSweetsUrl }}
+- --sweets-url={{ .Values.extras.lambdaSweetsUrl }}
+{{ end }}
 {{- end }}
 
-{{ define "sumologic.thecoffeebar.args.cashdesk" }}
-- /bin/bash
-- -c
-- "opentelemetry-instrument python3 src/bin/the_cashdesk.py \
-  --host={{ template "sumologic.thecoffeebar.metadata.name.cashdesk.service" . }} \
-  --port=8084 \
-  --calculator-host={{ template "sumologic.thecoffeebar.metadata.name.calculatorsvc.service" . }} \
-  --calculator-port=8090 \
-  --connection-string={{ printf "postgresql://account:account@%s:5432/account" ( include "sumologic.thecoffeebar.metadata.name.postgres.service" .) }}"
+{{ define "sumologic.thecoffeebar.command.cashdesk" }}
+- opentelemetry-instrument
+- the-cashdesk
+- --host={{ template "sumologic.thecoffeebar.metadata.name.cashdesk.service" . }}
+- --port=8084
+- --calculator-host={{ template "sumologic.thecoffeebar.metadata.name.calculatorsvc.service" . }}
+- --calculator-port=8090
+- --connection-string={{ printf "postgresql://account:account@%s:5432/account" ( include "sumologic.thecoffeebar.metadata.name.postgres.service" .) }}
 {{- end }}
 
-{{ define "sumologic.thecoffeebar.args.coffeemachine" }}
-- /bin/bash
-- -c
-- "opentelemetry-instrument python3 src/bin/the_coffee_machine.py \
-  --host={{ template "sumologic.thecoffeebar.metadata.name.coffeemachine.service" . }} \
-  --port=8083 \
-  --machine-svc-host={{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }} \
-  --machine-svc-port=9090 \
-  --cpu-increase-interval=10 \
-  --cpu-increase-duration=5 \
-  --cpu-increase-threads=475"
+{{ define "sumologic.thecoffeebar.command.coffeemachine" }}
+- opentelemetry-instrument
+- the-coffee-machine
+- --host={{ template "sumologic.thecoffeebar.metadata.name.coffeemachine.service" . }}
+- --port=8083
+- --machine-svc-host={{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }}
+- --machine-svc-port=9090
+- --cpu-increase-interval=10
+- --cpu-increase-duration=5
+- --cpu-increase-threads=475
 {{- end }}
 
-{{ define "sumologic.thecoffeebar.args.machinesvc" }}
-- /bin/bash
-- -c
-- "ruby lib/machine.rb \
-  {{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }} \
-  9090 \
-  {{ template "sumologic.thecoffeebar.metadata.name.coffeesvc.service" . }} \
-  9091 \
-  {{ template "sumologic.thecoffeebar.metadata.name.watersvc.service" . }} \
-  9092"
+{{ define "sumologic.thecoffeebar.command.machinesvc" }}
+- ruby
+- lib/machine.rb
+- {{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }}
+- "9090"
+- {{ template "sumologic.thecoffeebar.metadata.name.coffeesvc.service" . }}
+- "9091"
+- {{ template "sumologic.thecoffeebar.metadata.name.watersvc.service" . }}
+- "9092"
 {{- end }}
 
-{{ define "sumologic.thecoffeebar.args.watersvc" }}
-- /bin/bash
-- -c
-- "ruby lib/water.rb \
-  {{ template "sumologic.thecoffeebar.metadata.name.watersvc.service" . }} \
-  9092"
+{{ define "sumologic.thecoffeebar.command.watersvc" }}
+- ruby
+- lib/water.rb
+- {{ template "sumologic.thecoffeebar.metadata.name.watersvc.service" . }}
+- "9092"
 {{- end }}
 
-{{ define "sumologic.thecoffeebar.args.coffeesvc" }}
-- /bin/bash
-- -c
-- "ruby lib/coffee.rb \
-  {{ template "sumologic.thecoffeebar.metadata.name.coffeesvc.service" . }} \
-  9091"
+{{ define "sumologic.thecoffeebar.command.coffeesvc" }}
+- ruby
+- lib/coffee.rb
+- {{ template "sumologic.thecoffeebar.metadata.name.coffeesvc.service" . }}
+- "9091"
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.command.clicker" }}
-{{- $frontendHost := ( include "sumologic.thecoffeebar.metadata.name.frontend.service" . ) -}}
-{{ printf "[\"node\", \"src/clicker.js\", \"http://%s:3000\"]" $frontendHost }}
+- node
+- src/clicker.js
+- {{ printf "http://%s:3000" ( include "sumologic.thecoffeebar.metadata.name.frontend.service" . ) }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.command.calculatorsvc" }}
+- dotnet
+- dotnet-core-calculator-svc.dll
+- {{ printf "http://%s:8090" ( include "sumologic.thecoffeebar.metadata.name.calculatorsvc.service" . ) }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.command.frontend" }}
+- npm
+- start
+{{- end }}
+
+{{/*
+Create envs
+*/}}
+
+{{ define "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" }}
+- name: OTEL_EXPORTER_OTLP_ENDPOINT
+  value: {{ printf "http://%s:4317" .Values.extras.otelColHostName | quote }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" }}
+- name: OTEL_EXPORTER_OTLP_ENDPOINT
+  value: {{ printf "http://%s:55681" .Values.extras.otelColHostName | quote }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.frontend" }}
+{{- range $name, $value := .Values.envs.frontend }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+- name: REACT_APP_COFFEE_BAR_URL
+  value: {{ printf "http://%s:8082/order" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) | quote }}
+- name: REACT_APP_COLLECTION_SOURCE_URL
+  value: {{ .Values.extras.rumColSourceUrl | quote }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.bar" }}
+{{- range $name, $value := .Values.envs.bar }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.cashdesk" }}
+{{- range $name, $value := .Values.envs.cashdesk }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.coffeemachine" }}
+{{- range $name, $value := .Values.envs.coffeemachine }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.machinesvc" }}
+{{- range $name, $value := .Values.envs.machinesvc }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
+- name: MY_POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath:
+        status.podIP
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.watersvc" }}
+{{- range $name, $value := .Values.envs.watersvc }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
+- name: MY_POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath:
+        status.podIP
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.coffeesvc" }}
+{{- range $name, $value := .Values.envs.coffeesvc }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+- name: MY_POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath:
+        status.podIP
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.calculatorsvc" }}
+{{- range $name, $value := .Values.envs.calculatorsvc }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.clicker" }}
+{{- range $name, $value := .Values.envs.clicker }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.postgres" }}
+{{- range $name, $value := .Values.envs.postgres }}
+- name: {{ $name }}
+  value: {{ $value | quote -}}
+{{ end }}
 {{- end }}
