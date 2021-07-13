@@ -20,6 +20,7 @@ const COFFEE = ['americano', 'cappuccino', 'espresso'];
 const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_alla_ricotta', 'budini_fiorentini',
     'tiramisu'];
 
+const NAVIGATE_RETRY_SECONDS = 60 * 1000;
 
 (async () => {
     console.info('Starting The Coffee Bar UI Clicker');
@@ -49,7 +50,7 @@ const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_
         }
 
         // Navigate to The Coffee Bar UI
-        await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), 60000);
+        await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), NAVIGATE_RETRY_SECONDS);
 
         await utils.sleep(DELAY)
         // Select Coffee to order
