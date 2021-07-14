@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sumologic.thecoffeebar.metadata.name.clicker.deployment" . }}
+  labels:
+    app: {{ include "sumologic.thecoffeebar.labels.app.clicker.deployment" . }}
+    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "sumologic.thecoffeebar.selectorLabels.clicker" . }}
+      {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ include "sumologic.thecoffeebar.selectorLabels.clicker" . }}
+        {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sumologic.thecoffeebar.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: the-coffee-bar-clicker
+          securityContext:
+            {{- toYaml .Values.securityContext.clicker | nindent 12 }}
+          image: "{{ .Values.image.clicker.repository }}:{{ .Values.image.clicker.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+          {{- include "sumologic.thecoffeebar.command.clicker" . | nindent 12 }}
+          env:
+          {{- include "sumologic.thecoffeebar.envs.clicker" . | nindent 12 }}
+          {{- if .Values.healthChecks.clicker.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.clicker.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.clicker.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.clicker.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.clicker.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.clicker.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.clicker.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.clicker.readinessProbe.initialDelaySeconds }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources.clicker | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sumologic.thecoffeebar.metadata.name.bar.deployment" . }}
+  labels:
+    app: {{ include "sumologic.thecoffeebar.labels.app.bar.deployment" . }}
+    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "sumologic.thecoffeebar.selectorLabels.bar" . }}
+      {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ include "sumologic.thecoffeebar.selectorLabels.bar" . }}
+        {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sumologic.thecoffeebar.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      hostname: {{ template "sumologic.thecoffeebar.metadata.name.bar.service" . }}
+      containers:
+        - name: the-coffee-bar-bar
+          securityContext:
+            {{- toYaml .Values.securityContext.common | nindent 12 }}
+          image: "{{ .Values.image.python.repository }}:{{ .Values.image.python.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+          {{- include "sumologic.thecoffeebar.command.bar" . | nindent 12 }}
+          env:
+          {{- include "sumologic.thecoffeebar.envs.bar" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 8082
+              protocol: TCP
+          {{- if .Values.healthChecks.pythonApps.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.pythonApps.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.pythonApps.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.pythonApps.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.pythonApps.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.pythonApps.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.initialDelaySeconds }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources.python.common | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

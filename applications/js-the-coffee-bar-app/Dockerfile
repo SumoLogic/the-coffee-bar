@@ -10,12 +10,11 @@ ENV PATH /app/node_modules/.bin:$PATH
 # install app dependencies
 COPY package.json ./
 
-COPY package-lock.json ./
-
 RUN npm install
 
 # add app
 COPY . ./
 
-# start app
+ENV CHOKIDAR_USEPOLLING=true
+
 CMD ["npm", "start"]

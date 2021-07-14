@@ -1,3 +1,4 @@
+import logging as log
 from flask import Flask, Response, request
 from flask_cors import CORS
 import requests
@@ -47,6 +48,12 @@ class HttpServer:
         CORS(self.app, origins='*')
         self.host = host
         self.port = port
+        # For K8s livenessProbe
+        self.app.add_url_rule('/', 'index', self.index)
+
+    def index(self, *args, **kwargs):
+        log.info('Possible K8s livenessProbe request')
+        return Response("I'm alive!", status=200, mimetype='text/plain')
 
     def run(self):
         # Debug=True is causing issue with Flask application instrumentation

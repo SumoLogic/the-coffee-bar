@@ -1,0 +1,9 @@
+Sumo Logic The Coffee Bar Demo Application
+
+NOTE: It may take a few minutes for The Coffee Bar Frontend LoadBalancer IP to be available.
+Satus of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "sumologic.thecoffeebar.metadata.name.frontend.service" . }}-public'
+
+The Coffee Bar Frontend URL:
+kubectl --namespace {{ .Release.Namespace }} get svc {{ include "sumologic.thecoffeebar.metadata.name.frontend.service" . }}-public -o json | jq .status.loadBalancer.ingress[0].hostname
+
+Application deployed successfully!

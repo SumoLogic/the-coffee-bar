@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "sumologic.thecoffeebar.metadata.name.coffeesvc.deployment" . }}
+  labels:
+    app: {{ include "sumologic.thecoffeebar.labels.app.coffeesvc.deployment" . }}
+    {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "sumologic.thecoffeebar.selectorLabels.coffeesvc" . }}
+      {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        app: {{ include "sumologic.thecoffeebar.selectorLabels.coffeesvc" . }}
+        {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "sumologic.thecoffeebar.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      hostname: {{ template "sumologic.thecoffeebar.metadata.name.coffeesvc.service" . }}
+      containers:
+        - name: the-coffee-bar-bar
+          securityContext:
+            {{- toYaml .Values.securityContext.common | nindent 12 }}
+          image: "{{ .Values.image.ruby.repository }}:{{ .Values.image.ruby.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command:
+          {{- include "sumologic.thecoffeebar.command.coffeesvc" . | nindent 12 }}
+          env:
+          {{- include "sumologic.thecoffeebar.envs.coffeesvc" . | nindent 12 }}
+          ports:
+            - name: http
+              containerPort: 9091
+              protocol: TCP
+          {{- if .Values.healthChecks.rubyApps.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.rubyApps.livenessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.rubyApps.livenessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.rubyApps.livenessProbe.initialDelaySeconds }}
+          {{- end }}
+          {{- if .Values.healthChecks.rubyApps.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              {{- toYaml .Values.healthChecks.rubyApps.readinessProbe.exec | nindent 14 }}
+            periodSeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.periodSeconds }}
+            initialDelaySeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.initialDelaySeconds }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources.ruby.common | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
