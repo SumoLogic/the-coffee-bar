@@ -27,7 +27,7 @@ class Coffee < Sinatra::Base
         body "I'm alive!"
     end
 
-    post '/get_coffee' do
+    post '/get_beans' do
         span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
         trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
 
