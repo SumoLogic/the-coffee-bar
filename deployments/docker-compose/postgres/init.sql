@@ -28,7 +28,7 @@ INSERT INTO account (product, price, items_sold) VALUES ('torta', 2, 0)
     ON CONFLICT (product) DO NOTHING;
 INSERT INTO account (product, price, items_sold) VALUES ('budini_fiorentini', 1, 0)
     ON CONFLICT (product) DO NOTHING;
-INSERT INTO account (product, price, items_sold) VALUES ('muffin_alla_ricotta', 1, 0)
+INSERT INTO account (product, price, items_sold) VALUES ('muffin', 1, 0)
     ON CONFLICT (product) DO NOTHING;
 INSERT INTO account (product, price, items_sold) VALUES ('tiramisu', 3, 0)
     ON CONFLICT (product) DO NOTHING;

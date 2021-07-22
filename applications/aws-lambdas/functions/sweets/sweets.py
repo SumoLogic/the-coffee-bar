@@ -1,7 +1,7 @@
 import json
 import boto3
 
-AVAILABLE_SWEETS = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin_alla_ricotta']
+AVAILABLE_SWEETS = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin']
 s3 = boto3.resource('s3')
 
 

@@ -6,7 +6,7 @@ from time import sleep
 import requests
 
 
-SWEETS = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin_alla_ricotta', 'budini_fiorentini', 'tiramisu']
+SWEETS = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin', 'budini_fiorentini', 'tiramisu']
 
 
 class CoffeeLover:
