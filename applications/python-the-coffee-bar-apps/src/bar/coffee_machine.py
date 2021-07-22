@@ -7,9 +7,7 @@ import requests
 from src.common.http_server import HttpServer
 from src.utils.utils import increase_cpu
 
-COFFEES = {
-    'espresso': '/espresso',
-}
+GET_COFFEE_ENDPOINT = '/get_coffee'
 
 
 class CoffeeMachine(HttpServer):
@@ -34,9 +32,9 @@ class CoffeeMachine(HttpServer):
             self.scheduler.start()
 
     def add_all_endpoints(self):
-        self.add_endpoint(endpoint=COFFEES['espresso'], endpoint_name='espresso', handler=self.prepare_espresso)
+        self.add_endpoint(endpoint=GET_COFFEE_ENDPOINT, endpoint_name='espresso', handler=self.prepare_coffee)
 
-    def prepare_espresso(self, data):
+    def prepare_coffee(self, data):
         log.info('Preparing espresso coffee')
 
         coffee_machine_svc_url = 'http://{}:{}{}'.format(self.machine_svc_host, self.machine_svc_port,
