@@ -6,19 +6,15 @@ const UI_URL_ARG = process.argv.slice(2);
 const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
 const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 5; // Browser sleep interval in seconds
 
-const SELECTORS = {
-    'coffee': 'select[name="coffee"]',
-    'coffeeAmount': 'input[name="amount"]',
-    'water': 'input[name="water"]',
-    'grains': 'input[name="grains"]',
-    'sweets': 'select[name="sweets"]',
-    'sweetsAmount': 'input[name="sweets_amount"]',
-    'bill': 'input[name="bill"]',
-    'orderBtn': 'button[type="order"]'
+const GLOBAL_SELECTORS = {
+    'checkoutBtn': 'button[name="Checkout"]',
+    'okBtn': 'button[name="OkBtn"]',
+    'payBtn': 'button[name="Pay"]',
+    'billInput': 'input[name="Bill"]',
 };
-const COFFEE = ['americano', 'cappuccino', 'espresso'];
-const SWEETS = ['cannolo_siciliano', 'cheesecake', 'cornetto', 'torta', 'muffin_alla_ricotta', 'budini_fiorentini',
-    'tiramisu'];
+
+const COFFEE = ['Espresso', 'Cappuccino', 'Americano'];
+const SWEETS = ['Tiramisu', 'Cornetto', 'Muffin'];
 
 const NAVIGATE_RETRY_SECONDS = 60;
 
@@ -44,42 +40,55 @@ const NAVIGATE_RETRY_SECONDS = 60;
             await page.type(selector, String(value), {delay: utils.getRandomNumber(1000,2000)});
         }
 
-        async function clickAndSelect(selector, value) {
-            console.info(`Setting value: ${value} for: ${selector}`);
-            await page.select(selector, value);
+        async function click(selector) {
+            console.info(`Clicking on: ${selector}`);
+            await page.click(selector);
         }
 
         // Navigate to The Coffee Bar UI
         await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), NAVIGATE_RETRY_SECONDS);
 
         await utils.sleep(DELAY)
+
         // Select Coffee to order
-        await clickAndSelect(SELECTORS['coffee'], utils.getItemFromList(COFFEE));
+        let coffee = utils.getItemFromList(COFFEE);
+        let coffee_selectors = {
+            'input': `input[name="${coffee}"]`,
+            'button': `button[name="${coffee}"]`,
+        }
+
         // Set Coffee amount
-        await clickAndSetFieldValue(SELECTORS['coffeeAmount'], utils.getRandomNumber(-1, 3))
-        // Set Water amount
-        await clickAndSetFieldValue(SELECTORS['water'], utils.getRandomNumber(-5, 50));
-        // Set Grains amount
-        await clickAndSetFieldValue(SELECTORS['grains'], utils.getRandomNumber(-5, 50));
-        // Selet Sweets to order
-        await clickAndSelect(SELECTORS['sweets'], utils.getItemFromList(SWEETS));
+        await clickAndSetFieldValue(coffee_selectors['input'], utils.getRandomNumber(0, 3));
+        // Add Coffee
+        await click(coffee_selectors['button']);
+        
+        // Select Coffee to order
+        let sweets = utils.getItemFromList(SWEETS);
+        let sweet_selectors = {
+            'input': `input[name="${sweets}"`,
+            'button': `button[name="${sweets}"`,
+        }
+
         // Set Sweets amount
-        await clickAndSetFieldValue(SELECTORS['sweetsAmount'], utils.getRandomNumber(1, 3));
-        // Set Bill amount
-        await clickAndSetFieldValue(SELECTORS['bill'], utils.getRandomNumber(1, 20));
+        await clickAndSetFieldValue(sweet_selectors['input'], utils.getRandomNumber(1, 3));
+        // Add Sweets
+        await click(sweet_selectors['button']);
 
-        // Order
-        console.info('Click order button')
-        await page.click('button[type="order"]');
 
-        // Dismiss dialog
-        page.on('dialog', async dialog => {
-            console.info(dialog.message());
-            await dialog.dismiss();
-        });
+        // Checkout
+        await click(GLOBAL_SELECTORS['checkoutBtn'])
+
+        // Add bill
+        await clickAndSetFieldValue(GLOBAL_SELECTORS['billInput'], utils.getRandomNumber(1,20));
+
+        // Pay
+        await click(GLOBAL_SELECTORS['payBtn']);
+
+        // Order Status ok
+        await utils.sleep(DELAY)
+        await click(GLOBAL_SELECTORS['okBtn']);
 
         await utils.sleep(DELAY)
         await browser.close();
-
     }
 })();
