@@ -1,10 +1,13 @@
 const puppeteer = require('puppeteer');
+
 const utils = require('./utils')
-require('console-stamp')( console );
+require('console-stamp')(console);
 
 const UI_URL_ARG = process.argv.slice(2);
 const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
 const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 5; // Browser sleep interval in seconds
+const BROWSER = process.env.PUPPETEER_PRODUCT || 'chrome'
+const DEBUG_DUMPIO_ENV = process.env.DEBUG_DUMPIO || false
 
 const GLOBAL_SELECTORS = {
     'checkoutBtn': 'button[name="Checkout"]',
@@ -22,22 +25,40 @@ const NAVIGATE_RETRY_SECONDS = 60;
     console.info('Starting The Coffee Bar UI Clicker');
     console.info(`COFFEE_BAR_UI_URL=${COFFEE_BAR_UI_URL}`);
     console.info(`DELAY=${DELAY}`);
+    console.info(`BROWSER=${BROWSER}`);
+    console.info(`DEBUG_DUMPIO_ENV=${DEBUG_DUMPIO_ENV}`);
+
 
     while (true) {
         console.info('Starting new browser');
+
+        let executablePath = null;
+        if (BROWSER === 'firefox') {
+            executablePath = process.env.FIREFOX_BIN
+        } else {
+            executablePath = process.env.CHROME_BIN
+        }
+
+        let dumpio_debug = null;
+        if (DEBUG_DUMPIO_ENV === 'false') {
+            dumpio_debug = false;
+        } else {
+            dumpio_debug = true;
+        }
+
         const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/chromium-browser',
+            executablePath: executablePath,
             headless: true,
-            // dumpio: true,
-            args: ['--disable-dev-shm-usage', '--disable-gpu', '--disable-browser-side-navigation', '--no-sandbox'],
-            //"--remote-debugging-address=0.0.0.0", "--remote-debugging-port=9222"]
+            dumpio: dumpio_debug,
+            args: ['--wait-for-browser', '--disable-gpu', '--no-sandbox'],
         });
+
         const page = await browser.newPage();
 
         async function clickAndSetFieldValue(selector, value) {
             console.info(`Setting value: ${value} for: ${selector}`);
             await page.click(selector);
-            await page.type(selector, String(value), {delay: utils.getRandomNumber(1000,2000)});
+            await page.type(selector, String(value), {delay: utils.getRandomNumber(1000, 2000)});
         }
 
         async function click(selector) {
@@ -61,7 +82,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
         await clickAndSetFieldValue(coffee_selectors['input'], utils.getRandomNumber(0, 3));
         // Add Coffee
         await click(coffee_selectors['button']);
-        
+
         // Select Coffee to order
         let sweets = utils.getItemFromList(SWEETS);
         let sweet_selectors = {
@@ -79,7 +100,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
         await click(GLOBAL_SELECTORS['checkoutBtn'])
 
         // Add bill
-        await clickAndSetFieldValue(GLOBAL_SELECTORS['billInput'], utils.getRandomNumber(1,20));
+        await clickAndSetFieldValue(GLOBAL_SELECTORS['billInput'], utils.getRandomNumber(1, 20));
 
         // Pay
         await click(GLOBAL_SELECTORS['payBtn']);
