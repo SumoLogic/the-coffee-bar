@@ -6,4 +6,13 @@ Satus of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ 
 The Coffee Bar Frontend URL:
 kubectl --namespace {{ .Release.Namespace }} get svc {{ include "sumologic.thecoffeebar.metadata.name.frontend.service" . }}-public -o json | jq .status.loadBalancer.ingress[0].hostname
 
+The Coffee Bar Backend URL:
+kubectl --namespace {{ .Release.Namespace }} get svc {{ include "sumologic.thecoffeebar.metadata.name.bar.service" . }}-public -o json | jq .status.loadBalancer.ingress[0].hostname
+
+!!! IMPORTANT !!!
+Please run the command below:
+BAR_BACKEND_URL=$(kubectl --namespace {{ .Release.Namespace }} get svc {{ include "sumologic.thecoffeebar.metadata.name.bar.service" . }}-public -o json | jq -r .status.loadBalancer.ingress[0].hostname)
+kubectl --namespace {{ .Release.Namespace }} set env deployment/{{ .Release.Name }}-frontend REACT_APP_COFFEE_BAR_URL=http://${BAR_BACKEND_URL}:8082/order
+!!!!!!!!!!!!!!!!!
+
 Application deployed successfully!
