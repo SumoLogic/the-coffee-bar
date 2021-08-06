@@ -19,7 +19,7 @@ image:
     tag: ruby-apps-1.0.0rc2-0.19.0-0.20.1
   clicker:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: clicker
+    tag: clicker-linux
   postgres:
     repository: postgres
     tag: 9.6.2-alpine
@@ -46,10 +46,17 @@ podSecurityContext: {}
   # fsGroup: 2000
 
 securityContext:
+  ## Required to run browsers in headless mode
   clicker:
     capabilities:
       add:
         - SYS_ADMIN
+  ## Required to run CPU Killer/Network Delay
+  frontend:
+    capabilities:
+      add:
+        - SYS_ADMIN
+        - NET_ADMIN
   common: {}
   # capabilities:
   #   drop:
@@ -105,11 +112,11 @@ resources:
         memory: 250Mi
   clicker:
     requests:
-      cpu: 100m
-      memory: 50Mi
+      cpu: 200m
+      memory: 512Mi
     limits:
       cpu: 500m
-      memory: 250Mi
+      memory: 1024Mi
 
 healthChecks:
   calculator:
@@ -236,28 +243,33 @@ affinity: {}
 
 envs:
   bar:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-bar,application=sumo-the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-bar,application=the-coffee-bar-app"
     OTEL_PROPAGATORS: "aws_xray,tracecontext,baggage"
   calculatorsvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=sumo-the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
   cashdesk:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-cashdesk,application=sumo-the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-cashdesk,application=the-coffee-bar-app"
   clicker:
     DELAY: "5"
   coffeemachine:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=sumo-the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=the-coffee-bar-app"
   coffeesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
   frontend:
     REACT_APP_SUMO_OT_JS_URL: "https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
-    REACT_APP_SERVICE_NAME: "sumo-the-coffee-bar-frontend"
-    REACT_APP_APPLICATION_NAME: "sumo-the-coffee-bar-app"
+    REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
+    REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
+    ## Envs to configure CPU Killer and Network Delay
+    INTERVAL: "60" # Run every 60 minutes
+    DURATION: "5" # for 5 minutes
+    THREADS_NO: "475" # on 475 threads
+    NETWORK_DELAY: "1" # with 1 second network delay
   machinesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
   postgres:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=sumo-the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
 
 extras:
   otelColHostName: collection-sumologic-otelcol.sumologic
