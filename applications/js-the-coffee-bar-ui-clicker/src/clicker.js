@@ -46,11 +46,11 @@ const NAVIGATE_RETRY_SECONDS = 60;
             dumpio_debug = true;
         }
 
-        const browser = await puppeteer.launch({
+        var browser = await puppeteer.launch({
             executablePath: executablePath,
             headless: true,
             dumpio: dumpio_debug,
-            args: ['--wait-for-browser', '--disable-gpu', '--no-sandbox'],
+            args: ['--disable-extensions', '--wait-for-browser', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--disable-web-security'],
         });
 
         const page = await browser.newPage();
@@ -105,11 +105,12 @@ const NAVIGATE_RETRY_SECONDS = 60;
         // Pay
         await click(GLOBAL_SELECTORS['payBtn']);
 
-        // Order Status ok
-        await utils.sleep(DELAY)
-        await click(GLOBAL_SELECTORS['okBtn']);
+//        // Order Status ok
+//        await utils.sleep(DELAY)
+//        await click(GLOBAL_SELECTORS['okBtn']);
 
         await utils.sleep(DELAY)
+        await page.close();
         await browser.close();
     }
 })();
