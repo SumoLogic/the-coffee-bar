@@ -35,7 +35,7 @@ class Water < Sinatra::Base
 
         content_type :json
 
-        if payload['water'] < 0
+        if payload['water'] < 1
             status 503
             body "Not enough water"
             puts "ERROR - Not enough water - requested #{payload['water']} ml - trace_id=#{trace_id} - span_id=#{span_id}"

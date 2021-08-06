@@ -36,7 +36,7 @@ class Coffee < Sinatra::Base
 
         content_type :json
 
-        if payload['grains'] < 0
+        if payload['grains'] < 1
             status 502
             body "Lack of coffee grains"
             puts "ERROR - Lack of coffee grains in amount #{payload['grains']} - trace_id=#{trace_id} - span_id=#{span_id}"
