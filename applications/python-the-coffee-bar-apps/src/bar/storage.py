@@ -39,6 +39,8 @@ class Storage:
                 cur.close()
             except (Exception, psycopg2.DatabaseError) as ex:
                 log.error(ex)
+            finally:
+                self.close()
 
     def execute_select(self, query: str) -> dict:
         result = None

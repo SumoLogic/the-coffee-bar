@@ -525,8 +525,9 @@ Create commands/args
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.command.frontend" }}
-- npm
-- start
+- /bin/sh
+- '-c'
+- python3 ./cpu_killer/cpu_killer.py & npm start
 {{- end }}
 
 {{/*
@@ -579,41 +580,46 @@ Create envs
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.machinesvc" }}
+- name: MY_POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath:
+        status.podIP
 {{- range $name, $value := .Values.envs.machinesvc }}
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
 {{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
+{{- end }}
+
+sumologic-the-coffee-bar-bar-public
+status:
+  loadBalancer:
+    ingress:
+      - hostname
+{{ define "sumologic.thecoffeebar.envs.watersvc" }}
 - name: MY_POD_IP
   valueFrom:
     fieldRef:
       fieldPath:
         status.podIP
-{{- end }}
-
-{{ define "sumologic.thecoffeebar.envs.watersvc" }}
 {{- range $name, $value := .Values.envs.watersvc }}
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
 {{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
+{{- end }}
+
+{{ define "sumologic.thecoffeebar.envs.coffeesvc" }}
 - name: MY_POD_IP
   valueFrom:
     fieldRef:
       fieldPath:
         status.podIP
-{{- end }}
-
-{{ define "sumologic.thecoffeebar.envs.coffeesvc" }}
 {{- range $name, $value := .Values.envs.coffeesvc }}
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
-- name: MY_POD_IP
-  valueFrom:
-    fieldRef:
-      fieldPath:
-        status.podIP
 {{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
 {{- end }}
 

@@ -1,0 +1,768 @@
+---
+  apiVersion: v1
+  kind: Namespace
+  metadata:
+    name: the-coffee-bar-ns
+    labels:
+      name: the-coffee-bar-ns
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-coffee-bar-frontend
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: the-coffee-bar-frontend
+  template:
+    metadata:
+      labels:
+        app: the-coffee-bar-frontend
+      name: the-coffee-bar-frontend
+    spec:
+      containers:
+        - command: ["npm", "start"]
+          env:
+            - name: CHOKIDAR_USEPOLLING
+              value: "true"
+            - name: REACT_APP_COFFEE_BAR_URL
+              value: THE_COFFEE_BAR_URL
+            - name: REACT_APP_SUMO_OT_JS_URL
+              value: SUMO_OT_JS_URL
+            - name: REACT_APP_COLLECTION_SOURCE_URL
+              value: RUM_COLLECTOR_URL
+            - name: REACT_APP_SERVICE_NAME
+              value: "the-coffee-bar-frontend"
+            - name: REACT_APP_APPLICATION_NAME
+              value: "the-coffee-bar-app"
+          ports:
+            - containerPort: 3000
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:frontend-js-0.18.2
+          imagePullPolicy: Always
+          name: the-coffee-bar-frontend
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: the-coffee-bar-frontend
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-coffee-bar-frontend-local
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: the-coffee-bar-frontend
+  ports:
+    - port: 3000
+      targetPort: 3000
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-coffee-bar-frontend-public
+  namespace: the-coffee-bar-ns
+spec:
+  type: LoadBalancer
+  selector:
+    app: the-coffee-bar-frontend
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-coffee-lover
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: the-coffee-lover
+  template:
+    metadata:
+      labels:
+        app: the-coffee-lover
+      name: the-coffee-lover
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "opentelemetry-instrument python3 src/bin/the_coffee_lover.py \
+              --host=the-coffee-bar \
+              --port=8082 \
+              --ratio=10"
+          env:
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=the-coffee-lover"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:4317"
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:python-apps-1.3.0-0.22b0
+          imagePullPolicy: Always
+          name: the-coffee-lover
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: the-coffee-lover
+      restartPolicy: Always
+status: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-coffee-bar
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: the-coffee-bar
+  template:
+    metadata:
+      labels:
+        app: the-coffee-bar
+      name: the-coffee-bar
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "opentelemetry-instrument python3 src/bin/the_coffee_bar.py \
+              --host=the-coffee-bar \
+              --port=8082 \
+              --coffeemachine-host=the-coffee-machine \
+              --coffeemachine-port=8083 \
+              --cashdesk-host=the-cashdesk \
+              --cashdesk-port=8084"
+             # --sweets-url=SWEETS_URL
+          env:
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=the-coffee-bar"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:4317"
+            - name: OTEL_PROPAGATORS
+              value: "aws_xray,tracecontext,baggage"
+          ports:
+            - containerPort: 8082  # The Coffee Bar endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:python-apps-1.3.0-0.22b0
+          imagePullPolicy: Always
+          name: the-coffee-bar
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: the-coffee-bar
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-coffee-bar
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: the-coffee-bar
+  ports:
+    - name: "the-coffee-bar-http-server-port"
+      port: 8082
+      targetPort: 8082
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-coffee-bar-public
+  namespace: the-coffee-bar-ns
+spec:
+  type: LoadBalancer
+  selector:
+    app: the-coffee-bar
+  ports:
+    - protocol: TCP
+      port: 8082
+      targetPort: 8082
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-coffee-machine
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: the-coffee-machine
+  template:
+    metadata:
+      labels:
+        app: the-coffee-machine
+      name: the-coffee-machine
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "opentelemetry-instrument python3 src/bin/the_coffee_machine.py \
+              --host=the-coffee-machine \
+              --port=8083 \
+              --machine-svc-host=machine-svc \
+              --machine-svc-port=9090 \
+              --cpu-increase-interval=60 \
+              --cpu-increase-duration=5 \
+              --cpu-increase-threads=475"
+          env:
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=the-coffee-machine"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:4317"
+          ports:
+            - containerPort: 8083  # The Coffee Machine endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:python-apps-1.3.0-0.22b0
+          imagePullPolicy: Always
+          name: the-coffee-machine
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      imagePullSecrets:
+        - name: ecr-registry
+      hostname: the-coffee-machine
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-coffee-machine
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: the-coffee-machine
+  ports:
+    - name: "the-coffee-machine-http-server-port"
+      port: 8083
+      targetPort: 8083
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: the-cashdesk
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: the-cashdesk
+  template:
+    metadata:
+      labels:
+        app: the-cashdesk
+      name: the-cashdesk
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "opentelemetry-instrument python3 src/bin/the_cashdesk.py \
+              --host=the-cashdesk \
+              --port=8084 \
+              --calculator-host=calculator-svc \
+              --calculator-port=8090 \
+              --connection-string=postgresql://account:account@postgres:5432/account"
+          env:
+            - name: OTEL_TRACES_EXPORTER
+              value: "otlp"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=the-cashdesk"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:4317"
+          ports:
+            - containerPort: 8084  # The Cashdesk endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:python-apps-1.3.0-0.22b0
+          imagePullPolicy: Always
+          name: the-cashdesk
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: the-cashdesk
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: the-cashdesk
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: the-cashdesk
+  ports:
+    - name: "the-cashdesk-http-server-port"
+      port: 8084
+      targetPort: 8084
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: machine-svc
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: machine-svc
+  template:
+    metadata:
+      labels:
+        app: machine-svc
+      name: machine-svc
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "ruby lib/machine.rb"
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: HOST
+              value: "machine-svc"
+            - name: PORT
+              value: "9090"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=machine-svc,k8s.pod.ip=$(MY_POD_IP)"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:55681"
+          ports:
+            - containerPort: 9090  # Machine Svc endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:ruby-apps-1.0.0rc2-0.19.0-0.20.1
+          imagePullPolicy: Always
+          name: machine-svc
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: machine-svc
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: machine-svc
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: machine-svc
+  ports:
+    - name: "machine-svc-http-server-port"
+      port: 9090
+      targetPort: 9090
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: coffee-svc
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: coffee-svc
+  template:
+    metadata:
+      labels:
+        app: coffee-svc
+      name: coffee-svc
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "ruby lib/coffee.rb"
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: HOST
+              value: "coffee-svc"
+            - name: PORT
+              value: "9091"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=coffee-svc,k8s.pod.ip=$(MY_POD_IP)"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:55681"
+          ports:
+            - containerPort: 9091  # Coffee Svc endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:ruby-apps-1.0.0rc2-0.19.0-0.20.1
+          imagePullPolicy: Always
+          name: coffee-svc
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: coffee-svc
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: coffee-svc
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: coffee-svc
+  ports:
+    - name: "coffee-svc-http-server-port"
+      port: 9091
+      targetPort: 9091
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: water-svc
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: water-svc
+  template:
+    metadata:
+      labels:
+        app: water-svc
+      name: water-svc
+    spec:
+      containers:
+        - args:
+            - /bin/bash
+            - -c
+            - "ruby lib/water.rb"
+          env:
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: HOST
+              value: "water-svc"
+            - name: PORT
+              value: "9092"
+            - name: OTEL_RESOURCE_ATTRIBUTES
+              value: "service.name=water-svc,k8s.pod.ip=$(MY_POD_IP)"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:55681"
+          ports:
+            - containerPort: 9092  # Water Svc endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:ruby-apps-1.0.0rc2-0.19.0-0.20.1
+          imagePullPolicy: Always
+          name: water-svc
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: water-svc
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: water-svc
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: water-svc
+  ports:
+    - name: "water-svc-http-server-port"
+      port: 9092
+      targetPort: 9092
+status:
+  loadBalancer: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: calculator-svc
+  namespace: the-coffee-bar-ns
+spec:
+  replicas: 1
+  strategy: {}
+  selector:
+    matchLabels:
+      app: calculator-svc
+  template:
+    metadata:
+      labels:
+        app: calculator-svc
+      name: calculator-svc
+    spec:
+      containers:
+        - env:
+            - name: SERVER_ENDPOINT
+              value: "http://calculator-svc:8090"
+            - name: SERVICE_NAME
+              value: "calculator-svc"
+            - name: EXPORTER
+              value: "otlp"
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "http://collection-sumologic-otelcol.sumologic:4317"
+          ports:
+            - containerPort: 8090  # Water Svc endpoint port.
+          image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:calculator-dotnet-1.1.0b4-1.0.0rc5
+          imagePullPolicy: Always
+          name: calculator-svc
+          resources:
+            requests:
+              cpu: 100m
+              memory: 50Mi
+            limits:
+              cpu: 500m
+              memory: 250Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+      hostname: calculator-svc
+      restartPolicy: Always
+status: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: calculator-svc
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    app: calculator-svc
+  ports:
+    - name: "calculator-svc-http-server-port"
+      port: 8090
+      targetPort: 8090
+status:
+  loadBalancer: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    db: postgres
+  ports:
+    - name: "postgres-port"
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: postgres-pv-volume-tcb
+  namespace: the-coffee-bar-ns
+  labels:
+    name: postgres-pv-volume-tcb
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data/tcb"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-volume-tcb
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    matchLabels:
+      name: postgres-pv-volume-tcb
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-sql
+  namespace: the-coffee-bar-ns
+  labels:
+    db: postgres-init-sql
+data:
+  init-sql: |
+    CREATE USER account WITH PASSWORD 'account';
+    CREATE DATABASE account;
+    GRANT ALL PRIVILEGES ON DATABASE account TO account;
+    \c account;
+    CREATE TABLE IF NOT EXISTS account (
+                                        id SERIAL PRIMARY KEY,
+                                        product VARCHAR(255),
+                                        price SMALLINT,
+                                        items_sold BIGINT
+                                        );
+    CREATE UNIQUE INDEX IF NOT EXISTS product ON account (product);
+    GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO account;
+    INSERT INTO account (product, price, items_sold) VALUES ('espresso', 2, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('cappuccino', 4, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('americano', 3, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('cornetto', 1, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('cannolo_siciliano', 3, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('torta', 2, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('budini_fiorentini', 1, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('muffin', 1, 0)
+        ON CONFLICT (product) DO NOTHING;
+    INSERT INTO account (product, price, items_sold) VALUES ('tiramisu', 3, 0)
+        ON CONFLICT (product) DO NOTHING;
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: the-coffee-bar-ns
+spec:
+  selector:
+    matchLabels:
+      db: postgres
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        db: postgres
+    spec:
+      containers:
+        - image: postgres:9.6.2-alpine
+          name: postgres
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: trust
+          volumeMounts:
+            - name: postgres-init-script
+              mountPath: /docker-entrypoint-initdb.d/init.sql
+              subPath: init.sql
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      hostname: postgres
+      restartPolicy: Always
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-volume-tcb
+        - configMap:
+            name: postgres-init-sql
+            items:
+              - key: init-sql
+                path: init.sql
+          name: postgres-init-script

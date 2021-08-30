@@ -57,7 +57,7 @@ class CashDesk(HttpServer):
             sweets_amount_to_pay = self.call_calculator(data=calculation_data)['total']
 
         coffee_amount_to_pay = 0
-        if data['coffee_status'] is True:
+        if 'coffee_status' in data and data['coffee_status'] is True:
             coffee_price = self.get_product_price(product=data['coffee'])
             calculation_data = calculation_order(product=data['coffee'], price=coffee_price,
                                                  amount=data['coffee_amount'])
@@ -74,7 +74,7 @@ class CashDesk(HttpServer):
                 total_items = items_sold + 1
                 self.db.update_items((total_items, data['sweets']))
 
-            if data['coffee_status'] is True:
+            if 'coffee_status' in data and data['coffee_status'] is True:
                 items_sold = self.get_items_sold(product=data['coffee'])
                 total_items = items_sold + 1
                 self.db.update_items((total_items, data['coffee']))

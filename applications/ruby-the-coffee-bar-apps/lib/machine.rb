@@ -36,7 +36,7 @@ class Machine < Sinatra::Base
 
     coffee_host = ARGV[2] || 'coffee-svc'
     coffee_port = ARGV[3] || 9091
-    coffee_uri = URI.parse('http://%s:%s/get_coffee' % [coffee_host, coffee_port])
+    coffee_uri = URI.parse('http://%s:%s/get_beans' % [coffee_host, coffee_port])
     puts "INFO - Coffee Service URI: #{coffee_uri}"
 
     water_host = ARGV[4] || 'water-svc'

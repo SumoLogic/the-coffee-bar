@@ -3,21 +3,8 @@ import logging as log
 from flask import make_response
 import requests
 
-from src.bar.coffee_machine import COFFEES
+from src.bar.coffee_machine import GET_COFFEE_ENDPOINT
 from src.common.http_server import HttpServer
-
-
-PRICES = {
-    'espresso': 2,
-    'cappuccino': 4,
-    'americano': 3,
-    'cornetto': 1,
-    'cannolo_siciliano': 3,
-    'torta': 1.5,
-    'budini_fiorentini': 1.25,
-    'muffin_alla_ricotta': 2,
-    'tiramisu': 2.5,
-}
 
 
 def set_product_status(response: requests.models.Response, status_key: str):
@@ -47,18 +34,32 @@ class Bar(HttpServer):
                           handler=self.order)
 
     def order(self, data):
-
         # OPTIONAL: If sweets_url is set, get sweets_status
         sweets_status = {'sweets_status': False}
         if self.sweets_url:
-            sweets_status = self.get_sweets(data=data)
-            data.update(sweets_status)
+            if data['sweets_amount'] > 0:
+                sweets_status = self.get_sweets(data=data)
+                data.update(sweets_status)
+            else:
+                log.warning('Sweets were not requested.')
         else:
             log.warning('Sweets URL not configured. Sweets will be not provided.')
 
         # Get coffee_status
-        coffee_status = self.get_coffee(data=data)
-        data.update(coffee_status)
+        coffee_status = {'coffee_status': False}
+        if data['coffee_amount'] > 0:
+            coffee_status = self.get_coffee(data=data)
+            data.update(coffee_status)
+        else:
+            log.warning('Coffee was not requested.')
+
+        # Coffee Amount and Sweets Amount <= 0 - no order
+        if data['coffee_amount'] <= 0 and data['sweets_amount'] <= 0:
+            result = {
+                'reason': 'Please make an order.'
+            }
+            log.warning('Please make an order.')
+            return make_response(result, 204)
 
         if coffee_status['coffee_status'] is True or sweets_status['sweets_status'] is True:
             return self.process_payment(data=data)
@@ -78,7 +79,7 @@ class Bar(HttpServer):
     def get_coffee(self, data):
         log.info('Send request to the coffee-machine')
         coffee_machine_url = 'http://{}:{}{}'.format(self.coffee_machine_host, self.coffee_machine_port,
-                                                     COFFEES['espresso'])
+                                                     GET_COFFEE_ENDPOINT)
 
         response = requests.post(url=coffee_machine_url, json=data)
 

@@ -27,7 +27,7 @@ class Coffee < Sinatra::Base
         body "I'm alive!"
     end
 
-    post '/get_coffee' do
+    post '/get_beans' do
         span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
         trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
 
@@ -36,7 +36,7 @@ class Coffee < Sinatra::Base
 
         content_type :json
 
-        if payload['grains'] < 0
+        if payload['grains'] < 1
             status 502
             body "Lack of coffee grains"
             puts "ERROR - Lack of coffee grains in amount #{payload['grains']} - trace_id=#{trace_id} - span_id=#{span_id}"

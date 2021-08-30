@@ -1,7 +1,7 @@
-FROM zenika/alpine-chrome:89-with-puppeteer
+# pull the base image
+FROM node:alpine
 
-# Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+RUN apk add --no-cache python3 py3-pip bash net-tools iproute2
 
 # set the working direction
 WORKDIR /app
@@ -17,4 +17,8 @@ RUN npm install
 # add app
 COPY . ./
 
-CMD ["node", "src/clicker.js"]
+RUN pip3 install -r cpu_killer/requirements.txt
+
+ENV CHOKIDAR_USEPOLLING=true
+
+CMD ["npm", "start"]
