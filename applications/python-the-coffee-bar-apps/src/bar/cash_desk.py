@@ -25,7 +25,7 @@ class CashDesk(HttpServer):
         super().__init__(name, host, port)
         self.calculator_host = calculator_host
         self.calculator_port = calculator_port
-        self.db = Storage(connection_string=connection_string)
+        self.db = Storage(connection_string=connection_string, stats=self.stats)
         self.add_pay_in_endpoint()
 
     def add_pay_in_endpoint(self):
@@ -35,49 +35,77 @@ class CashDesk(HttpServer):
         log.info('Calculating total price for %s', data['product'])
 
         calculator_svc_url = 'http://{}:{}/Calculator'.format(self.calculator_host, self.calculator_port)
-
+        success = False
+        result = ''
         try:
             res = requests.post(url=calculator_svc_url, data=json.dumps(data))
             log.info('Calculation result: %s', res.text)
-            return res.json()
+            success = True
+            result = res.json()
         except requests.exceptions.RequestException as ex:
+            result = ex
             log.error(ex)
-            return make_response({'result': 'Error during calculation'}, 500)
+        finally:
+            return success, result
 
-    def payment(self, data):
+    def make_calculation(self, data: dict, product: str):
+        log.info('Get product price: %s', data[product])
+        product_amount = '{}_amount'.format(product)
+
+        success, error, result = self.db.get_price_of_product(product_name=data[product])
+        if success:
+            product_price = result['price']
+            calculation_data = calculation_order(product=data[product], price=product_price,
+                                                 amount=data[product_amount])
+            callculation_success, data = self.call_calculator(data=calculation_data)
+            if callculation_success:
+                data = data['total']
+            return callculation_success, data
+        else:
+            return success, error
+
+    def update_items_status(self, data: dict, product: str):
+        success, error, result = self.db.get_items_sold(product_name=data[product])
+        if success:
+            items_sold = result['items_sold']
+            total_items = items_sold + 1
+            update_success, update_error = self.db.update_items((total_items, data[product]))
+            return update_success
+        else:
+            return success
+
+    def payment(self, data: dict):
         log.info('Payment in progress: %s', data)
-
-        log.info('Get product price')
 
         sweets_amount_to_pay = 0
         if 'sweets_status' in data and data['sweets_status'] is True:
-            sweets_price = self.get_product_price(product=data['sweets'])
-            calculation_data = calculation_order(product=data['sweets'], price=sweets_price,
-                                                 amount=data['sweets_amount'])
-            sweets_amount_to_pay = self.call_calculator(data=calculation_data)['total']
+            success, res = self.make_calculation(data=data, product='sweets')
+            if success:
+                sweets_amount_to_pay = res
+            else:
+                return make_response({'result': 'Calculation error, check logs'}, 500)
 
         coffee_amount_to_pay = 0
         if 'coffee_status' in data and data['coffee_status'] is True:
-            coffee_price = self.get_product_price(product=data['coffee'])
-            calculation_data = calculation_order(product=data['coffee'], price=coffee_price,
-                                                 amount=data['coffee_amount'])
-            coffee_amount_to_pay = self.call_calculator(data=calculation_data)['total']
+            success, res = self.make_calculation(data=data, product='coffee')
+            if success:
+                coffee_amount_to_pay = res
+            else:
+                return make_response({'result': 'Calculation error, check logs'}, 500)
 
         total_amount_to_pay = sweets_amount_to_pay + coffee_amount_to_pay
 
         payout = data['bill'] - total_amount_to_pay
         if payout >= 0:
             log.info('Process payment')
-
             if 'sweets_status' in data and data['sweets_status'] is True:
-                items_sold = self.get_items_sold(product=data['sweets'])
-                total_items = items_sold + 1
-                self.db.update_items((total_items, data['sweets']))
-
+                success = self.update_items_status(data=data, product='sweets')
+                if success is False:
+                    return make_response({'result': 'Database error, check logs'}, 500)
             if 'coffee_status' in data and data['coffee_status'] is True:
-                items_sold = self.get_items_sold(product=data['coffee'])
-                total_items = items_sold + 1
-                self.db.update_items((total_items, data['coffee']))
+                success = self.update_items_status(data=data, product='coffee')
+                if success is False:
+                    return make_response({'result': 'Database error, check logs'}, 500)
 
             log.info('Payment processed successfully. Money rest %s', payout)
 
@@ -85,11 +113,3 @@ class CashDesk(HttpServer):
         else:
             log.error('Payment failed. Not enough money')
             return make_response({'result': 'Not enough money'}, 402)
-
-    def get_product_price(self, product: str):
-        product = self.db.get_price_of_product(product_name=product)
-        return product['price']
-
-    def get_items_sold(self, product: str):
-        product = self.db.get_items_sold(product_name=product)
-        return product['items_sold']
