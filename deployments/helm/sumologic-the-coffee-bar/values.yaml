@@ -10,13 +10,13 @@ image:
     tag: calculator-dotnet-1.1.0b4-1.0.0rc5
   frontend:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: frontend-js-0.18.2
+    tag: frontend-js-0.18.2-1
   python:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: python-apps-1.3.0-0.22b0
+    tag: python-apps-1.5.0-0.24b0
   ruby:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: ruby-apps-1.0.0rc2-0.19.0-0.20.1
+    tag: ruby-apps-1.0.0rc3-0.20.1-0.20.3
   clicker:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
     tag: clicker-linux
@@ -92,15 +92,15 @@ resources:
         cpu: 100m
         memory: 50Mi
       limits:
-        cpu: 500m
-        memory: 250Mi
+        cpu: 250m
+        memory: 400Mi
   ruby:
     common:
       requests:
         cpu: 100m
         memory: 50Mi
       limits:
-        cpu: 500m
+        cpu: 250m
         memory: 250Mi
   calculatorsvc:
     common:
@@ -108,8 +108,8 @@ resources:
         cpu: 100m
         memory: 50Mi
       limits:
-        cpu: 500m
-        memory: 250Mi
+        cpu: 250m
+        memory: 500Mi
   clicker:
     requests:
       cpu: 200m
@@ -244,9 +244,9 @@ affinity: {}
 envs:
   bar:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-bar,application=the-coffee-bar-app"
-    OTEL_PROPAGATORS: "aws_xray,tracecontext,baggage"
+    OTEL_PROPAGATORS: "xray,tracecontext,baggage"
   calculatorsvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=calculator-svc,application=the-coffee-bar-app"
   cashdesk:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-cashdesk,application=the-coffee-bar-app"
   clicker:
@@ -257,6 +257,7 @@ envs:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
   frontend:
     REACT_APP_SUMO_OT_JS_URL: "https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
+    #REACT_APP_SUMO_OT_JS_URL: "https://cdn-service.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     ## Envs to configure CPU Killer and Network Delay
