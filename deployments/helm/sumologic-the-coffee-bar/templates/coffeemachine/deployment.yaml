@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       hostname: {{ template "sumologic.thecoffeebar.metadata.name.coffeemachine.service" . }}
       containers:
-        - name: the-coffee-bar-bar
+        - name: the-coffee-machine
           securityContext:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.python.repository }}:{{ .Values.image.python.tag }}"

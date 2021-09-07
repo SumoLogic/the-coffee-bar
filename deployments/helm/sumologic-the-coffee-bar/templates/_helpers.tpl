@@ -20,7 +20,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.frontend.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.frontend" . }}
+the-coffee-bar-frontend
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.frontend.configmap" -}}
@@ -36,7 +36,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.bar.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.bar" . }}
+the-coffee-bar
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.bar.configmap" -}}
@@ -52,7 +52,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.cashdesk.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.cashdesk" . }}
+the-cashdesk
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.cashdesk.configmap" -}}
@@ -68,7 +68,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.coffeemachine.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.coffeemachine" . }}
+the-coffee-machine
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.coffeemachine.configmap" -}}
@@ -84,7 +84,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.calculatorsvc.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.calculatorsvc" . }}
+calculator-svc
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.calculatorsvc.configmap" -}}
@@ -124,7 +124,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.machinesvc.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.machinesvc" . }}
+machine-svc
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.machinesvc.configmap" -}}
@@ -140,7 +140,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.watersvc.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.watersvc" . }}
+water-svc
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.watersvc.configmap" -}}
@@ -156,7 +156,7 @@ If release name contains chart name it will be used as a full name.
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.coffeesvc.service" -}}
-{{ template "sumologic.thecoffeebar.metadata.name.coffeesvc" . }}
+coffee-svc
 {{- end -}}
 
 {{- define "sumologic.thecoffeebar.metadata.name.coffeesvc.configmap" -}}
@@ -450,7 +450,6 @@ Create the name of the service account to use
 Create commands/args
 */}}
 
-/usr/local/bin/the-coffee-bar --host=sumologic-the-coffee-bar-bar --port=8082 --coffeemachine-host=sumologic-the-coffee-bar-coffeemachine --coffeemachine-port=8083 --cashdesk-host=sumologic-the-coffee-bar-cashdesk --cashdesk-port=8084 --sweets-url=CHECK_SWEETS_URL
 {{ define "sumologic.thecoffeebar.command.bar" }}
 - opentelemetry-instrument
 - the-coffee-bar
@@ -482,7 +481,7 @@ Create commands/args
 - --port=8083
 - --machine-svc-host={{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }}
 - --machine-svc-port=9090
-- --cpu-increase-interval=10
+- --cpu-increase-interval=60
 - --cpu-increase-duration=5
 - --cpu-increase-threads=475
 {{- end }}

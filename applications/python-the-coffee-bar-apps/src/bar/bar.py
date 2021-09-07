@@ -64,10 +64,18 @@ class Bar(HttpServer):
         if coffee_status['coffee_status'] is True or sweets_status['sweets_status'] is True:
             return self.process_payment(data=data)
         else:
-            result = {
-                'reason': 'Lack of requested products',
-                'products': [data['coffee'], data['sweets']],
-            }
+            if coffee_status['coffee_status'] is False and sweets_status['sweets_status'] is False:
+                result = {
+                    'reason': 'Lack of requested products: {}, {}'.format(data['coffee'], data['sweets']),
+                }
+            elif coffee_status['coffee_status'] is True and sweets_status['sweets_status'] is False:
+                result = {
+                    'reason': 'Lack of requested product: {}, {} provided.'.format(data['sweets'], data['coffee']),
+                }
+            elif coffee_status['coffee_status'] is False and sweets_status['sweets_status'] is True:
+                result = {
+                    'reason': 'Lack of requested product: {}, {} provided.'.format(data['coffee'], data['sweets']),
+                }
             return make_response(result, 404)
 
     def get_sweets(self, data):

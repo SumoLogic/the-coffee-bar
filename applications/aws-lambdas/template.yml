@@ -41,7 +41,7 @@ Resources:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
           AWS_LAMBDA_EXEC_WRAPPER: /opt/python/otel-instrument
-          OTEL_RESOURCE_ATTRIBUTES: service.name=ui-lambda‑SweetsFunction,application=the-coffee-bar-with-ui
+          OTEL_RESOURCE_ATTRIBUTES: service.name=ui-lambda‑SweetsFunction,application=the-coffee-bar-app
       Layers:
         - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
       Events:
@@ -76,7 +76,7 @@ Resources:
       Environment:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
-          OTEL_RESOURCE_ATTRIBUTES: service.name=ui-lambda‑CheckSweetsFunction,application=the-coffee-bar-with-ui
+          OTEL_RESOURCE_ATTRIBUTES: service.name=ui-lambda‑CheckSweetsFunction,application=the-coffee-bar-app
           OTEL_PROPAGATORS: aws_xray
           AWS_LAMBDA_EXEC_WRAPPER: /opt/python/otel-instrument
           INVOKE_FUNCTION_NAME: !Ref SweetsFunction

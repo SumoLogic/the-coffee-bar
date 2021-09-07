@@ -67,7 +67,7 @@ class Machine < Sinatra::Base
         water = make_request(water_uri, payload)
 
         if coffee.code == "200" && water.code == "200"
-            json body: { coffee_status: true, reason: "Coffee done" }
+            json body: { coffee_status: true, result: "Coffee done" }
             status 200
             puts "INFO - Coffee is ready - trace_id=#{trace_id} - span_id=#{span_id}"
         elsif coffee.code == "200" && water.code != "200"

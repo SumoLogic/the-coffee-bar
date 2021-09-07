@@ -1,4 +1,6 @@
 import logging as log
+import os
+from logging.handlers import SysLogHandler
 import sys
 
 from opentelemetry import trace
@@ -41,6 +43,13 @@ def configure_logging(log_level: str):
     stdout_handler.setLevel(log_level)
     stdout_handler.setFormatter(span_formattter)
     root.addHandler(stdout_handler)
+
+    if os.getenv('SYSLOG'):
+        syslog_address = os.getenv('SYSLOG').split(':')
+        syslog_handler = SysLogHandler(address=(syslog_address[0], int(syslog_address[1])))
+        syslog_handler.setLevel(log_level)
+        syslog_handler.setFormatter(span_formattter)
+        root.addHandler(syslog_handler)
 
     return log
 
