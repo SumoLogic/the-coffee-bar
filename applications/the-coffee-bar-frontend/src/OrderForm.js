@@ -31,7 +31,9 @@ class OrderForm extends Component {
     bill: 0,
     order_dialog: false,
     order_response: false,
-    response: '',
+    result: '',
+    reason: '',
+    trace_id: ''
   };
 
 
@@ -77,7 +79,11 @@ class OrderForm extends Component {
     this.setState({ order_dialog: false });
     fetch(process.env.REACT_APP_COFFEE_BAR_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'pragma': 'no-cache',
+        'cache-control': 'no-cache',
+      },
       body: JSON.stringify(this.order),
     })
       .then((response) => {
@@ -86,16 +92,19 @@ class OrderForm extends Component {
       .then((res) => {
         this.setState({ order_response: true });
         if ('reason' in res) {
-          this.setState({ response: res['reason'] });
-        } else if ('result' in res) {
-          this.setState({ response: res['result'] });
-        } else {
-          this.setState({ response: JSON.stringify(res) });
+          this.setState({ reason: res['reason'] });
+        }
+        if ('result' in res) {
+          this.setState({ result: res['result'] });
+        }
+
+        if ('trace_id' in res) {
+          this.setState({ trace_id: res['trace_id'] });
         }
       })
       .catch((error) => {
         console.error('Error:', error.toString());
-        this.setState({ response: error.toString() });
+        this.setState({ reason: error.toString() });
         this.setState({ order_response: true });
       });
   };
@@ -338,7 +347,9 @@ class OrderForm extends Component {
                 <AlertDialogHeader>Order Status</AlertDialogHeader>
                 <AlertDialogCloseButton />
                 <AlertDialogBody>
-                  {this.state.response}
+                  Result: {this.state.result}<br />
+                  Reason: {this.state.reason}<br />
+                  TraceID: {this.state.trace_id}
                 </AlertDialogBody>
                 <AlertDialogFooter>
                   <Button name='OkBtn' id='OkBtn' colorScheme='green' ml={3} onClick={() => {
