@@ -30,7 +30,7 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - name: the-coffee-bar-postgres
+        - name: postgres
           securityContext:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.postgres.repository }}:{{ .Values.image.postgres.tag }}"

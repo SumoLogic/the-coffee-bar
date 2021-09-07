@@ -30,7 +30,7 @@ spec:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       hostname: {{ template "sumologic.thecoffeebar.metadata.name.calculatorsvc.service" . }}
       containers:
-        - name: the-coffee-bar-bar
+        - name: calculator-svc
           securityContext:
             {{- toYaml .Values.securityContext.common | nindent 12 }}
           image: "{{ .Values.image.dotnet.repository }}:{{ .Values.image.dotnet.tag }}"
