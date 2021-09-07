@@ -1,3 +1,4 @@
+import json
 import logging as log
 import os
 
@@ -13,13 +14,18 @@ import statsd
 
 
 class EndpointAction:
+    stats = None
+
     def __init__(self, action):
         self.action = action
         self.response = Response(mimetype='application/json')
-        self.stats = statsd.StatsClient(host='otelcol', port=8125)
+        if os.getenv('STATSD'):
+            statsd_address = os.getenv('STATSD').split(':')
+            self.stats = statsd.StatsClient(host=statsd_address[0], port=int(statsd_address[1]))
 
     def __call__(self, *args, **kwargs):
-        self.stats.incr('endpoint_calls')
+        if self.stats:
+            self.stats.incr('endpoint_calls')
         data = to_json(request.json)
         result = self.action(data)
 
@@ -41,6 +47,17 @@ class EndpointAction:
                 trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
                                                                  "exception.message": str(result.response)},
                                                    _time_ns())
+
+        # Add trace_id into response
+        try:
+            data = json.loads(self.response.data)
+        except:
+            data = {}
+        finally:
+            context = trace.get_current_span().get_span_context()
+            trace_id = context.trace_id
+            data['trace_id'] = '{trace:032x}'.format(trace=trace_id)
+            self.response.set_data(json.dumps(data))
 
         return self.response
 

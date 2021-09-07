@@ -83,7 +83,7 @@ class CashDesk(HttpServer):
             if success:
                 sweets_amount_to_pay = res
             else:
-                return make_response({'result': 'Calculation error, check logs'}, 500)
+                return make_response({'reason': 'Calculation error, check logs'}, 500)
 
         coffee_amount_to_pay = 0
         if 'coffee_status' in data and data['coffee_status'] is True:
@@ -91,7 +91,7 @@ class CashDesk(HttpServer):
             if success:
                 coffee_amount_to_pay = res
             else:
-                return make_response({'result': 'Calculation error, check logs'}, 500)
+                return make_response({'reason': 'Calculation error, check logs'}, 500)
 
         total_amount_to_pay = sweets_amount_to_pay + coffee_amount_to_pay
 
@@ -101,15 +101,15 @@ class CashDesk(HttpServer):
             if 'sweets_status' in data and data['sweets_status'] is True:
                 success = self.update_items_status(data=data, product='sweets')
                 if success is False:
-                    return make_response({'result': 'Database error, check logs'}, 500)
+                    return make_response({'reason': 'Database error, check logs'}, 500)
             if 'coffee_status' in data and data['coffee_status'] is True:
                 success = self.update_items_status(data=data, product='coffee')
                 if success is False:
-                    return make_response({'result': 'Database error, check logs'}, 500)
+                    return make_response({'reason': 'Database error, check logs'}, 500)
 
             log.info('Payment processed successfully. Money rest %s', payout)
 
             return make_response({'result': 'Money rest: %s' % payout}, 200)
         else:
             log.error('Payment failed. Not enough money')
-            return make_response({'result': 'Not enough money'}, 402)
+            return make_response({'reason': 'Not enough money'}, 402)
