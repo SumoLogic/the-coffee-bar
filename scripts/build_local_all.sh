@@ -26,7 +26,8 @@ docker tag "${MAIN_DOCKER_TAG}:${DOTNET_APP_TAG}" ${REGISTRY}/${AWS_REPOSITORY}:
 push_to_aws_repository ${DOTNET_APP_TAG}
 
 #Build Python applications
-PYTHON_APP_TAG=python-apps-1.3.0-0.22b0
+PYTHON_APP_TAG=python-apps-1.5.0-0.24b0
+
 
 cd ${ROOT_DIR}/applications/python-the-coffee-bar-apps
 docker build -t "${MAIN_DOCKER_TAG}:${PYTHON_APP_TAG}" .
@@ -34,7 +35,7 @@ docker tag "${MAIN_DOCKER_TAG}:${PYTHON_APP_TAG}" ${REGISTRY}/${AWS_REPOSITORY}:
 push_to_aws_repository ${PYTHON_APP_TAG}
 
 # Build Ruby applications
-RUBY_APP_TAG=ruby-apps-1.0.0rc2-0.19.0-0.20.1
+RUBY_APP_TAG=ruby-apps-1.0.0rc3-0.20.1-0.20.3
 
 cd ${ROOT_DIR}/applications/ruby-the-coffee-bar-apps
 docker build -t "${MAIN_DOCKER_TAG}:${RUBY_APP_TAG}" .
@@ -42,7 +43,7 @@ docker tag "${MAIN_DOCKER_TAG}:${RUBY_APP_TAG}" ${REGISTRY}/${AWS_REPOSITORY}:${
 push_to_aws_repository ${RUBY_APP_TAG}
 
 # Build javascript applications
-JS_APP_TAG=frontend-js-0.18.2
+JS_APP_TAG=frontend-js-0.18.2-1
 
 cd ${ROOT_DIR}/applications/the-coffee-bar-frontend
 docker build -t "${MAIN_DOCKER_TAG}:${JS_APP_TAG}" .

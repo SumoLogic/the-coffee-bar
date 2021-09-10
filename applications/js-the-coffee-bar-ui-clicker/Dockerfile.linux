@@ -1,8 +1,9 @@
-FROM alpine:3.13.5
+FROM alpine:3.14.2
 
 # Install Firefox
 RUN echo http://nl.alpinelinux.org/alpine/edge/testing >> /etc/apk/repositories
-RUN apk --no-cache add pciutils-libs mesa-gl mesa-egl ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-ubuntu-font-family ttf-opensans font-adobe-100dpi
+RUN apk --no-cache add pciutils-libs mesa-gl mesa-egl ttf-dejavu ttf-droid ttf-freefont ttf-liberation ttf-opensans font-adobe-100dpi
+
 RUN apk --no-cache add firefox
 
 ENV FIREFOX_BIN=/usr/bin/firefox \
@@ -26,7 +27,7 @@ ENV CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
 
 # Install nodejs/npm
-RUN apk add --update nodejs nodejs-npm bash
+RUN apk add --update nodejs npm bash
 
 WORKDIR /app
 
