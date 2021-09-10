@@ -28,6 +28,7 @@ push_to_aws_repository ${DOTNET_APP_TAG}
 #Build Python applications
 PYTHON_APP_TAG=python-apps-1.5.0-0.24b0
 
+
 cd ${ROOT_DIR}/applications/python-the-coffee-bar-apps
 docker build -t "${MAIN_DOCKER_TAG}:${PYTHON_APP_TAG}" .
 docker tag "${MAIN_DOCKER_TAG}:${PYTHON_APP_TAG}" ${REGISTRY}/${AWS_REPOSITORY}:${PYTHON_APP_TAG}

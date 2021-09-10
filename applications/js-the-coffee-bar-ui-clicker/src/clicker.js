@@ -45,6 +45,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
         } else {
             dumpio_debug = true;
         }
+      
         var browser = null;
         var page = null;
         try {
