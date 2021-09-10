@@ -100,6 +100,7 @@ class OrderForm extends Component {
 
         if ('trace_id' in res) {
           this.setState({ trace_id: res['trace_id'] });
+          console.info('TraceID:', res['trace_id']);
         }
       })
       .catch((error) => {
