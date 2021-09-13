@@ -36,8 +36,9 @@ class Storage:
         try:
             if self.connection:
                 self.connection.close()
-                self.stats.decr('postgres_closed_connection_total')
-                self.stats.gauge('current_connections', -1, delta=True)
+                if self.stats:
+                    self.stats.decr('postgres_closed_connection_total')
+                    self.stats.gauge('current_connections', -1, delta=True)
         except Exception as ex:
             log.error(ex)
 
