@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   dotnet:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: calculator-dotnet-1.1.0b4-1.0.0rc5
+    tag: calculator-dotnet-1.1.0-1.0.0rc7
   frontend:
     repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
     tag: frontend-js-0.18.2-1
