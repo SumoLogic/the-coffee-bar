@@ -44,7 +44,7 @@ services:
  #             ,"--sweets-url=LAMBDA_RUL_HERE"]
     environment:
       - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=https://otelcol:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
@@ -79,7 +79,7 @@ services:
               "--machine-svc-port=9090"]
     environment:
       - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=https://otelcol:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
   the-cashdesk:
     image: sumo/the-coffee-bar-app:python-apps-1.5.0-0.24b0
