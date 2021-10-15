@@ -43,7 +43,7 @@ docker tag "${MAIN_DOCKER_TAG}:${RUBY_APP_TAG}" ${REGISTRY}/${AWS_REPOSITORY}:${
 push_to_aws_repository ${RUBY_APP_TAG}
 
 # Build javascript applications
-JS_APP_TAG=frontend-js-0.18.2-1
+JS_APP_TAG=frontend-js-0.24.0
 
 cd ${ROOT_DIR}/applications/the-coffee-bar-frontend
 docker build -t "${MAIN_DOCKER_TAG}:${JS_APP_TAG}" .
