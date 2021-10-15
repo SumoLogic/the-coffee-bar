@@ -105,7 +105,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
   machine-svc:
-    image: sumo/the-coffee-bar-app:ruby-apps-1.0.0rc3-0.20.1-0.20.3
+    image: sumo/the-coffee-bar-app:ruby-apps-1.0.0-0.21.3-0.20.5
     container_name: machine-svc
     hostname: machine-svc
     ports:
@@ -116,7 +116,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
   coffee-svc:
-    image: sumo/the-coffee-bar-app:ruby-apps-1.0.0rc3-0.20.1-0.20.3
+    image: sumo/the-coffee-bar-app:ruby-apps-1.0.0-0.21.3-0.20.5
     container_name: coffee-svc
     hostname: coffee-svc
     ports:
@@ -127,7 +127,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
   water-svc:
-    image: sumo/the-coffee-bar-app:ruby-apps-1.0.0rc3-0.20.1-0.20.3
+    image: sumo/the-coffee-bar-app:ruby-apps-1.0.0-0.21.3-0.20.5
     container_name: water-svc
     hostname: water-svc
     ports:

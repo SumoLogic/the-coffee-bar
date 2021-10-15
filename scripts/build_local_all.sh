@@ -35,7 +35,7 @@ docker tag "${MAIN_DOCKER_TAG}:${PYTHON_APP_TAG}" ${REGISTRY}/${AWS_REPOSITORY}:
 push_to_aws_repository ${PYTHON_APP_TAG}
 
 # Build Ruby applications
-RUBY_APP_TAG=ruby-apps-1.0.0rc3-0.20.1-0.20.3
+RUBY_APP_TAG=ruby-apps-1.0.0-0.21.3-0.20.5
 
 cd ${ROOT_DIR}/applications/ruby-the-coffee-bar-apps
 docker build -t "${MAIN_DOCKER_TAG}:${RUBY_APP_TAG}" .
