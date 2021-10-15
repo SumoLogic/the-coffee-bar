@@ -41,14 +41,14 @@ services:
     command: ["opentelemetry-instrument", "the-coffee-bar",
               "--host=the-coffee-bar", "--port=8082", "--coffeemachine-host=the-coffee-machine",
               "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
- #             ,"--sweets-url=LAMBDA_RUL_HERE"]
+ #             ,"--sweets-url=LAMBDA_URL_HERE"]
     environment:
       - OTEL_EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
-    image: sumo/the-coffee-bar-app:frontend-js-0.18.2-1
+    image: sumo/the-coffee-bar-app:frontend-js-0.24.0
     container_name: the-coffee-bar-frontend
     hostname: the-coffee-bar-frontend
     ports:
@@ -68,6 +68,8 @@ services:
       - REACT_APP_SUMO_OT_JS_URL=
       - REACT_APP_COLLECTION_SOURCE_URL=
       - REACT_APP_APPLICATION_NAME=tcb-local
+      - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
+      - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
   the-coffee-machine:
     image: sumo/the-coffee-bar-app:python-apps-1.5.0-0.24b0
     container_name: the-coffee-machine
