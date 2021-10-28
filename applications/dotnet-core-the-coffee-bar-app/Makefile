@@ -1,4 +1,4 @@
-TAG ?= calculator-dotnet-1.1.0b4-1.0.0rc5
+TAG ?= calculator-dotnet-1.1.0-1.0.0rc7
 FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
