@@ -26,7 +26,7 @@ setup(
     keywords='the-coffee-bar opentelemetry auto instrumentation setuptools development',
 
     packages=find_packages(),
-    python_requires='>=3.7, <4',
+    python_requires='>=3.8, <4',
 
     install_requires=['APScheduler==3.8.1',
                       'argparse==1.4.0',

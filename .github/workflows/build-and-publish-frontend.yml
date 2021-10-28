@@ -21,7 +21,7 @@ jobs:
         uses: tj-actions/changed-files@v11.3
         id: verify-if-files-changed
         with:
-          path: applications/the-coffee-bar-frontend
+          files: applications/the-coffee-bar-frontend
 
       - name: Login to ECR Repository
         run: make login

@@ -37,14 +37,10 @@ Application requires few environment variables to be configured.
 * `EXPORTER` - defines the span exporter (otlp, zipkin, jaeger, console - otlp by default)
 
 `Specific for OTLP Exporter`
-* `OTEL_EXPORTER_OTLP_SPAN_ENDPOINT` - defines the OTLP gRPC Collector Endpoint (e.g. `localhost:55680`)
+* `OTEL_EXPORTER_OTLP_ENDPOINT` - defines the OTLP gRPC Collector Endpoint (e.g. `http://localhost:4317`)
 
 `Specific for Zipkin Exporter`
-* `OTEL_EXPORTER_ZIPKIN_SPAN_ENDPOINT` - defines the Zipkin HTTP Collector Endpoint (e.g. `localhost:9411/api/v2/spans`)
-
-`Specific for Jaeger Exporter`
-* `OTEL_EXPORTER_JAEGER_SPAN_HOST` - defines the Jaeger UDP Collector Host Name (e.g. `localhost`)
-* `OTEL_EXPORTER_JAEGER_SPAN_PORT` - defines the Jaeger UDP Collector Port (e.g. `6831`)
+* `OTEL_EXPORTER_ZIPKIN_ENDPOINT` - defines the Zipkin HTTP Collector Endpoint (e.g. `localhost:9411/api/v2/spans`)
 
 # Contact
 In case of any issues please contact Mateusz 'mat' Rumian @ mrumian@sumologic.com

@@ -27,7 +27,7 @@ docker build -t sumo/the-coffee-bar-app:${TAG} .
 Each of the application `machine-svc, water-svc, coffee-svc` needs some configuration - in this case everything is 
 based on the environment variables. Application supports right now only OTLP Span Exporter.
 
-- **machine.rb env variables**
+- **machine.rb environment variables**
     ```bash
     HOST - define host name for Sinatra server
     PORT - define port for Sinatra server
@@ -40,7 +40,7 @@ based on the environment variables. Application supports right now only OTLP Spa
     OTEL_EXPORTER_OTLP_INSECURE - define HTTP/HTTPS (false/true) for HTTP OTLP collector endpoint
     ```
 
-- **coffee.rb env variables**
+- **coffee.rb environment variables**
     ```bash
     HOST - define host name for Sinatra server
     PORT - define port for Sinatra server
@@ -49,7 +49,7 @@ based on the environment variables. Application supports right now only OTLP Spa
     OTEL_EXPORTER_OTLP_INSECURE - define HTTP/HTTPS (false/true) for HTTP OTLP collector endpoint
     ```
 
-- **water.rb env variables**
+- **water.rb environment variables**
     ```bash
     HOST - define host name for Sinatra server
     PORT - define port for Sinatra server

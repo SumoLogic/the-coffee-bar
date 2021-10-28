@@ -21,7 +21,7 @@ jobs:
         uses: tj-actions/changed-files@v11.3
         id: verify-if-files-changed
         with:
-          path: applications/js-the-coffee-bar-ui-clicker
+          files: applications/js-the-coffee-bar-ui-clicker
 
       - name: Login to ECR Repository
         run: make login

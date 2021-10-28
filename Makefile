@@ -17,11 +17,11 @@ push-dotnet-apps:
 
 #-------------------------------------------------------------------------------
 .PHONY: build-clicker
-build-clicker-apps:
+build-clicker:
 	REPO_URL=${REPO_URL} $(MAKE) -C ./applications/js-the-coffee-bar-ui-clicker build
 
-.PHONY: push-clicker-apps
-push-clicker-apps:
+.PHONY: push-clicker
+push-clicker:
 	REPO_URL=${REPO_URL} $(MAKE) -C ./applications/js-the-coffee-bar-ui-clicker push
 
 #-------------------------------------------------------------------------------
