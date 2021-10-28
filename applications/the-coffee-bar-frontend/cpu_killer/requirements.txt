@@ -1,3 +1,6 @@
-APScheduler==3.7.0
+APScheduler==3.8.1
 asyncio==3.4.3
 tcconfig==0.26.0
+cron-descriptor==1.2.24
+pytz==2021.3
+tzlocal==4.0.2
