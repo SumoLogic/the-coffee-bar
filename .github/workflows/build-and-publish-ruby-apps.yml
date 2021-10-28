@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - '*'
 
 jobs:
   BuildAndPushTheCoffeeBarRubyApps:
@@ -21,7 +24,7 @@ jobs:
         uses: tj-actions/changed-files@v11.3
         id: verify-if-files-changed
         with:
-          path: applications/ruby-the-coffee-bar-apps
+          files: applications/ruby-the-coffee-bar-apps
 
       - name: Login to ECR Repository
         run: make login
