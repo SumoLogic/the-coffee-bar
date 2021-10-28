@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='the-coffee-bar',
-    version='0.0.1',
+    version='0.1.0',
     description='The Coffee Bar - OpenTelemetry instrumented demo application',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -28,9 +28,10 @@ setup(
     packages=find_packages(),
     python_requires='>=3.7, <4',
 
-    install_requires=['APScheduler==3.7.0',
+    install_requires=['APScheduler==3.8.1',
                       'argparse==1.4.0',
-                      'Flask==2.0.1',
+                      'cron-descriptor==1.2.24',
+                      'Flask==2.0.2',
                       'flask-cors==3.0.10',
                       'opentelemetry-distro==0.24b0',
                       'opentelemetry-exporter-jaeger==1.5.0',
@@ -41,7 +42,7 @@ setup(
                       'opentelemetry-sdk-extension-aws==0.24b0',
                       'psycopg2==2.9.1',
                       'pyjson==1.3.0',
-                      'pyyaml==5.4.1',
+                      'pyyaml==6.0',
                       'requests==2.26.0',
                       'statsd==3.3.0',
                       ],
