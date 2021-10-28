@@ -18,19 +18,18 @@ jobs:
           fetch-depth: 0
 
       - name: Verify changes in python-the-coffee-bar-apps directory
-        uses: tj-actions/changed-files@v10
+        uses: tj-actions/changed-files@v11.3
         id: verify-if-files-changed
         with:
-          files: |
-            applications/python-the-coffee-bar-apps
+          path: applications/python-the-coffee-bar-apps
 
       - name: Login to ECR Repository
         run: make login
 
       - name: Build if changes observed
-        if: steps.verify-if-files-changed.outputs.only_changed == 'true'
+        if: steps.verify-if-files-changed.outputs.any_changed == 'true'
         run: make build-python-apps
 
       - name: Push if changes observed
-        if: steps.verify-if-files-changed.outputs.only_changed == 'true'
+        if: steps.verify-if-files-changed.outputs.any_changed == 'true'
         run: make push-python-apps
