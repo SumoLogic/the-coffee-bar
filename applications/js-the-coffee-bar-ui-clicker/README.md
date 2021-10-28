@@ -17,7 +17,7 @@ Simple JS application to generate the traffic on The Coffee Bar UI App
     ```
 * To build docker image run:
     ```bash
-    TAG=clicker
+    TAG=clicker-linux
 
     # Build Image
     docker build -t sumo/the-coffee-bar-app:${TAG} .

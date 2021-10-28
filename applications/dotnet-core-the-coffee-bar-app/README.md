@@ -13,7 +13,7 @@ The ASP .NET Core application auto-instrumented by [OpenTelemetry-Dotnet].
 
 * To build docker image run:
     ```bash
-    TAG=dotnet-core-calculator-svc
+    TAG=calculator-dotnet-1.1.0b4-1.0.0rc5
     
     # Build Image
     docker build -t sumo/the-coffee-bar-app:${TAG} .

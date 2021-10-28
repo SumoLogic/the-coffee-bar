@@ -17,7 +17,7 @@ The Ruby application auto-instrumented by [OpenTelemetry-Ruby].
 ## How to build?
 
 ```bash
-TAG=ruby-apps
+TAG=ruby-apps-1.0.0-0.21.3-0.20.5
 
 # Build Image
 docker build -t sumo/the-coffee-bar-app:${TAG} .
