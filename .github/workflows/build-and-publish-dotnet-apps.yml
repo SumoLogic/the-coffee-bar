@@ -1,0 +1,36 @@
+name: The Coffee Bar - dotnet application builder
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  BuildAndPushTheCoffeeBarDotnetApps:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+
+      - name: Verify changes in python-the-coffee-bar-apps directory
+        uses: tj-actions/changed-files@v10
+        id: verify-if-files-changed
+        with:
+          files: |
+            applications/dotnet-core-the-coffee-bar-app
+
+      - name: Login to ECR Repository
+        run: make login
+
+      - name: Build if changes observed
+        if: steps.verify-if-files-changed.outputs.only_changed == 'true'
+        run: make build-dotnet-apps
+
+      - name: Push if changes observed
+        if: steps.verify-if-files-changed.outputs.only_changed == 'true'
+        run: make push-dotnet-apps
