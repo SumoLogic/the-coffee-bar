@@ -6,19 +6,19 @@ replicaCount: 1
 
 image:
   dotnet:
-    repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
+    repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
     tag: calculator-dotnet-1.1.0-1.0.0rc7
   frontend:
-    repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: frontend-js-0.18.2-1
+    repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
+    tag: frontend-jsv0.0.1-ot0.24.0
   python:
-    repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: python-apps-1.5.0-0.24b0
+    repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
+    tag: pythonAppsv0.1.0-ot1.5.0-0.24b0
   ruby:
-    repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
-    tag: ruby-apps-1.0.0rc3-0.20.1-0.20.3
+    repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
+    tag: rubyAppsv0.0.1-ot1.0.0-0.21.3-0.20.5
   clicker:
-    repository: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java
+    repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
     tag: clicker-linux
   postgres:
     repository: postgres
@@ -271,6 +271,11 @@ envs:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+
+crons:
+  clicker: '0 */4 * * *' # cron spec of time, here, 4 o'clock
+  postgres: '0 */8 * * *' # cron spec of time, here, 8 o'clock
+  cashdesk: '0 */8 * * *' # cron spec of time, here, 8 o'clock
 
 extras:
   otelColHostName: collection-sumologic-otelcol.sumologic
