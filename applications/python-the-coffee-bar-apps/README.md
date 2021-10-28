@@ -42,7 +42,7 @@ usage: the_coffee_bar.py [-h] [-H HOST] [-P PORT] [-m COFFEEMACHINE_HOST]
                          [-n COFFEEMACHINE_PORT] [-j CASHDESK_HOST]
                          [-k CASHDESK_PORT] [-c CONFIG] [-l LOG_LEVEL]
 
-The Coffee Bar v0.0.1
+The Coffee Bar v0.1.0
 
 optional arguments:
   -h, --help            show this help message and exit
