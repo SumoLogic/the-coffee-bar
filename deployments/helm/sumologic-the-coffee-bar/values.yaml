@@ -252,25 +252,24 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
+    CRON: "0 * * * *" # Run every hour
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=the-coffee-bar-app"
   coffeesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
   frontend:
-    REACT_APP_SUMO_OT_JS_URL: "https://cdn-service.us2.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
-    #REACT_APP_SUMO_OT_JS_URL: "https://cdn-service.sumologic.com/ui/js/thirdparty/sumologic-opentelemetry.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     ## Envs to configure CPU Killer and Network Delay
-    INTERVAL: "60" # Run every 60 minutes
+    CRON: "0 * * * *" # Run every hour
     DURATION: "5" # for 5 minutes
     THREADS_NO: "475" # on 475 threads
     NETWORK_DELAY: "1" # with 1 second network delay
   machinesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=the-coffee-bar-app"
   postgres:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=the-coffee-bar-app,k8s.pod.ip=$(MY_POD_IP)"
+    OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=the-coffee-bar-app"
 
 crons:
   clicker: '0 */4 * * *' # cron spec of time, here, 4 o'clock
