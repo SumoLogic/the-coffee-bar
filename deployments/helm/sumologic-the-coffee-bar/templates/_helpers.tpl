@@ -481,7 +481,7 @@ Create commands/args
 - --port=8083
 - --machine-svc-host={{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }}
 - --machine-svc-port=9090
-- --cpu-increase-cron=$CRON
+- --cpu-increase-cron=$(CRON)
 - --cpu-increase-duration=5
 - --cpu-increase-threads=475
 {{- end }}
@@ -553,7 +553,7 @@ Create envs
 - name: REACT_APP_COLLECTION_SOURCE_URL
   value: {{ .Values.extras.rumColSourceUrl | quote }}
 - name: REACT_APP_PROPAGATION_CORS_URLS
-  value: {{ printf "[/^http:\\/\\/%s:8082\\/.*/,]" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) }}
+  value: {{ printf "[/^http:\\\\/\\\\/%s:8082\\\\/.*/,]" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) | quote }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.bar" }}

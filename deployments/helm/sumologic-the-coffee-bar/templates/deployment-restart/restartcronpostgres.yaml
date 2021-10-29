@@ -28,7 +28,7 @@ spec:
               command:
                 - 'kubectl'
                 - '-n'
-                - 'clicker-ns'
+                - '{{ .Release.Namespace }}'
                 - 'rollout'
                 - 'restart'
                 - 'statefulset/{{ include "sumologic.thecoffeebar.metadata.name.postgres.statefulset" . }}'

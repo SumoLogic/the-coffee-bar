@@ -28,7 +28,7 @@ spec:
               command:
                 - 'kubectl'
                 - '-n'
-                - 'clicker-ns'
+                - '{{ .Release.Namespace }}'
                 - 'rollout'
                 - 'restart'
                 - 'deployment/{{ include "sumologic.thecoffeebar.metadata.name.clicker.deployment" . }}'

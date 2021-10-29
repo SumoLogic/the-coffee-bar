@@ -259,6 +259,7 @@ envs:
   frontend:
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
+    REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     ## Envs to configure CPU Killer and Network Delay
     CRON: "0 * * * *" # Run every hour
     DURATION: "5" # for 5 minutes
