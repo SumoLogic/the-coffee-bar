@@ -84,7 +84,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             }
 
             // Set Coffee amount
-            await clickAndSetFieldValue(coffee_selectors['input'], utils.getRandomNumber(0, 3), DELAY);
+            await clickAndSetFieldValue(coffee_selectors['input'], utils.getRandomNumber(1, 3), DELAY);
             // Add Coffee
             await click(coffee_selectors['button'], DELAY);
 
