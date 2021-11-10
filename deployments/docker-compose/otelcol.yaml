@@ -34,11 +34,8 @@ extensions:
 exporters:
   logging:
     loglevel: debug
-  jaeger:
-    endpoint: jaeger:14250
-    insecure: true
-#  otlphttp:
-#    traces_endpoint: ""
+  otlphttp:
+    traces_endpoint: SUMOLOGIC_HTTP_TRACES_URL
 
 service:
   extensions: [health_check]
@@ -46,7 +43,7 @@ service:
     traces:
       receivers: [jaeger, otlp, zipkin]
       processors: [memory_limiter]
-      exporters: [logging, jaeger, otlphttp]
+      exporters: [logging, otlphttp]
     metrics:
       receivers: [otlp]
       exporters: [logging]

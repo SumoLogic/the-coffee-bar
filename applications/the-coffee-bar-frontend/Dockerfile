@@ -15,9 +15,11 @@ COPY package.json ./
 RUN npm install
 
 # add app
-COPY . ./
+COPY ./cpu_killer/requirements.txt ./cpu_killer/requirements.txt
 
 RUN pip3 install -r cpu_killer/requirements.txt
+
+COPY . ./
 
 ENV CHOKIDAR_USEPOLLING=true
 # Fix for timezone

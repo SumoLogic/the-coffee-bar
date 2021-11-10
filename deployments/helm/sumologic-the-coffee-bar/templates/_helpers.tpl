@@ -538,6 +538,13 @@ Create envs
   value: {{ printf "http://%s:4317" .Values.extras.otelColHostName | quote }}
 {{- end }}
 
+{{ define "sumologic.thecoffeebar.envs.python.otel.exporter.otlp.proto.http" }}
+- name: OTEL_TRACES_EXPORTER
+  value: otlp_proto_http
+- name: OTEL_EXPORTER_OTLP_ENDPOINT
+  value: {{ printf "http://%s:55681/v1/traces" .Values.extras.otelColHostName | quote }}
+{{- end }}
+
 {{ define "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" }}
 - name: OTEL_EXPORTER_OTLP_ENDPOINT
   value: {{ printf "http://%s:55681" .Values.extras.otelColHostName | quote }}
@@ -561,7 +568,7 @@ Create envs
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
-{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- include "sumologic.thecoffeebar.envs.python.otel.exporter.otlp.proto.http" . }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.cashdesk" }}
@@ -569,7 +576,7 @@ Create envs
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
-{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- include "sumologic.thecoffeebar.envs.python.otel.exporter.otlp.proto.http" . }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.coffeemachine" }}
@@ -577,15 +584,10 @@ Create envs
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
-{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- include "sumologic.thecoffeebar.envs.python.otel.exporter.otlp.proto.http" . }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.machinesvc" }}
-- name: MY_POD_IP
-  valueFrom:
-    fieldRef:
-      fieldPath:
-        status.podIP
 {{- range $name, $value := .Values.envs.machinesvc }}
 - name: {{ $name }}
   value: {{ $value | quote -}}
@@ -593,17 +595,7 @@ Create envs
 {{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
 {{- end }}
 
-sumologic-the-coffee-bar-bar-public
-status:
-  loadBalancer:
-    ingress:
-      - hostname
 {{ define "sumologic.thecoffeebar.envs.watersvc" }}
-- name: MY_POD_IP
-  valueFrom:
-    fieldRef:
-      fieldPath:
-        status.podIP
 {{- range $name, $value := .Values.envs.watersvc }}
 - name: {{ $name }}
   value: {{ $value | quote -}}
@@ -612,11 +604,6 @@ status:
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.coffeesvc" }}
-- name: MY_POD_IP
-  valueFrom:
-    fieldRef:
-      fieldPath:
-        status.podIP
 {{- range $name, $value := .Values.envs.coffeesvc }}
 - name: {{ $name }}
   value: {{ $value | quote -}}
