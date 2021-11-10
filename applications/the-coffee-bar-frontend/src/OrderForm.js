@@ -295,6 +295,7 @@ class OrderForm extends Component {
             <Button name='Checkout' id='Checkout' colorScheme="blue" size='lg' fontSize='x-large'
                     textTransform='uppercase' onClick={() => {
               this.setState({ order_dialog: true });
+              this.setState({ bill: 0 });
             }}>
               Checkout
             </Button>
@@ -355,6 +356,9 @@ class OrderForm extends Component {
                 <AlertDialogFooter>
                   <Button name='OkBtn' id='OkBtn' colorScheme='green' ml={3} onClick={() => {
                     this.setState({ order_response: false });
+                    this.setState({ reason: '' });
+                    this.setState({ result: '' });
+                    this.setState({ trace_id: '' });
                   }}>
                     OK
                   </Button>
