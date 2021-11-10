@@ -87,7 +87,8 @@ class HttpServer:
         return Response("I'm alive!", status=200, mimetype='text/plain')
 
     def run(self):
-        serve(TransLogger(application=self.app, logger=log.getLogger('root')), host=self.host, port=self.port)
+        serve(TransLogger(application=self.app, logger=log.getLogger('root')), host=self.host, port=self.port,
+              server_name=self.host)
 
     def add_endpoint(self, endpoint: str = None, endpoint_name: str = None, handler: staticmethod = None):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=['POST', 'GET', 'HEAD'])
