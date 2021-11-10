@@ -40,11 +40,13 @@ setup(
                       'opentelemetry-instrumentation==0.24b0',
                       'opentelemetry-sdk==1.5.0',
                       'opentelemetry-sdk-extension-aws==0.24b0',
+                      'paste==3.5.0',
                       'psycopg2==2.9.1',
                       'pyjson==1.3.0',
                       'pyyaml==6.0',
                       'requests==2.26.0',
                       'statsd==3.3.0',
+                      'waitress==2.0.0',
                       ],
     data_files=[('config', ['src/config/config.yaml'])],
     entry_points={

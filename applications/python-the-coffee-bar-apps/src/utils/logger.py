@@ -1,7 +1,7 @@
 import logging as log
 import os
-from logging.handlers import SysLogHandler
 import sys
+from logging.handlers import SysLogHandler
 
 from opentelemetry import trace
 
@@ -33,22 +33,23 @@ class SpanFormatter(log.Formatter):
 def configure_logging(log_level: str):
     log_level = _LOG_LEVEL[log_level]
 
+    span_formatter = SpanFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s '
+                                   '- trace_id=%(trace_id)s - span_id=%(span_id)s')
+
+    # Configure basic logging
     root = log.getLogger()
     root.setLevel(log_level)
 
-    span_formattter = SpanFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s '
-                                    '- trace_id=%(trace_id)s - span_id=%(span_id)s')
-
     stdout_handler = log.StreamHandler(sys.stdout)
     stdout_handler.setLevel(log_level)
-    stdout_handler.setFormatter(span_formattter)
+    stdout_handler.setFormatter(span_formatter)
     root.addHandler(stdout_handler)
 
     if os.getenv('SYSLOG'):
         syslog_address = os.getenv('SYSLOG').split(':')
         syslog_handler = SysLogHandler(address=(syslog_address[0], int(syslog_address[1])))
         syslog_handler.setLevel(log_level)
-        syslog_handler.setFormatter(span_formattter)
+        syslog_handler.setFormatter(span_formatter)
         root.addHandler(syslog_handler)
 
     return log

@@ -7,10 +7,12 @@ from flask_cors import CORS
 import requests
 
 from src.utils.utils import to_json
-
 from opentelemetry import trace
 from opentelemetry.util._time import _time_ns
 import statsd
+
+from waitress import serve
+from paste.translogger import TransLogger
 
 
 class EndpointAction:
@@ -85,8 +87,7 @@ class HttpServer:
         return Response("I'm alive!", status=200, mimetype='text/plain')
 
     def run(self):
-        # Debug=True is causing issue with Flask application instrumentation
-        self.app.run(host=self.host, port=self.port, debug=False)
+        serve(TransLogger(application=self.app, logger=log.getLogger('root')), host=self.host, port=self.port)
 
     def add_endpoint(self, endpoint: str = None, endpoint_name: str = None, handler: staticmethod = None):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=['POST', 'GET', 'HEAD'])
