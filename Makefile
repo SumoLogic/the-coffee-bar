@@ -52,6 +52,17 @@ push-frontend:
 	REPO_URL=${REPO_URL} $(MAKE) -C ./applications/the-coffee-bar-frontend push
 
 #-------------------------------------------------------------------------------
+
+.PHONY: build-all
+build-all:
+	$(MAKE) build-frontend
+	$(MAKE) build-dotnet-apps
+	$(MAKE) build-clicker
+	$(MAKE) build-python-apps
+	$(MAKE) build-ruby-apps
+	$(MAKE) build-frontend
+
+#-------------------------------------------------------------------------------
 .PHONY: _login
 _login:
 	aws ecr-public get-login-password --region us-east-1 \
