@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
-gem 'opentelemetry-sdk', '1.0.0'
+gem 'opentelemetry-sdk', '1.0.1'
 gem 'opentelemetry-instrumentation-all', '0.21.3'
-gem 'opentelemetry-exporter-otlp', '0.20.5'
+gem 'opentelemetry-exporter-otlp', '0.20.6'
 gem 'sinatra', '2.1.0'
 gem 'sinatra-contrib', '2.1.0'
 gem 'net', '0.3.3'
