@@ -13,7 +13,7 @@ image:
     tag: frontend-jsv0.0.1-ot0.24.0
   python:
     repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
-    tag: pythonAppsv0.1.1-ot1.6.2-0.25b2
+    tag: pythonAppsv0.1.1-ot1.7.1-0.26b1
   ruby:
     repository: public.ecr.aws/a4t4y2n3/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.0.1-0.21.3-0.20.6

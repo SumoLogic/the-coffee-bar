@@ -1,4 +1,4 @@
-TAG ?= pythonAppsv0.1.1-ot1.6.2-0.25b2
+TAG ?= pythonAppsv0.1.1-ot1.7.1-0.26b1
 FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
