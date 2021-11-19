@@ -65,7 +65,6 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
       - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
-      - REACT_APP_SUMO_OT_JS_URL=
       - REACT_APP_COLLECTION_SOURCE_URL=
       - REACT_APP_APPLICATION_NAME=tcb-local
       - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
@@ -107,7 +106,7 @@ services:
 #      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
 #      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
   machine-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.0.1-ot1.0.0-0.21.3-0.20.5
+    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.1.1-ot1.0.1-0.21.3-0.20.6
     container_name: machine-svc
     hostname: machine-svc
     ports:
@@ -118,7 +117,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
   coffee-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.0.1-ot1.0.0-0.21.3-0.20.5
+    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.1.1-ot1.0.1-0.21.3-0.20.6
     container_name: coffee-svc
     hostname: coffee-svc
     ports:
@@ -129,7 +128,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
   water-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.0.1-ot1.0.0-0.21.3-0.20.5
+    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.1.1-ot1.0.1-0.21.3-0.20.6
     container_name: water-svc
     hostname: water-svc
     ports:
@@ -166,5 +165,3 @@ services:
       - "55681:55681"
       - "14268:14268"
       - "9411:9411"
-    expose:
-      - 16686

@@ -1,3 +1,3 @@
-module TheCoffeeMachine
-      VERSION = "0.1.0"
+module TheCoffeeBar
+      VERSION = "0.1.1"
 end
