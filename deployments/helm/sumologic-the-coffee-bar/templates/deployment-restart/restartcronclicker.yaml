@@ -6,6 +6,8 @@ metadata:
 spec:
   concurrencyPolicy: Forbid
   schedule: '{{ .Values.crons.clicker }}'
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
       backoffLimit: 2 # this has very low chance of failing, as all this does
