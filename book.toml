@@ -1,0 +1,6 @@
+[book]
+authors = ["Marcin 'Perk' Stożek"]
+language = "en"
+multilingual = false
+src = "src"
+title = "OpenTelemetry Coffee Bar Course"
