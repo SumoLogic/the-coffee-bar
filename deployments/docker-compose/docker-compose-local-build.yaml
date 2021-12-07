@@ -1,0 +1,200 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    hostname: postgres
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+  clicker:
+    build:
+      context: ../../applications/js-the-coffee-bar-ui-clicker
+      dockerfile: Dockerfile
+    container_name: clicker
+    hostname: clicker
+    environment:
+      COFFEE_BAR_UI_URL: "http://the-coffee-bar-frontend:3000"
+      DELAY: "10"
+      PUPPETEER_PRODUCT: "chrome"
+      DEBUG_DUMPIO: 'false'
+    cap_add:
+      - SYS_ADMIN
+    command: ["node", "src/clicker.js", "http://the-coffee-bar-frontend:3000"]
+    depends_on:
+      - the-coffee-bar
+      - the-coffee-bar-frontend
+    ports:
+      - 9222:9222
+    expose:
+      - 9222
+  the-coffee-lover:
+    build:
+      context: ../../applications/python-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: the-coffee-lover
+    hostname: the-coffee-lover
+    command: ["opentelemetry-instrument", "the-coffee-lover",
+              "--host=the-coffee-bar",
+              "--port=8082",
+              "--ratio=30"]
+    environment:
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
+    depends_on:
+      - the-coffee-bar
+  the-coffee-bar-frontend:
+    build:
+      context: ../../applications/the-coffee-bar-frontend
+      dockerfile: Dockerfile
+    container_name: the-coffee-bar-frontend
+    hostname: the-coffee-bar-frontend
+    ports:
+      - 3000:3000
+    expose:
+      - 3000
+    command: |
+      /bin/bash -c "python3 ./cpu_killer/cpu_killer.py & \
+       npm start"
+    environment:
+      - CRON=*/2 * * * *
+      - DURATION=1
+      - THREADS_NO=500
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
+      - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
+      - REACT_APP_COLLECTION_SOURCE_URL=
+      - REACT_APP_APPLICATION_NAME=tcb-local
+      - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
+      - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
+  the-coffee-bar:
+    build:
+      context: ../../applications/python-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: the-coffee-bar
+    hostname: the-coffee-bar
+    ports:
+      - 8082:8082
+    expose:
+      - 8082
+    command: ["opentelemetry-instrument", "the-coffee-bar",
+              "--host=the-coffee-bar", "--port=8082",
+              "--coffeemachine-host=the-coffee-machine",
+              "--coffeemachine-port=8083",
+              "--cashdesk-host=the-cashdesk",
+              "--cashdesk-port=8084"]
+    #             ,"--sweets-url=LAMBDA_URL_HERE"]
+    environment:
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
+      - OTEL_PROPAGATORS=xray,tracecontext,baggage
+  the-coffee-machine:
+    build:
+      context: ../../applications/python-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: the-coffee-machine
+    hostname: the-coffee-machine
+    ports:
+      - 8083:8083
+    command: ["opentelemetry-instrument", "the-coffee-machine",
+              "--host=the-coffee-machine", "--port=8083",
+              "--machine-svc-host=machine-svc",
+              "--machine-svc-port=9090",
+              "--cpu-increase-cron=*/2 * * * *",
+              "--cpu-increase-duration=1",
+              "--cpu-increase-threads=500"]
+    environment:
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
+  the-cashdesk:
+    build:
+      context: ../../applications/python-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: the-cashdesk
+    hostname: the-cashdesk
+    ports:
+      - 8084:8084
+    command: ["opentelemetry-instrument", "the-cashdesk",
+              "--host=the-cashdesk", "--port=8084",
+              "--calculator-host=calculator-svc",
+              "--calculator-port=8090",
+              "--connection-string=postgresql://account:account@postgres:5432/account"]
+    environment:
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-cashdesk
+  machine-svc:
+    build:
+      context: ../../applications/ruby-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: machine-svc
+    hostname: machine-svc
+    ports:
+      - 9090:9090
+    command: ["ruby", "/app/lib/machine.rb"]
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
+  coffee-svc:
+    build:
+      context: ../../applications/ruby-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: coffee-svc
+    hostname: coffee-svc
+    ports:
+      - 9091:9091
+    command: ["ruby", "/app/lib/coffee.rb"]
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
+  water-svc:
+    build:
+      context: ../../applications/ruby-the-coffee-bar-apps
+      dockerfile: Dockerfile
+    container_name: water-svc
+    hostname: water-svc
+    ports:
+      - 9092:9092
+    command: ["ruby", "/app/lib/water.rb"]
+    environment:
+      - OTEL_EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=water-svc
+  calculator-svc:
+    build:
+      context: ../../applications/dotnet-core-the-coffee-bar-app
+      dockerfile: Dockerfile
+    container_name: calculator-svc
+    hostname: calculator-svc
+    command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
+    environment:
+      - EXPORTER=otlp
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=calculator-svc,application=tcb-local
+    ports:
+      - 8090:8090
+  otelcol:
+    image: public.ecr.aws/sumologic/opentelemetry-collector:latest
+    container_name: otelcol
+    hostname: otelcol
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+        - ./otelcol.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "6831:6831"
+      - "14251:14251"
+      - "4317:4317"
+      - "55680:55680"
+      - "55681:55681"
+      - "14268:14268"
+      - "9411:9411"
