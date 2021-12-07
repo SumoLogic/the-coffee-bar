@@ -1,3 +1,6 @@
+# OT Course Ignores
+opentelemetry-intro-course/docs/
+
 # IDE Ignores
 .idea/
 
