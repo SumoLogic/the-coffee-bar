@@ -2,6 +2,7 @@ import logging as log
 
 from flask import make_response
 import requests
+import datetime
 
 from src.bar.coffee_machine import GET_COFFEE_ENDPOINT
 from src.common.http_server import HttpServer
@@ -85,11 +86,16 @@ class Bar(HttpServer):
         return set_product_status(response=response, status_key='sweets_status')
 
     def get_coffee(self, data):
+        start_time = datetime.datetime.now()
         log.info('Send request to the coffee-machine')
         coffee_machine_url = 'http://{}:{}{}'.format(self.coffee_machine_host, self.coffee_machine_port,
                                                      GET_COFFEE_ENDPOINT)
 
         response = requests.post(url=coffee_machine_url, json=data)
+        end_time = datetime.datetime.now()
+        time_diff = (end_time - start_time)
+        request_time = time_diff.total_seconds() * 1000
+        log.info('Coffee preparation request time: %s ms', request_time)
 
         return set_product_status(response=response, status_key='coffee_status')
 
