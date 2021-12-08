@@ -7,3 +7,8 @@ title = "OpenTelemetry Coffee Bar Course"
 
 [build]
 build-dir = "docs"
+
+[output.html]
+git-repository-url = "https://github.com/sumologic/the-coffee-bar"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/sumologic/the-coffee-bar/edit/main/opentelemetry-intro-course/{path}"
