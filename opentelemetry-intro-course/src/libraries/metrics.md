@@ -15,7 +15,7 @@ Different types of Metrics by Statsd :
 - Gauges : Gauges are a constant data type. They are not subject to averaging, and they don’t change unless you change them.
 
 
-## OpenTelemetry Auto Instrumentation for Python App:
+## OpenTelemetry Manual Instrumentation for Python App:
 The librars used for Auto instrumentation can be imported directly . 
 Sample code: 
     from opentelemetry import metrics
