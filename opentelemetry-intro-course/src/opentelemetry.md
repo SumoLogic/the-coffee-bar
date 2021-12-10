@@ -1,1 +1,1 @@
-# OpenTelemetry
+# What is OpenTelemetry
