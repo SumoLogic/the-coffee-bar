@@ -141,6 +141,53 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="metrics"><a class="header" href="#metrics">Metrics</a></h1>
+<h2 id="manual-instrumentation"><a class="header" href="#manual-instrumentation">Manual Instrumentation</a></h2>
+<p>The python apps part of the framework are instrumented with ManualTelemetry-Python. These metrics are configured using statsd . 
+To receive the Statsd metrics you can configure it in otelcol.yaml receivers. The otelcol.yaml can be found at deployments/docker-compose.</p>
+<p>Sample Configuration for Python App:</p>
+<p>statsd:
+endpoint: &quot;0.0.0.0:8125&quot; # default
+aggregation_interval: 60s  # default
+enable_metric_type: true   # default
+is_monotonic_counter: true # default
+timer_histogram_mapping:
+- statsd_type: &quot;histogram&quot;
+observer_type: &quot;gauge&quot;
+- statsd_type: &quot;timing&quot;
+observer_type: &quot;gauge&quot;</p>
+<p>Samples of metrics generated in Sumo portal : </p>
+<pre><code>{
+_collector=&quot;tcb-otc-distro&quot;,
+_collectorId=&quot;000000000*****&quot;,
+_source=&quot;tcb-otc-distro&quot;,
+_sourceCategory=&quot;tcb-otc-distro&quot;,
+_sourceHost=&quot;otelcol&quot;,
+_sourceId=&quot;0000000000000000&quot;,
+_sourceName=&quot;OTC Metric Input&quot;
+metric_type=&quot;counter&quot;
+}
+</code></pre>
+<h2 id="manual-instrumentation-for-python-app"><a class="header" href="#manual-instrumentation-for-python-app">Manual Instrumentation for Python App:</a></h2>
+<p>The Coffee Bar App can be Auto instrumented using Open Telementary. </p>
+<pre><code>batcher_mode = &quot;stateful&quot;
+metrics.set_meter_provider(MeterProvider())
+meter = metrics.get_meter(__name__, batcher_mode == &quot;stateful&quot;)
+exporter = ConsoleMetricsExporter()
+controller = PushController(meter, exporter, 5)
+
+staging_label_set = meter.get_label_set({&quot;environment&quot;: &quot;staging&quot;})
+
+requests_counter = meter.create_metric(
+    name=&quot;requests&quot;,
+    description=&quot;number of requests&quot;,
+    unit=&quot;1&quot;,
+    value_type=int,
+    metric_type=Counter,
+    label_keys=(&quot;environment&quot;,),
+</code></pre>
+<p>Samples of metrics generated : </p>
+<p>ConsoleMetricsExporter(data=&quot;Counter(name=&quot;requests&quot;, description=&quot;number of requests&quot;)&quot;, label_set=&quot;(('environment', 'staging'),)&quot;, value=25)</p>
+<p>For more details refer : https://opentelemetry-python-yusuket.readthedocs.io/en/latest/getting-started.html#adding-metrics</p>
 
                     </main>
 

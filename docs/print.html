@@ -149,6 +149,33 @@
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="logs"><a class="header" href="#logs">Logs</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="metrics"><a class="header" href="#metrics">Metrics</a></h1>
+<p>A metric is a measurement about a service, captured at runtime. Logically, the moment of capturing one of these measurements is known as a metric event which consists not only of the measurement itself, but the time that it was captured and associated metadata.
+Application and request metrics are important indicators of availability and performance. Custom metrics can provide insights into how availability indicators impact user experience or the business. Collected data can be used to alert of an outage or trigger scheduling decisions to scale up a deployment automatically upon high demand.
+Refer : https://opentelemetry.io/docs/concepts/data-sources/</p>
+<h2 id="statsd-metrics-for-python-app"><a class="header" href="#statsd-metrics-for-python-app">Statsd Metrics for Python App:</a></h2>
+<p>StatsD is originally a simple daemon to aggregate and summarize application metrics. With StatsD, applications are to be instrumented by developers using language-specific client libraries. These libraries will then communicate with the StatsD daemon using its dead-simple protocol, and the daemon will then generate aggregate metrics and relay them to virtually any graphing or monitoring backend.
+In the coffee bar app we have used Statsd library to collect the metrics . In the python app we have directly imported Statsd library . 
+Sample code : 
+import statsd
+Different types of Metrics by Statsd :</p>
+<ul>
+<li>Counters : They are treated as a count of a type of event per second.</li>
+<li>Timers : Timers are meant to track how long something took.</li>
+<li>Gauges : Gauges are a constant data type. They are not subject to averaging, and they don’t change unless you change them.</li>
+</ul>
+<h2 id="opentelemetry-manual-instrumentation-for-python-app"><a class="header" href="#opentelemetry-manual-instrumentation-for-python-app">OpenTelemetry Manual Instrumentation for Python App:</a></h2>
+<p>The librars used for Auto instrumentation can be imported directly . 
+Sample code: 
+from opentelemetry import metrics
+from opentelemetry.sdk.metrics import Counter, MeterProvider
+from opentelemetry.sdk.metrics.export import ConsoleMetricsExporter
+from opentelemetry.sdk.metrics.export.controller import PushController</p>
+<p>OpenTelemetry defines three metric instruments today:</p>
+<ul>
+<li>counter: a value that is summed over time – you can think of this like an odometer on a car; it only ever goes up.</li>
+<li>measure: a value that is aggregated over time. This is more akin to the trip odometer on a car, it represents a value over   some defined range.</li>
+<li>observer: captures a current set of values at a particular point in time, like a fuel gauge in a vehicle.</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="traces"><a class="header" href="#traces">Traces</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="opentelemetry-collector"><a class="header" href="#opentelemetry-collector">OpenTelemetry Collector</a></h1>
 <p>How to set up OT libraries to create signals:</p>
@@ -163,6 +190,53 @@
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="logs-1"><a class="header" href="#logs-1">Logs</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="metrics-1"><a class="header" href="#metrics-1">Metrics</a></h1>
+<h2 id="manual-instrumentation"><a class="header" href="#manual-instrumentation">Manual Instrumentation</a></h2>
+<p>The python apps part of the framework are instrumented with ManualTelemetry-Python. These metrics are configured using statsd . 
+To receive the Statsd metrics you can configure it in otelcol.yaml receivers. The otelcol.yaml can be found at deployments/docker-compose.</p>
+<p>Sample Configuration for Python App:</p>
+<p>statsd:
+endpoint: &quot;0.0.0.0:8125&quot; # default
+aggregation_interval: 60s  # default
+enable_metric_type: true   # default
+is_monotonic_counter: true # default
+timer_histogram_mapping:
+- statsd_type: &quot;histogram&quot;
+observer_type: &quot;gauge&quot;
+- statsd_type: &quot;timing&quot;
+observer_type: &quot;gauge&quot;</p>
+<p>Samples of metrics generated in Sumo portal : </p>
+<pre><code>{
+_collector=&quot;tcb-otc-distro&quot;,
+_collectorId=&quot;000000000*****&quot;,
+_source=&quot;tcb-otc-distro&quot;,
+_sourceCategory=&quot;tcb-otc-distro&quot;,
+_sourceHost=&quot;otelcol&quot;,
+_sourceId=&quot;0000000000000000&quot;,
+_sourceName=&quot;OTC Metric Input&quot;
+metric_type=&quot;counter&quot;
+}
+</code></pre>
+<h2 id="manual-instrumentation-for-python-app"><a class="header" href="#manual-instrumentation-for-python-app">Manual Instrumentation for Python App:</a></h2>
+<p>The Coffee Bar App can be Auto instrumented using Open Telementary. </p>
+<pre><code>batcher_mode = &quot;stateful&quot;
+metrics.set_meter_provider(MeterProvider())
+meter = metrics.get_meter(__name__, batcher_mode == &quot;stateful&quot;)
+exporter = ConsoleMetricsExporter()
+controller = PushController(meter, exporter, 5)
+
+staging_label_set = meter.get_label_set({&quot;environment&quot;: &quot;staging&quot;})
+
+requests_counter = meter.create_metric(
+    name=&quot;requests&quot;,
+    description=&quot;number of requests&quot;,
+    unit=&quot;1&quot;,
+    value_type=int,
+    metric_type=Counter,
+    label_keys=(&quot;environment&quot;,),
+</code></pre>
+<p>Samples of metrics generated : </p>
+<p>ConsoleMetricsExporter(data=&quot;Counter(name=&quot;requests&quot;, description=&quot;number of requests&quot;)&quot;, label_set=&quot;(('environment', 'staging'),)&quot;, value=25)</p>
+<p>For more details refer : https://opentelemetry-python-yusuket.readthedocs.io/en/latest/getting-started.html#adding-metrics</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="traces-1"><a class="header" href="#traces-1">Traces</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pipelines"><a class="header" href="#pipelines">Pipelines</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="receivers"><a class="header" href="#receivers">Receivers</a></h1>
