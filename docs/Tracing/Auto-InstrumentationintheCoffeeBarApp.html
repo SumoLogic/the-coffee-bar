@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Exporters - OpenTelemetry Coffee Bar Course</title>
+        <title>Coffee Bar App Tracing Examples - OpenTelemetry Coffee Bar Course</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../opentelemetry.html"><strong aria-hidden="true">2.</strong> What is OpenTelemetry</a></li><li class="chapter-item expanded "><a href="../libraries/index.html"><strong aria-hidden="true">3.</strong> OT Libraries for your applications</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../libraries/logs.html"><strong aria-hidden="true">3.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../libraries/metrics.html"><strong aria-hidden="true">3.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../libraries/traces.html"><strong aria-hidden="true">3.3.</strong> Traces</a></li></ol></li><li class="chapter-item expanded "><a href="../otelcol/index.html"><strong aria-hidden="true">4.</strong> OpenTelemetry Collector</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../otelcol/logs.html"><strong aria-hidden="true">4.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../otelcol/metrics.html"><strong aria-hidden="true">4.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../otelcol/traces.html"><strong aria-hidden="true">4.3.</strong> Traces</a></li><li class="chapter-item expanded "><a href="../otelcol/pipelines.html"><strong aria-hidden="true">4.4.</strong> Pipelines</a></li><li class="chapter-item expanded "><a href="../otelcol/receivers.html"><strong aria-hidden="true">4.5.</strong> Receivers</a></li><li class="chapter-item expanded "><a href="../otelcol/processors.html"><strong aria-hidden="true">4.6.</strong> Processors</a></li><li class="chapter-item expanded "><a href="../otelcol/exporters.html" class="active"><strong aria-hidden="true">4.7.</strong> Exporters</a></li></ol></li><li class="chapter-item expanded "><a href="../misc/thecoffeebar.html"><strong aria-hidden="true">5.</strong> The Coffee Bar application</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Tracing/Tracing.html"><strong aria-hidden="true">5.1.</strong> Tracing Introduction</a></li><li class="chapter-item expanded "><a href="../Tracing/Auto-InstrumentationintheCoffeeBarApp.html"><strong aria-hidden="true">5.2.</strong> Coffee Bar App Tracing Examples</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../misc/contributors.html">Contributors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../opentelemetry.html"><strong aria-hidden="true">2.</strong> What is OpenTelemetry</a></li><li class="chapter-item expanded "><a href="../libraries/index.html"><strong aria-hidden="true">3.</strong> OT Libraries for your applications</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../libraries/logs.html"><strong aria-hidden="true">3.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../libraries/metrics.html"><strong aria-hidden="true">3.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../libraries/traces.html"><strong aria-hidden="true">3.3.</strong> Traces</a></li></ol></li><li class="chapter-item expanded "><a href="../otelcol/index.html"><strong aria-hidden="true">4.</strong> OpenTelemetry Collector</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../otelcol/logs.html"><strong aria-hidden="true">4.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../otelcol/metrics.html"><strong aria-hidden="true">4.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../otelcol/traces.html"><strong aria-hidden="true">4.3.</strong> Traces</a></li><li class="chapter-item expanded "><a href="../otelcol/pipelines.html"><strong aria-hidden="true">4.4.</strong> Pipelines</a></li><li class="chapter-item expanded "><a href="../otelcol/receivers.html"><strong aria-hidden="true">4.5.</strong> Receivers</a></li><li class="chapter-item expanded "><a href="../otelcol/processors.html"><strong aria-hidden="true">4.6.</strong> Processors</a></li><li class="chapter-item expanded "><a href="../otelcol/exporters.html"><strong aria-hidden="true">4.7.</strong> Exporters</a></li></ol></li><li class="chapter-item expanded "><a href="../misc/thecoffeebar.html"><strong aria-hidden="true">5.</strong> The Coffee Bar application</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Tracing/Tracing.html"><strong aria-hidden="true">5.1.</strong> Tracing Introduction</a></li><li class="chapter-item expanded "><a href="../Tracing/Auto-InstrumentationintheCoffeeBarApp.html" class="active"><strong aria-hidden="true">5.2.</strong> Coffee Bar App Tracing Examples</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../misc/contributors.html">Contributors</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -113,7 +113,7 @@
                         <a href="https://github.com/sumologic/the-coffee-bar" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/sumologic/the-coffee-bar/edit/main/opentelemetry-intro-course/src/otelcol/exporters.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/sumologic/the-coffee-bar/edit/main/opentelemetry-intro-course/src/Tracing/Auto-InstrumentationintheCoffeeBarApp.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                     </div>
@@ -140,16 +140,37 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="exporters"><a class="header" href="#exporters">Exporters</a></h1>
+                        <h1 id="auto-instrumentation-examples"><a class="header" href="#auto-instrumentation-examples">Auto-Instrumentation Examples</a></h1>
+<h2 id="python-app"><a class="header" href="#python-app">Python app</a></h2>
+<p>The python apps part of the framework are instrumented with <a href="https://opentelemetry-python.readthedocs.io/en/stable/examples/auto-instrumentation/README.html">OpenTelemetry-Python</a></p>
+<p>For each of the application the-coffe-lover, the-coffee-bar, the-coffee-machine and the-cashdesk we execute <code>opentelemetry-auto-instrumentation python app_name -h</code>, e.g. opentelemetry-auto-instrumentation python the-coffee-bar -h. Configuration to the application can be provided by config file - example config file can be found in src/config/config.yaml or by application arguments.</p>
+<p>More details in this <a href="https://github.com/SumoLogic/the-coffee-bar/tree/main/applications/python-the-coffee-bar-apps#readme">readme</a> </p>
+<h2 id="ruby-app"><a class="header" href="#ruby-app">Ruby APP</a></h2>
+<p>The ruby applications part of the framework are instrumented with <a href="https://github.com/open-telemetry/opentelemetry-ruby">OpenTelemetry-Ruby</a> </p>
+<p>Each of the application machine-svc, water-svc, coffee-svc needs additional configuration - in this case everything is based on the environment variables.</p>
+<p>For more <a href="https://github.com/SumoLogic/the-coffee-bar/tree/main/applications/ruby-the-coffee-bar-apps">details</a> </p>
+<h2 id="dotnet-app"><a class="header" href="#dotnet-app">Dotnet app</a></h2>
+<p>The ASP .NET Core application is auto-instrumented by OpenTelemetry-Dotnet.</p>
+<p>In this situation the application requires some variables to be set 
+Common</p>
+<ul>
+<li>SERVICE_NAME - defines the name of the service (calculator-svc by default)</li>
+<li>EXPORTER - defines the span exporter (otlp, zipkin, jaeger, console - otlp by default)
+Specific for OTLP Exporter</li>
+<li>OTEL_EXPORTER_OTLP_ENDPOINT - defines the OTLP gRPC Collector Endpoint (e.g. http://localhost:4317)
+Specific for Zipkin Exporter</li>
+<li>OTEL_EXPORTER_ZIPKIN_ENDPOINT - defines the Zipkin HTTP Collector Endpoint (e.g. localhost:9411/api/v2/spans)</li>
+</ul>
+<p>For more <a href="https://github.com/SumoLogic/the-coffee-bar/tree/main/applications/dotnet-core-the-coffee-bar-app">details</a> </p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../otelcol/processors.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../Tracing/Tracing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../misc/thecoffeebar.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../misc/contributors.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -158,10 +179,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../otelcol/processors.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../Tracing/Tracing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../misc/thecoffeebar.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../misc/contributors.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

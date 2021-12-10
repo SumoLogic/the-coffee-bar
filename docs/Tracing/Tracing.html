@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Exporters - OpenTelemetry Coffee Bar Course</title>
+        <title>Tracing Introduction - OpenTelemetry Coffee Bar Course</title>
         <!-- Custom HTML head -->
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
@@ -75,7 +75,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../opentelemetry.html"><strong aria-hidden="true">2.</strong> What is OpenTelemetry</a></li><li class="chapter-item expanded "><a href="../libraries/index.html"><strong aria-hidden="true">3.</strong> OT Libraries for your applications</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../libraries/logs.html"><strong aria-hidden="true">3.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../libraries/metrics.html"><strong aria-hidden="true">3.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../libraries/traces.html"><strong aria-hidden="true">3.3.</strong> Traces</a></li></ol></li><li class="chapter-item expanded "><a href="../otelcol/index.html"><strong aria-hidden="true">4.</strong> OpenTelemetry Collector</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../otelcol/logs.html"><strong aria-hidden="true">4.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../otelcol/metrics.html"><strong aria-hidden="true">4.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../otelcol/traces.html"><strong aria-hidden="true">4.3.</strong> Traces</a></li><li class="chapter-item expanded "><a href="../otelcol/pipelines.html"><strong aria-hidden="true">4.4.</strong> Pipelines</a></li><li class="chapter-item expanded "><a href="../otelcol/receivers.html"><strong aria-hidden="true">4.5.</strong> Receivers</a></li><li class="chapter-item expanded "><a href="../otelcol/processors.html"><strong aria-hidden="true">4.6.</strong> Processors</a></li><li class="chapter-item expanded "><a href="../otelcol/exporters.html" class="active"><strong aria-hidden="true">4.7.</strong> Exporters</a></li></ol></li><li class="chapter-item expanded "><a href="../misc/thecoffeebar.html"><strong aria-hidden="true">5.</strong> The Coffee Bar application</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Tracing/Tracing.html"><strong aria-hidden="true">5.1.</strong> Tracing Introduction</a></li><li class="chapter-item expanded "><a href="../Tracing/Auto-InstrumentationintheCoffeeBarApp.html"><strong aria-hidden="true">5.2.</strong> Coffee Bar App Tracing Examples</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../misc/contributors.html">Contributors</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../opentelemetry.html"><strong aria-hidden="true">2.</strong> What is OpenTelemetry</a></li><li class="chapter-item expanded "><a href="../libraries/index.html"><strong aria-hidden="true">3.</strong> OT Libraries for your applications</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../libraries/logs.html"><strong aria-hidden="true">3.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../libraries/metrics.html"><strong aria-hidden="true">3.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../libraries/traces.html"><strong aria-hidden="true">3.3.</strong> Traces</a></li></ol></li><li class="chapter-item expanded "><a href="../otelcol/index.html"><strong aria-hidden="true">4.</strong> OpenTelemetry Collector</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../otelcol/logs.html"><strong aria-hidden="true">4.1.</strong> Logs</a></li><li class="chapter-item expanded "><a href="../otelcol/metrics.html"><strong aria-hidden="true">4.2.</strong> Metrics</a></li><li class="chapter-item expanded "><a href="../otelcol/traces.html"><strong aria-hidden="true">4.3.</strong> Traces</a></li><li class="chapter-item expanded "><a href="../otelcol/pipelines.html"><strong aria-hidden="true">4.4.</strong> Pipelines</a></li><li class="chapter-item expanded "><a href="../otelcol/receivers.html"><strong aria-hidden="true">4.5.</strong> Receivers</a></li><li class="chapter-item expanded "><a href="../otelcol/processors.html"><strong aria-hidden="true">4.6.</strong> Processors</a></li><li class="chapter-item expanded "><a href="../otelcol/exporters.html"><strong aria-hidden="true">4.7.</strong> Exporters</a></li></ol></li><li class="chapter-item expanded "><a href="../misc/thecoffeebar.html"><strong aria-hidden="true">5.</strong> The Coffee Bar application</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../Tracing/Tracing.html" class="active"><strong aria-hidden="true">5.1.</strong> Tracing Introduction</a></li><li class="chapter-item expanded "><a href="../Tracing/Auto-InstrumentationintheCoffeeBarApp.html"><strong aria-hidden="true">5.2.</strong> Coffee Bar App Tracing Examples</a></li><li class="spacer"></li></ol></li><li class="chapter-item expanded "><a href="../misc/contributors.html">Contributors</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -113,7 +113,7 @@
                         <a href="https://github.com/sumologic/the-coffee-bar" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/sumologic/the-coffee-bar/edit/main/opentelemetry-intro-course/src/otelcol/exporters.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/sumologic/the-coffee-bar/edit/main/opentelemetry-intro-course/src/Tracing/Tracing.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
                     </div>
@@ -140,16 +140,20 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="exporters"><a class="header" href="#exporters">Exporters</a></h1>
+                        <h1 id="opentelemetry-tracing"><a class="header" href="#opentelemetry-tracing">OpenTelemetry Tracing</a></h1>
+<p>Traces track the progression of a single request, called a trace, as it is handled by services that make up an application. The request may be initiated by a user or an application. Distributed tracing is a form of tracing that traverses process, network and security boundaries. Each unit of work in a trace is called a span; a trace is a tree of spans. Spans are objects that represent the work being done by individual services or components involved in a request as it flows through a system. A span contains a span context, which is a set of globally unique identifiers that represent the unique request that each span is a part of. A span provides Request, Error and Duration (RED) metrics that can be used to debug availability as well as performance issues.
+A trace contains a single root span which encapsulates the end-to-end latency for the entire request. You can think of this as a single logical operation, such as clicking a button in a web application to add a product to a shopping cart. The root span would measure the time it took from an end-user clicking that button to the operation being completed or failing (so, the item is added to the cart or some error occurs) and the result being displayed to the user. A trace is comprised of the single root span and any number of child spans, which represent operations taking place as part of the request. Each span contains metadata about the operation, such as its name, start and end timestamps, attributes, events, and status.
+To create and manage spans in OpenTelemetry, the OpenTelemetry API provides the tracer interface. This object is responsible for tracking the active span in your process, and allows you to access the current span in order to perform operations on it such as adding attributes, events, and finishing it when the work it tracks is complete. One or more tracer objects can be created in a process through the tracer provider, a factory interface that allows for multiple tracers to be instantiated in a single process with different options.
+References - https://opentelemetry.io/docs/concepts/data-sources/</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../otelcol/processors.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../misc/thecoffeebar.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
-                            <a rel="next" href="../misc/thecoffeebar.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../Tracing/Auto-InstrumentationintheCoffeeBarApp.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         <div style="clear: both"></div>
@@ -158,10 +162,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../otelcol/processors.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../misc/thecoffeebar.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
-                    <a rel="next" href="../misc/thecoffeebar.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../Tracing/Auto-InstrumentationintheCoffeeBarApp.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

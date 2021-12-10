@@ -15,7 +15,8 @@
   - [Processors](otelcol/processors.md)
   - [Exporters](otelcol/exporters.md)
 - [The Coffee Bar application](misc/thecoffeebar.md)
-
+  - [Tracing Introduction](Tracing/Tracing.md)
+  - [Coffee Bar App Tracing Examples](Tracing/Auto-InstrumentationintheCoffeeBarApp.md)
 -----------
 
 [Contributors](misc/contributors.md)
