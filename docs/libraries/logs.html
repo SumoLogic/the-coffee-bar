@@ -152,6 +152,7 @@ You can find more on that topic in the <a href="../otelcol/logs.html">OpenTeleme
 <p>As a result, by default on a Linux machine those logs are written to the <code>/var/lib/docker/containers/&lt;container-id&gt;/&lt;container-id&gt;-json.log</code> file.</p>
 <p>The log file from Docker container can be scraped by the <a href="../otelcol/logs.html">OpenTelemetry Collector</a> with the help of <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver">filelogreceiver</a>. This receiver will tail the log file and for each line emit a new record for further processing inside the <a href="../otelcol/README.html">OpenTelemetry Collector</a>. It will also attach a <code>file name</code> metadata to this record.</p>
 <h2 id="correlating-logs-and-traces"><a class="header" href="#correlating-logs-and-traces">Correlating logs and traces</a></h2>
+<p>When you use the OpenTelemetry appender for logging library you can correlate logs with traces.</p>
 
                     </main>
 

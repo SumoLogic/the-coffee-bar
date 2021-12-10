@@ -19,3 +19,5 @@ As a result, by default on a Linux machine those logs are written to the `/var/l
 The log file from Docker container can be scraped by the [OpenTelemetry Collector](../otelcol/logs.md) with the help of [filelogreceiver](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver). This receiver will tail the log file and for each line emit a new record for further processing inside the [OpenTelemetry Collector](../otelcol/README.md). It will also attach a `file name` metadata to this record.  
 
 ## Correlating logs and traces
+
+When you use the OpenTelemetry appender for logging library you can correlate logs with traces.
