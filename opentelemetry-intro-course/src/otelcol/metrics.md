@@ -30,7 +30,7 @@ Samples of metrics generated in Sumo portal :
     metric_type="counter"
     }
 
-## Auto Instrumentation for Python App:
+## Manual Instrumentation for Python App:
 The Coffee Bar App can be Auto instrumented using Open Telementary. 
 
     batcher_mode = "stateful"
