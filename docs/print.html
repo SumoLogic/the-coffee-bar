@@ -153,6 +153,17 @@ References - https://opentelemetry.io/docs/concepts/data-sources/</p>
 <li><strong><a href="libraries/traces.html">Traces</a></strong> how to create traces</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="logs"><a class="header" href="#logs">Logs</a></h1>
+<p>OpenTelemetry does not provide a dedicated logging API nor libraries for creating logs right now. There are mature libraries which do that already and support for those projects is planned instead. Most probably that will be an appender which will correlate logs with traces.</p>
+<h2 id="how-to-create-simple-logs"><a class="header" href="#how-to-create-simple-logs">How to create simple logs</a></h2>
+<p>Standard libraries for programming languages provide simple logging capabilites out of the box. You can use them to create logs. If your application follows <a href="https://12factor.net/logs">The Twelve-Factor App</a> standard &quot;it should write its logs, unbuffered, to <code>stdout</code>&quot;.<br />
+Later, the execution environment like <em>systemd</em>, <em>Docker</em> or <em>Kubernetes</em> takes care of routing this event stream to the local file or sending to other systems like <a href="http://sumologic.com">Sumo Logic</a> directly.</p>
+<p>If your application logs are written to the local file they can be collected by <a href="libraries/../otelcol/logs.html">OpenTelemetry Collector</a> for further processing.<br />
+You can find more on that topic in the <a href="libraries/../otelcol/logs.html">OpenTelemetry Collector / Logs</a> section.</p>
+<h3 id="example"><a class="header" href="#example">Example</a></h3>
+<p>Let's assume that your application writes logs to <code>stdout</code> and runs inside a <code>Docker container</code>.</p>
+<p>As a result, by default on a Linux machine those logs are written to the <code>/var/lib/docker/containers/&lt;container-id&gt;/&lt;container-id&gt;-json.log</code> file.</p>
+<p>The log file from Docker container can be scraped by the <a href="libraries/../otelcol/logs.html">OpenTelemetry Collector</a> with the help of <a href="https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/filelogreceiver">filelogreceiver</a>. This receiver will tail the log file and for each line emit a new record for further processing inside the <a href="libraries/../otelcol/README.html">OpenTelemetry Collector</a>. It will also attach a <code>file name</code> metadata to this record.</p>
+<h2 id="correlating-logs-and-traces"><a class="header" href="#correlating-logs-and-traces">Correlating logs and traces</a></h2>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="metrics"><a class="header" href="#metrics">Metrics</a></h1>
 <p>A metric is a measurement about a service, captured at runtime. Logically, the moment of capturing one of these measurements is known as a metric event which consists not only of the measurement itself, but the time that it was captured and associated metadata.
 Application and request metrics are important indicators of availability and performance. Custom metrics can provide insights into how availability indicators impact user experience or the business. Collected data can be used to alert of an outage or trigger scheduling decisions to scale up a deployment automatically upon high demand.
