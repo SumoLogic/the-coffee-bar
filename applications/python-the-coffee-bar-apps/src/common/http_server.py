@@ -65,6 +65,9 @@ class EndpointAction:
 
 
 class HttpServer:
+    # https://stackoverflow.com/questions/55857058/how-to-find-the-cause-of-task-queue-depth-warnings-from-waitress
+    # WARNI [waitress][WARNING] Task queue depth is 2
+    WAITRESS_THREADS_NO = 6
     app = None
     stats = None
 
@@ -88,7 +91,7 @@ class HttpServer:
 
     def run(self):
         serve(TransLogger(application=self.app, logger=log.getLogger('root')), host=self.host, port=self.port,
-              server_name=self.host)
+              server_name=self.host, threads=self.WAITRESS_THREADS_NO)
 
     def add_endpoint(self, endpoint: str = None, endpoint_name: str = None, handler: staticmethod = None):
         self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=['POST', 'GET', 'HEAD'])
