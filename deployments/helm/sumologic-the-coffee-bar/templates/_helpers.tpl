@@ -12,7 +12,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 If release name contains chart name it will be used as a full name.
 */}}
 {{- define "sumologic.thecoffeebar.fullname" -}}
-{{- default .Chart.Name }}
+{{- .Values.fullnameOverride | default .Chart.Name }}
 {{- end }}
 
 {{- define "sumologic.thecoffeebar.metadata.name.frontend" -}}
@@ -426,11 +426,11 @@ postgres-db
 {{- end }}
 
 {{- define "sumologic.thecoffeebar.selectorLabels.postgres.volume" -}}
-postgres-persistent-volume
+{{ include "sumologic.thecoffeebar.fullname" . }}-pv
 {{- end }}
 
 {{- define "sumologic.thecoffeebar.selectorLabels.postgres.volume.claim" -}}
-postgres-persistent-volume-claim
+{{ include "sumologic.thecoffeebar.fullname" . }}-pvc
 {{- end }}
 
 
