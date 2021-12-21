@@ -1,4 +1,4 @@
-TAG ?= rubyAppsv0.1.1-ot1.0.1-0.21.3-0.20.6
+TAG ?= rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
 FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
