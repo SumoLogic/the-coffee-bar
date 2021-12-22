@@ -15,13 +15,14 @@ class CoffeeMachine(HttpServer):
 
     def __init__(self, name: str = 'The Coffee Machine', host: str = 'localhost', port: int = 8084,
                  machine_svc_host: str = 'localhost', machine_svc_port: int = 9090,
-                 cpu_increase_cron: str = '0 * * * *', cpu_increase_duration: int = 5, cpu_increase_threads: int = 500):
+                 cpu_increase_cron: str = '0 */12 * * *', cpu_increase_start_date: str = None, cpu_increase_duration: int = 5, cpu_increase_threads: int = 500):
         super().__init__(name, host, port)
         self.cpu_increase_cron = cpu_increase_cron
         self.cpu_increase_duration = cpu_increase_duration
         self.cpu_increase_threads = cpu_increase_threads
         self.machine_svc_host = machine_svc_host
         self.machine_svc_port = machine_svc_port
+        self.cpu_increase_start_date = cpu_increase_start_date
 
         self.add_all_endpoints()
 
@@ -29,7 +30,7 @@ class CoffeeMachine(HttpServer):
         if self.cpu_increase_duration is not None:
             self.scheduler = BackgroundScheduler()
             self.scheduler.add_job(increase_cpu, CronTrigger.from_crontab(self.cpu_increase_cron),
-                                   [self.cpu_increase_duration, self.cpu_increase_threads])
+                                   [self.cpu_increase_duration, self.cpu_increase_threads],start_date=self.cpu_increase_start_date)
             self.scheduler.start()
 
     def add_all_endpoints(self):

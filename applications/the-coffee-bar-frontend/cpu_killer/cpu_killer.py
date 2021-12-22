@@ -60,17 +60,20 @@ try:
     cpu_increase_threads = int(getenv('THREADS_NO')) if getenv('THREADS_NO') is not None else 475
     cpu_increase_duration = int(getenv('DURATION')) if getenv('DURATION') is not None else 1
     network_delay = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
-    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 * * * *'
+    cron_start_date = str(getenv('CRON_START_DATE'))
+    log.info('Cron Start Date %s', cron_start_date)
+    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 */12 * * *'
 
     scheduler = BackgroundScheduler()
     cron_trigger = CronTrigger.from_crontab(cron)
 
-    scheduler.add_job(increase_cpu, cron_trigger, [cpu_increase_duration, cpu_increase_threads])
-    scheduler.add_job(network_delay_s, cron_trigger, [network_delay, cpu_increase_duration])
+    scheduler.add_job(increase_cpu, cron_trigger, [cpu_increase_duration, cpu_increase_threads], start_date=cron_start_date)
+    scheduler.add_job(network_delay_s, cron_trigger, [network_delay, cpu_increase_duration], start_date=cron_start_date)
 
     if cpu_increase_duration > 0:
         log.info('CPU KILLER enabled')
         log.info('CRON %s' % get_description(cron))
+        log.info('CRON START DATE %s' % cron_start_date)
         log.info('THREADS %d' % cpu_increase_threads)
         log.info('DURATION %d' % cpu_increase_duration)
         log.info('NETWORK_DELAY %d' % network_delay)
