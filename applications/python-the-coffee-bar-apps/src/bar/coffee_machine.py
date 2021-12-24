@@ -16,7 +16,7 @@ class CoffeeMachine(HttpServer):
 
     def __init__(self, name: str = 'The Coffee Machine', host: str = 'localhost', port: int = 8084,
                  machine_svc_host: str = 'localhost', machine_svc_port: int = 9090,
-                 cpu_increase_cron: str = '0 */12 * * *', cpu_increase_start_date: str = None, cpu_increase_duration: int = 5, cpu_increase_threads: int = 500):
+                 cpu_increase_cron: str = '0 */12 * * */4', cpu_increase_start_date: str = None, cpu_increase_duration: int = 5, cpu_increase_threads: int = 500):
         super().__init__(name, host, port)
         self.cpu_increase_cron = cpu_increase_cron
         self.cpu_increase_duration = cpu_increase_duration

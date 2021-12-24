@@ -62,7 +62,7 @@ try:
     network_delay = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
     cron_start_date = str(getenv('CRON_START_DATE'))
     log.info('Cron Start Date %s', cron_start_date)
-    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 */12 * * *'
+    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 */12 * * */4'
 
     scheduler = BackgroundScheduler()
     cron_trigger = CronTrigger.from_crontab(cron)
