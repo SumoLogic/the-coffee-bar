@@ -8,6 +8,7 @@ import time
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.util import undefined
 from cron_descriptor import get_description
 from datetime import datetime
 
@@ -52,7 +53,7 @@ try:
     increase_duration_s = int(getenv('DURATION')) if getenv('DURATION') is not None else 60
     network_delay_s = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
     cron_start_date = str(getenv('CRON_START_DATE'))
-    datetime_object = datetime.now()
+    datetime_object = undefined
     try:
         if cron_start_date is not None:
             datetime_object = datetime.strptime(cron_start_date, '%Y-%m-%d %H:%M:%S')
