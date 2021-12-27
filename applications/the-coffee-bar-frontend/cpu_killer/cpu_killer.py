@@ -63,6 +63,7 @@ try:
     log.info('Cron Start Date %s', datetime_object)
     cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 * * * *'
 
+
     scheduler = BackgroundScheduler()
     cron_trigger = CronTrigger.from_crontab(cron)
 
