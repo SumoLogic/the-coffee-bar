@@ -252,8 +252,9 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
-    CRON: "0 */12 * * */4" # Run every 12th hour, used in helpers.tpl
-    CRON_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00, used in helpers.tpl
+    CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    CRON_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
+    DURATION: "5" # in seconds, Use 3600 for 1 hour
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=the-coffee-bar-app"
   coffeesvc:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
@@ -262,9 +263,9 @@ envs:
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     ## Envs to configure CPU Killer and Network Delay
-    CRON: "0 */12 * * */4" # Run every 12th hour
+    CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
     CRON_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
-    DURATION: "5" # for 5 minutes
+    DURATION: "5" # for 5 seconds
     THREADS_NO: "475" # on 475 threads
     NETWORK_DELAY: "1" # with 1 second network delay
   machinesvc:
