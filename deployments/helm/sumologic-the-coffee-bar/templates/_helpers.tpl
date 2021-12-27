@@ -482,6 +482,7 @@ Create commands/args
 - --machine-svc-host={{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }}
 - --machine-svc-port=9090
 - --cpu-increase-cron=$(CRON)
+- --cpu-increase-start-date=$(CRON_START_DATE)
 - --cpu-increase-duration=5
 - --cpu-increase-threads=475
 {{- end }}

@@ -67,7 +67,7 @@ class EndpointAction:
 class HttpServer:
     # https://stackoverflow.com/questions/55857058/how-to-find-the-cause-of-task-queue-depth-warnings-from-waitress
     # WARNI [waitress][WARNING] Task queue depth is 2
-    WAITRESS_THREADS_NO = 6
+    WAITRESS_THREADS_NO = int(os.getenv('WAITRESS_THREADS_NO', 10))
     app = None
     stats = None
 
