@@ -8,6 +8,7 @@ import subprocess
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from cron_descriptor import get_description
+from datetime import datetime
 
 
 def magic_cpu_usage_increaser(period: int):
@@ -37,7 +38,7 @@ def network_delay_s(delay_s: int, period: int):
     subprocess.call(['tcset', 'eth0', '--delay', delay])
 
     start_time = time.time()
-    while time.time() - start_time < period * 60:
+    while time.time() - start_time < period:
         time.sleep(1)
 
     log.info('Removing network delay')
@@ -58,22 +59,23 @@ root.addHandler(stdout_handler)
 loop = asyncio.get_event_loop()
 try:
     cpu_increase_threads = int(getenv('THREADS_NO')) if getenv('THREADS_NO') is not None else 475
-    cpu_increase_duration = int(getenv('DURATION')) if getenv('DURATION') is not None else 1
+    cpu_increase_duration = int(getenv('DURATION')) if getenv('DURATION') is not None else 60
     network_delay = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
     cron_start_date = str(getenv('CRON_START_DATE'))
-    log.info('Cron Start Date %s', cron_start_date)
+    datetime_object = datetime.strptime(cron_start_date, '%Y-%m-%d %H:%M:%S')
+    log.info('Cron Start Date %s', datetime_object)
     cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 */12 * * */4'
 
     scheduler = BackgroundScheduler()
     cron_trigger = CronTrigger.from_crontab(cron)
 
-    scheduler.add_job(increase_cpu, cron_trigger, [cpu_increase_duration, cpu_increase_threads], start_date=cron_start_date)
-    scheduler.add_job(network_delay_s, cron_trigger, [network_delay, cpu_increase_duration], start_date=cron_start_date)
+    scheduler.add_job(increase_cpu, cron_trigger, [cpu_increase_duration, cpu_increase_threads], next_run_time=datetime_object)
+    scheduler.add_job(network_delay_s, cron_trigger, [network_delay, cpu_increase_duration], next_run_time=datetime_object)
 
     if cpu_increase_duration > 0:
         log.info('CPU KILLER enabled')
         log.info('CRON %s' % get_description(cron))
-        log.info('CRON START DATE %s' % cron_start_date)
+        log.info('CRON START DATE %s' % datetime_object)
         log.info('THREADS %d' % cpu_increase_threads)
         log.info('DURATION %d' % cpu_increase_duration)
         log.info('NETWORK_DELAY %d' % network_delay)
