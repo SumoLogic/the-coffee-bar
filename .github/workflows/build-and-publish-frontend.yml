@@ -13,12 +13,12 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
       - name: Verify changes in python-the-coffee-bar-apps directory
-        uses: tj-actions/changed-files@v11.3
+        uses: tj-actions/changed-files@v2.0.0
         id: verify-if-files-changed
         with:
           files: applications/the-coffee-bar-frontend
