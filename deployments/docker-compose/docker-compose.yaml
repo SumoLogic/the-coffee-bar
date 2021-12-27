@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
 #  clicker:
-#    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:clicker-linux
+#    image: public.ecr.aws/sumologic/the-coffee-bar:clicker-linux
 #    container_name: clicker
 #    hostname: clicker
 #    environment:
@@ -31,7 +31,7 @@ services:
 #    expose:
 #      - 9222
   the-coffee-bar:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
     container_name: the-coffee-bar
     hostname: the-coffee-bar
     ports:
@@ -48,7 +48,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:frontend-jsv0.0.1-ot0.24.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:frontend-jsv0.0.2-ot0.24.0
     container_name: the-coffee-bar-frontend
     hostname: the-coffee-bar-frontend
     ports:
@@ -60,8 +60,8 @@ services:
        npm start"
     environment:
       - CRON=*/2 * * * *
-      - DURATION=1
-      - THREADS_NO=500
+      - DURATION=60
+      - THREADS_NO=1
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
       - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
@@ -70,7 +70,7 @@ services:
       - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
   the-coffee-machine:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
     container_name: the-coffee-machine
     hostname: the-coffee-machine
     ports:
@@ -83,7 +83,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
   the-cashdesk:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
     container_name: the-cashdesk
     hostname: the-cashdesk
     ports:
@@ -96,7 +96,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-cashdesk
 #  the-coffee-lover:
-#    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
+#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.1-ot1.7.1-0.26b1
 #    container_name: the-coffee-lover
 #    hostname: the-coffee-lover
 #    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",
@@ -106,7 +106,7 @@ services:
 #      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
 #      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
   machine-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
     container_name: machine-svc
     hostname: machine-svc
     ports:
@@ -117,7 +117,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
   coffee-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
     container_name: coffee-svc
     hostname: coffee-svc
     ports:
@@ -128,7 +128,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
   water-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
     container_name: water-svc
     hostname: water-svc
     ports:
@@ -140,7 +140,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=water-svc
   calculator-svc:
-    image: public.ecr.aws/a4t4y2n3/the-coffee-bar:calculator-dotnet-1.1.0-1.0.0rc7
+    image: public.ecr.aws/sumologic/the-coffee-bar:calculator-dotnet-1.1.0-1.0.0rc7
     container_name: calculator-svc
     hostname: calculator-svc
     command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
