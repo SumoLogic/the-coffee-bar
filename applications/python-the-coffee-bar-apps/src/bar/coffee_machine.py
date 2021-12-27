@@ -23,7 +23,13 @@ class CoffeeMachine(HttpServer):
         self.cpu_increase_threads = cpu_increase_threads
         self.machine_svc_host = machine_svc_host
         self.machine_svc_port = machine_svc_port
-        self.datetime_object = datetime.strptime(cpu_increase_start_date, '%Y-%m-%d %H:%M:%S')
+        self.datetime_object = datetime.now()
+        try:
+            if cpu_increase_start_date is not None:
+                self.datetime_object = datetime.strptime(cpu_increase_start_date, '%Y-%m-%d %H:%M:%S')
+        except:
+            log.info('Invalid Date Format for CRON start date.')
+
         log.info('CPU Increase start date is: %s', self.datetime_object)
         self.add_all_endpoints()
 

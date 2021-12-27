@@ -52,7 +52,13 @@ try:
     increase_duration_s = int(getenv('DURATION')) if getenv('DURATION') is not None else 60
     network_delay_s = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
     cron_start_date = str(getenv('CRON_START_DATE'))
-    datetime_object = datetime.strptime(cron_start_date, '%Y-%m-%d %H:%M:%S')
+    datetime_object = datetime.now()
+    try:
+        if cron_start_date is not None:
+            datetime_object = datetime.strptime(cron_start_date, '%Y-%m-%d %H:%M:%S')
+    except:
+        log.info('Invalid Date Format for CRON start date.')
+
     log.info('Cron Start Date %s', datetime_object)
     cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 */12 * * */4'
 
