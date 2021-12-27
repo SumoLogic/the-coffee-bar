@@ -1,10 +1,11 @@
-import threading
-import time
-from os import getenv
 import asyncio
-import sys
 import logging as log
+from multiprocessing.pool import Pool
+from os import getenv
 import subprocess
+import sys
+import time
+
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from cron_descriptor import get_description
@@ -18,27 +19,16 @@ def magic_cpu_usage_increaser(period: int):
 
 def increase_cpu(period: int, threads: int):
     log.info('Increasing CPU Usage - threads=%d' % threads)
-    thread_list = []
-
-    for i in range(1, threads):
-        t = threading.Thread(target=magic_cpu_usage_increaser, args=(period,))
-        thread_list.append(t)
-
-    for thread in thread_list:
-        thread.start()
-
-    for thread in thread_list:
-        thread.join()
+    with Pool(threads) as p:
+        p.map(magic_cpu_usage_increaser, [period])
 
 
-def network_delay_s(delay_s: int, period: int):
+def network_delay(delay_s: int, period: int):
     log.info('Adding network delay: %dsec' % delay_s)
     delay = '{}sec'.format(delay_s)
     subprocess.call(['tcset', 'eth0', '--delay', delay])
 
-    start_time = time.time()
-    while time.time() - start_time < period * 60:
-        time.sleep(1)
+    time.sleep(period)
 
     log.info('Removing network delay')
     subprocess.call(['tcdel', 'eth0', '--all'])
@@ -58,22 +48,26 @@ root.addHandler(stdout_handler)
 loop = asyncio.get_event_loop()
 try:
     cpu_increase_threads = int(getenv('THREADS_NO')) if getenv('THREADS_NO') is not None else 475
-    cpu_increase_duration = int(getenv('DURATION')) if getenv('DURATION') is not None else 1
-    network_delay = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
-    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 * * * *'
+    increase_duration_s = int(getenv('DURATION')) if getenv('DURATION') is not None else 60
+    network_delay_s = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
+    cron_start_date = str(getenv('CRON_START_DATE'))
+    log.info('Cron Start Date %s', cron_start_date)
+    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 */12 * * */4'
 
     scheduler = BackgroundScheduler()
     cron_trigger = CronTrigger.from_crontab(cron)
 
-    scheduler.add_job(increase_cpu, cron_trigger, [cpu_increase_duration, cpu_increase_threads])
-    scheduler.add_job(network_delay_s, cron_trigger, [network_delay, cpu_increase_duration])
+    scheduler.add_job(increase_cpu, cron_trigger, [increase_duration_s, cpu_increase_threads],
+                      start_date=cron_start_date)
+    scheduler.add_job(network_delay, cron_trigger, [network_delay_s, increase_duration_s], start_date=cron_start_date)
 
-    if cpu_increase_duration > 0:
+    if increase_duration_s > 0:
         log.info('CPU KILLER enabled')
         log.info('CRON %s' % get_description(cron))
+        log.info('CRON START DATE %s' % cron_start_date)
         log.info('THREADS %d' % cpu_increase_threads)
-        log.info('DURATION %d' % cpu_increase_duration)
-        log.info('NETWORK_DELAY %d' % network_delay)
+        log.info('DURATION (s) %d' % increase_duration_s)
+        log.info('NETWORK DELAY (s) %d' % network_delay_s)
         scheduler.start()
         loop.run_forever()
     else:
