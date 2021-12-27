@@ -1,4 +1,4 @@
-TAG ?= frontend-jsv0.0.1-ot0.24.0
+TAG ?= frontend-jsv0.0.2-ot0.24.0
 FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
