@@ -3,6 +3,7 @@ import time
 import threading
 
 import logging as log
+from src.utils.logger import configure_basic_logging
 
 
 def to_json(obj) -> dict:
@@ -13,6 +14,7 @@ def to_json(obj) -> dict:
 
 
 def magic_cpu_usage_increaser(period: int, thread_no: int, threads: int):
+    configure_basic_logging('info')
     start_time = time.time()
     while time.time() - start_time < period:
         pass
@@ -25,6 +27,7 @@ def magic_cpu_usage_increaser(period: int, thread_no: int, threads: int):
 
 
 def increase_cpu(period: int, threads: int):
+    configure_basic_logging('info')
     log.info('Deploying new version 1.20.124')
     log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
     thread_list = []
