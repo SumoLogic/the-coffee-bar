@@ -483,7 +483,7 @@ Create commands/args
 - --machine-svc-port=9090
 - --cpu-increase-cron=$(CRON)
 - --cpu-increase-start-date=$(CRON_START_DATE)
-- --cpu-increase-duration=5
+- --cpu-increase-duration=$(DURATION)
 - --cpu-increase-threads=475
 {{- end }}
 
