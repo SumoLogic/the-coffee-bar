@@ -3,7 +3,7 @@
 ################################################################################
 
 IMAGE_NAME = the-coffee-bar
-ECR_URL = public.ecr.aws/a4t4y2n3
+ECR_URL = public.ecr.aws/sumologic
 REPO_URL = $(ECR_URL)/$(IMAGE_NAME)
 
 #-------------------------------------------------------------------------------
