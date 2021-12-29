@@ -13,6 +13,19 @@ _LOG_LEVEL = {
     'debug': log.DEBUG
 }
 
+BASIC_FORMAT = log.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+CPU_INCREASER_FILE_NAME = 'cpu_increaser.py'
+
+
+class NoCpuIncreaserFilter(log.Filter):
+    def filter(self, record: log.LogRecord) -> bool:
+        return not record.filename == CPU_INCREASER_FILE_NAME
+
+
+class OnlyCpuIncreaserFilter(log.Filter):
+    def filter(self, record: log.LogRecord) -> bool:
+        return record.filename == CPU_INCREASER_FILE_NAME
+
 
 class SpanFormatter(log.Formatter):
     def format(self, record: log.LogRecord):
@@ -36,20 +49,23 @@ def configure_logging(log_level: str):
     span_formatter = SpanFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s '
                                    '- trace_id=%(trace_id)s - span_id=%(span_id)s')
 
-    # Configure basic logging
-    root = log.getLogger()
-    root.setLevel(log_level)
+    console_handler = log.StreamHandler(sys.stdout)
+    console_handler.setFormatter(span_formatter)
+    console_handler.addFilter(NoCpuIncreaserFilter())
 
-    stdout_handler = log.StreamHandler(sys.stdout)
-    stdout_handler.setLevel(log_level)
-    stdout_handler.setFormatter(span_formatter)
-    root.addHandler(stdout_handler)
+    cpu_increaser_logging = log.StreamHandler(sys.stdout)
+    cpu_increaser_logging.setFormatter(BASIC_FORMAT)
+    cpu_increaser_logging.addFilter(OnlyCpuIncreaserFilter())
+
+    # Configure basic logging
+    log.basicConfig(level=log_level, handlers=[console_handler, cpu_increaser_logging])
 
     if os.getenv('SYSLOG'):
         syslog_address = os.getenv('SYSLOG').split(':')
         syslog_handler = SysLogHandler(address=(syslog_address[0], int(syslog_address[1])))
         syslog_handler.setLevel(log_level)
         syslog_handler.setFormatter(span_formatter)
+        root = log.getLogger(__name__)
         root.addHandler(syslog_handler)
 
     return log
@@ -58,14 +74,12 @@ def configure_logging(log_level: str):
 def configure_basic_logging(log_level: str):
     log_level = _LOG_LEVEL[log_level]
 
-    root = log.getLogger()
+    root = log.getLogger(__name__)
     root.setLevel(log_level)
-
-    span_formattter = log.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
     stdout_handler = log.StreamHandler(sys.stdout)
     stdout_handler.setLevel(log_level)
-    stdout_handler.setFormatter(span_formattter)
+    stdout_handler.setFormatter(BASIC_FORMAT)
     root.addHandler(stdout_handler)
 
     return log
