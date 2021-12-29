@@ -1,14 +1,13 @@
 import logging as log
+from datetime import datetime
 
+import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.util import undefined
 from flask import Response
-import requests
-from datetime import datetime
-
 from src.common.http_server import HttpServer
-from src.utils.utils import increase_cpu
+from src.utils.cpu_increaser import increase_cpu
 
 GET_COFFEE_ENDPOINT = '/get_coffee'
 
@@ -17,7 +16,8 @@ class CoffeeMachine(HttpServer):
 
     def __init__(self, name: str = 'The Coffee Machine', host: str = 'localhost', port: int = 8084,
                  machine_svc_host: str = 'localhost', machine_svc_port: int = 9090,
-                 cpu_increase_cron: str = '0 * * * *', cpu_increase_start_date: str = None, cpu_increase_duration: int = 60, cpu_increase_threads: int = 500):
+                 cpu_increase_cron: str = '0 * * * *', cpu_increase_start_date: str = None, 
+                 cpu_increase_duration: int = 60, cpu_increase_threads: int = 500):
 
         super().__init__(name, host, port)
         self.cpu_increase_cron = cpu_increase_cron
@@ -40,7 +40,8 @@ class CoffeeMachine(HttpServer):
         if self.cpu_increase_duration is not None:
             self.scheduler = BackgroundScheduler()
             self.scheduler.add_job(increase_cpu, CronTrigger.from_crontab(self.cpu_increase_cron),
-                                   [self.cpu_increase_duration, self.cpu_increase_threads],next_run_time=self.datetime_object)
+                                   [self.cpu_increase_duration, self.cpu_increase_threads],
+                                   next_run_time=self.datetime_object)
             self.scheduler.start()
 
     def add_all_endpoints(self):
