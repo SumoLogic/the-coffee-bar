@@ -1,19 +1,19 @@
 BASE_TAG = frontend-jsv0.0.2-ot0.24.0
 
 ifndef GITHUB_HEAD_REF
-TAG = $(BASE_TAG)
+	TAG = $(BASE_TAG)
 else
-TAG = $(BASE_TAG)-dev-$(GITHUB_HEAD_REF)
+	TAG = $(BASE_TAG)-dev-$(GITHUB_HEAD_REF)
 endif
 
-FINAL_TAGA = $(REPO_URL):$(TAG)
+FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build \
-		--tag $(FINAL_TAGA) \
+		--tag $(FINAL_TAG) \
 		.
 
 .PHONY: push
 push:
-	docker push $(FINAL_TAGA)
+	docker push $(FINAL_TAG)
