@@ -16,4 +16,4 @@ build:
 
 .PHONY: push
 push:
-	docker push $(FINAL_TAG)
+	docker push $(FINAL_TAGA)
