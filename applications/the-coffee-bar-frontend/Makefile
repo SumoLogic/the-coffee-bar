@@ -6,12 +6,12 @@ else
 TAG = $(BASE_TAG)-dev-$(GITHUB_HEAD_REF)
 endif
 
-FINAL_TAG = $(REPO_URL):$(TAG)
+FINAL_TAGA = $(REPO_URL):$(TAG)
 
 .PHONY: build
 build:
 	DOCKER_BUILDKIT=1 docker build \
-		--tag $(FINAL_TAG) \
+		--tag $(FINAL_TAGA) \
 		.
 
 .PHONY: push
