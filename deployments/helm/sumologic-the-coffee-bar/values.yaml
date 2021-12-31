@@ -259,6 +259,7 @@ envs:
   coffeesvc:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
   frontend:
+    REACT_APP_RUM_SCRIPT_URL: "https://rum.sumologic.com/sumologic-rum.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
