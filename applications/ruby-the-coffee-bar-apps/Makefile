@@ -1,4 +1,11 @@
-TAG ?= rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
+BASE_TAG = rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
+
+ifndef GITHUB_HEAD_REF
+	TAG = $(BASE_TAG)
+else
+	TAG = $(BASE_TAG)-dev-$(GITHUB_HEAD_REF)
+endif
+
 FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
