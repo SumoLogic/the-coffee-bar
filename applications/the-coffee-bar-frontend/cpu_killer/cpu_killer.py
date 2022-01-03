@@ -26,7 +26,7 @@ def increase_cpu(period: int, threads: int):
 
 
 def network_delay(delay: str, period: int):
-    log.info('Adding network delay: %ssec' % delay)
+    log.info('Adding network delay: %s' % delay)
     subprocess.call(['tcset', 'eth0', '--delay', delay])
 
     time.sleep(period)
