@@ -22,6 +22,7 @@ RUN pip3 install -r cpu_killer/requirements.txt
 COPY . ./
 
 ENV CHOKIDAR_USEPOLLING=true
+
 # Fix for timezone
 RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
