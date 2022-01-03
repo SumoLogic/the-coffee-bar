@@ -27,7 +27,7 @@ def increase_cpu(period: int, threads: int):
 
 def network_delay(delay: str, period: int):
     log.info('Adding network delay: %s' % delay)
-    subprocess.call(['tcset', 'eth0', '--delay', delay])
+    subprocess.call(['tcset', 'eth0', '--direction', 'incoming', '--delay', delay])
 
     time.sleep(period)
 
@@ -50,7 +50,7 @@ loop = asyncio.get_event_loop()
 try:
     cpu_spike_processes = int(getenv('CPU_SPIKE_PROCESSES')) if getenv('CPU_SPIKE_PROCESSES') is not None else 475
     spike_duration = int(getenv('SPIKE_DURATION')) if getenv('SPIKE_DURATION') is not None else 60
-    network_delay_s = str(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else '1sec'
+    network_delay_time = str(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else '1sec'
     spike_start_date = str(getenv('SPIKE_START_DATE'))
     datetime_object = undefined
     try:
@@ -67,7 +67,7 @@ try:
 
     scheduler.add_job(increase_cpu, cron_trigger, [spike_duration, cpu_spike_processes],
                       next_run_time=datetime_object)
-    scheduler.add_job(network_delay, cron_trigger, [network_delay_s, spike_duration],
+    scheduler.add_job(network_delay, cron_trigger, [network_delay_time, spike_duration],
                       next_run_time=datetime_object)
 
     if spike_duration > 0:
@@ -76,7 +76,7 @@ try:
         log.info('SPIKE START DATE %s' % datetime_object)
         log.info('CPU SPIKE PROCESSES %d' % cpu_spike_processes)
         log.info('SPIKE DURATION (s) %d' % spike_duration)
-        log.info('NETWORK DELAY %s' % network_delay_s)
+        log.info('NETWORK DELAY %s' % network_delay_time)
         scheduler.start()
         loop.run_forever()
     else:
