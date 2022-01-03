@@ -1,4 +1,11 @@
-TAG ?= clicker-linux
+BASE_TAG = clicker-linux
+
+ifndef GITHUB_HEAD_REF
+	TAG = $(BASE_TAG)
+else
+	TAG = $(BASE_TAG)-dev-$(GITHUB_HEAD_REF)
+endif
+
 FINAL_TAG = $(REPO_URL):$(TAG)
 
 .PHONY: build
