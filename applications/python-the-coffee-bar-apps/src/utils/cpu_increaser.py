@@ -21,7 +21,7 @@ def increase_cpu(period: int, threads: int):
     log.info('Deploying new version 1.20.123')
 
 
-def network_delay(delay: str, period: int):
+def set_network_delay(delay: str, period: int):
     log.info('Adding network delay: %s' % delay)
     subprocess.call(['tcset', 'eth0', '--delay', delay])
 

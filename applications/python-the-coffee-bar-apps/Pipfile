@@ -7,7 +7,6 @@ verify_ssl = true
 
 [packages]
 APScheduler = "3.8.1"
-argparse = "1.4.0"
 cron-descriptor = "1.2.24"
 Flask = "2.0.1"
 flask-cors = "3.0.10"
@@ -19,13 +18,13 @@ opentelemetry-instrumentation = "0.26b1"
 opentelemetry-sdk = "1.7.1"
 opentelemetry-propagator-aws-xray = "1.0.1"
 paste = "3.5.0"
-psycopg2 = "2.9.1"
+psycopg2 = "2.9.3"
 pyjson = "1.5.2"
-pyyaml = "6.0"
 requests = "2.26.0"
 statsd = "3.3.0"
+tcconfig = "0.27.1"
 waitress = "2.0.0"
 the-coffee-bar = {path = "."}
 
 [requires]
-python_version = "3.8"
+python_version = "3.10"

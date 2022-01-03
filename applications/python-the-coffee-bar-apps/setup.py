@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='the-coffee-bar',
-    version='0.1.1',
+    version='0.2.0',
     description='The Coffee Bar - OpenTelemetry instrumented demo application',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -17,11 +17,11 @@ setup(
     author='Mateusz "mat" Rumian',
     author_email='mrumian@sumologic.com',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 3 - Beta',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.10',
     ],
     keywords='the-coffee-bar opentelemetry auto instrumentation setuptools development',
 
@@ -29,7 +29,6 @@ setup(
     python_requires='>=3.8, <4',
 
     install_requires=['APScheduler==3.8.1',
-                      'argparse==1.4.0',
                       'cron-descriptor==1.2.24',
                       'Flask==2.0.2',
                       'flask-cors==3.0.10',
@@ -41,14 +40,14 @@ setup(
                       'opentelemetry-sdk==1.7.1',
                       'opentelemetry-propagator-aws-xray==1.0.1',
                       'paste==3.5.0',
-                      'psycopg2==2.9.1',
+                      'psycopg2==2.9.3',
                       'pyjson==1.3.0',
-                      'pyyaml==6.0',
                       'requests==2.26.0',
                       'statsd==3.3.0',
+                      'tcconfig==0.27.1',
                       'waitress==2.0.0',
                       ],
-    data_files=[('config', ['src/config/config.yaml'])],
+    data_files=[],
     entry_points={
         'console_scripts': [
             'the-coffee-bar=src.bin.the_coffee_bar:main',
