@@ -63,6 +63,7 @@ services:
       - DURATION=60
       - THREADS_NO=1
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_RUM_SCRIPT_URL=https://rum.sumologic.com/sumologic-rum.js
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
       - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
       - REACT_APP_COLLECTION_SOURCE_URL=
