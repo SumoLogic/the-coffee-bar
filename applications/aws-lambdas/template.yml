@@ -41,8 +41,10 @@ Resources:
       Environment:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
-          AWS_LAMBDA_EXEC_WRAPPER: /opt/python/otel-instrument
-          OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑SweetsFunction,application=the-coffee-bar-app
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
+          OTEL_SERVICE_NAME: lambda-SweetsFunction
+          OTEL_RESOURCE_ATTRIBUTES: application=the-coffee-bar-app
+          OTEL_TRACES_SAMPLER: always_on
       Layers:
         - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
       Events:
@@ -78,9 +80,11 @@ Resources:
       Environment:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
-          OTEL_RESOURCE_ATTRIBUTES: service.name=lambda‑CheckSweetsFunction,application=the-coffee-bar-app
-          OTEL_PROPAGATORS: aws_xray
-          AWS_LAMBDA_EXEC_WRAPPER: /opt/python/otel-instrument
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
+          OTEL_SERVICE_NAME: lambda‑CheckSweetsFunction
+          OTEL_RESOURCE_ATTRIBUTES: application=the-coffee-bar-app
+          OTEL_TRACES_SAMPLER: always_on
+          OTEL_PROPAGATORS: xray
           INVOKE_FUNCTION_NAME: !Ref SweetsFunction
       Layers:
         - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
@@ -94,37 +98,37 @@ Resources:
 Mappings:
   RegionLayers:
     ap-northeast-1:
-      layer: "arn:aws:lambda:ap-northeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-northeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     ap-northeast-2:
-      layer: "arn:aws:lambda:ap-northeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-northeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     ap-south-1:
-      layer: "arn:aws:lambda:ap-south-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-south-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     ap-southeast-1:
-      layer: "arn:aws:lambda:ap-southeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-southeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     ap-southeast-2:
-      layer: "arn:aws:lambda:ap-southeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-southeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     ca-central-1:
-      layer: "arn:aws:lambda:ca-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:ca-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     eu-central-1:
-      layer: "arn:aws:lambda:eu-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:2"
     eu-north-1:
-      layer: "arn:aws:lambda:eu-north-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-north-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     eu-west-1:
-      layer: "arn:aws:lambda:eu-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     eu-west-2:
-      layer: "arn:aws:lambda:eu-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     eu-west-3:
-      layer: "arn:aws:lambda:eu-west-3:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-west-3:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     sa-east-1:
-      layer: "	arn:aws:lambda:sa-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "	arn:aws:lambda:sa-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     us-east-1:
-      layer: "arn:aws:lambda:us-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:us-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     us-east-2:
-      layer: "arn:aws:lambda:us-east-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:us-east-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:2"
     us-west-1:
-      layer: "arn:aws:lambda:us-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:us-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
     us-west-2:
-      layer: "arn:aws:lambda:us-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python38-lambda-layer:1"
+      layer: "arn:aws:lambda:us-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
 Metadata:
   AWS::ServerlessRepo::Application:
     Name: The-Coffee-Bar-App-Functions
