@@ -4,7 +4,7 @@ const utils = require('./utils')
 require('console-stamp')(console);
 
 const UI_URL_ARG = process.argv.slice(2);
-const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://localhost:3000'; // The Coffee Bar UI URL
+const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
 const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 5; // Browser sleep interval in seconds
 const BROWSER = process.env.PUPPETEER_PRODUCT || 'chrome'
 const DEBUG_DUMPIO_ENV = process.env.DEBUG_DUMPIO || false
