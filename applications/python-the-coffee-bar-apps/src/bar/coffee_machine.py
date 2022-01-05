@@ -7,7 +7,7 @@ from apscheduler.triggers.cron import CronTrigger
 from apscheduler.util import undefined
 from flask import Response
 from src.common.http_server import HttpServer
-from src.utils.cpu_increaser import increase_cpu
+from src.utils.cpu_increaser import increase_cpu, set_network_delay
 
 GET_COFFEE_ENDPOINT = '/get_coffee'
 
@@ -16,33 +16,43 @@ class CoffeeMachine(HttpServer):
 
     def __init__(self, name: str = 'The Coffee Machine', host: str = 'localhost', port: int = 8084,
                  machine_svc_host: str = 'localhost', machine_svc_port: int = 9090,
-                 cpu_increase_cron: str = '0 * * * *', cpu_increase_start_date: str = None, 
-                 cpu_increase_duration: int = 60, cpu_increase_threads: int = 500):
+                 spike_cron: str = '0 * * * *', spike_start_date: str = None,
+                 spike_duration: int = 60, cpu_spike_processes: int = 1, network_delay: str = None):
 
         super().__init__(name, host, port)
-        self.cpu_increase_cron = cpu_increase_cron
-        self.cpu_increase_duration = cpu_increase_duration
-        self.cpu_increase_threads = cpu_increase_threads
+        self.spike_cron = spike_cron
+        self.spike_duration = spike_duration
+        self.cpu_spike_processes = cpu_spike_processes
+        self.network_delay = network_delay
         self.machine_svc_host = machine_svc_host
         self.machine_svc_port = machine_svc_port
         self.datetime_object = undefined
 
         try:
-            if cpu_increase_start_date is not None:
-                self.datetime_object = datetime.strptime(cpu_increase_start_date, '%Y-%m-%d %H:%M:%S')
+            if spike_start_date is not None:
+                self.datetime_object = datetime.strptime(spike_start_date, '%Y-%m-%d %H:%M:%S')
         except:
             log.info('Invalid Date Format for CRON start date.')
 
-        log.info('CPU Increase start date is: %s', self.datetime_object)
+        log.info('Spike start date is: %s', self.datetime_object)
         self.add_all_endpoints()
 
-        # Increase CPU usage for some time
-        if self.cpu_increase_duration is not None:
-            self.scheduler = BackgroundScheduler()
-            self.scheduler.add_job(increase_cpu, CronTrigger.from_crontab(self.cpu_increase_cron),
-                                   [self.cpu_increase_duration, self.cpu_increase_threads],
+        # Increase CPU usage for some time and add network delay
+        self.scheduler = BackgroundScheduler()
+        self.cron = CronTrigger.from_crontab(self.spike_cron)
+
+        if self.spike_duration is not None:
+            self.scheduler.add_job(func=increase_cpu,
+                                   trigger=self.cron,
+                                   args=[self.spike_duration, self.cpu_spike_processes],
                                    next_run_time=self.datetime_object)
-            self.scheduler.start()
+        if self.network_delay is not None:
+            self.scheduler.add_job(func=set_network_delay,
+                                   trigger=self.cron,
+                                   args=[self.network_delay, self.spike_duration],
+                                   next_run_time=self.datetime_object)
+
+        self.scheduler.start()
 
     def add_all_endpoints(self):
         self.add_endpoint(endpoint=GET_COFFEE_ENDPOINT, endpoint_name='espresso', handler=self.prepare_coffee)

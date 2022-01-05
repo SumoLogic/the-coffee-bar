@@ -10,10 +10,10 @@ image:
     tag: calculator-dotnet-1.1.0-1.0.0rc7
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: frontend-jsv0.0.2-ot0.24.0
+    tag: frontend-jsv0.1.0-ot0.24.0
   python:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: pythonAppsv0.1.2-ot1.7.1-0.26b1
+    tag: pythonAppsv0.2.0-ot1.7.1-0.26b1
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
@@ -53,6 +53,12 @@ securityContext:
         - SYS_ADMIN
   ## Required to run CPU Killer/Network Delay
   frontend:
+    capabilities:
+      add:
+        - SYS_ADMIN
+        - NET_ADMIN
+  ## Required to run CPU Killer/Network Delay
+  coffeemachine:
     capabilities:
       add:
         - SYS_ADMIN
@@ -252,9 +258,11 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
-    CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
-    CRON_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
-    DURATION: "5" # in seconds, Use 3600 for 1 hour
+    SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
+    CPU_SPIKE_PROCESSES: "1"
+    NETWORK_DELAY: "1sec"
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=the-coffee-bar-app"
   coffeesvc:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
@@ -264,11 +272,11 @@ envs:
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     ## Envs to configure CPU Killer and Network Delay
-    CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
-    CRON_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
-    DURATION: "5" # for 5 seconds
-    THREADS_NO: "475" # on 475 threads
-    NETWORK_DELAY: "1" # with 1 second network delay
+    SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_DURATION: "300" # for 5 minutes
+    CPU_SPIKE_PROCESSES: "1" # on 1 process
+    NETWORK_DELAY: "100ms" # with 100 ms network delay
   machinesvc:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=the-coffee-bar-app"
   postgres:

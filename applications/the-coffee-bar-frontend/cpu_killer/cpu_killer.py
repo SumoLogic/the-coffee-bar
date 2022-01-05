@@ -1,16 +1,16 @@
 import asyncio
 import logging as log
-from multiprocessing.pool import Pool
-from os import getenv
 import subprocess
 import sys
 import time
+from datetime import datetime
+from multiprocessing.pool import Pool
+from os import getenv
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from apscheduler.util import undefined
 from cron_descriptor import get_description
-from datetime import datetime
 
 
 def magic_cpu_usage_increaser(period: int):
@@ -25,9 +25,8 @@ def increase_cpu(period: int, threads: int):
         p.map(magic_cpu_usage_increaser, [period])
 
 
-def network_delay(delay_s: int, period: int):
-    log.info('Adding network delay: %dsec' % delay_s)
-    delay = '{}sec'.format(delay_s)
+def network_delay(delay: str, period: int):
+    log.info('Adding network delay: %s' % delay)
     subprocess.call(['tcset', 'eth0', '--delay', delay])
 
     time.sleep(period)
@@ -49,35 +48,35 @@ root.addHandler(stdout_handler)
 
 loop = asyncio.get_event_loop()
 try:
-    cpu_increase_threads = int(getenv('THREADS_NO')) if getenv('THREADS_NO') is not None else 475
-    increase_duration_s = int(getenv('DURATION')) if getenv('DURATION') is not None else 60
-    network_delay_s = int(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else 3
-    cron_start_date = str(getenv('CRON_START_DATE'))
+    cpu_spike_processes = int(getenv('CPU_SPIKE_PROCESSES')) if getenv('CPU_SPIKE_PROCESSES') is not None else 475
+    spike_duration = int(getenv('SPIKE_DURATION')) if getenv('SPIKE_DURATION') is not None else 60
+    network_delay_time = str(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else '1sec'
+    spike_start_date = str(getenv('SPIKE_START_DATE'))
     datetime_object = undefined
     try:
-        if cron_start_date is not None:
-            datetime_object = datetime.strptime(cron_start_date, '%Y-%m-%d %H:%M:%S')
+        if spike_start_date is not None:
+            datetime_object = datetime.strptime(spike_start_date, '%Y-%m-%d %H:%M:%S')
     except:
         log.info('Invalid Date Format for CRON start date.')
 
     log.info('Cron Start Date %s', datetime_object)
-    cron = str(getenv('CRON')) if getenv('CRON') is not None else '0 * * * *'
-
+    cron = str(getenv('SPIKE_CRON')) if getenv('SPIKE_CRON') is not None else '0 * * * *'
 
     scheduler = BackgroundScheduler()
     cron_trigger = CronTrigger.from_crontab(cron)
 
-    scheduler.add_job(increase_cpu, cron_trigger, [increase_duration_s, cpu_increase_threads],
+    scheduler.add_job(increase_cpu, cron_trigger, [spike_duration, cpu_spike_processes],
                       next_run_time=datetime_object)
-    scheduler.add_job(network_delay, cron_trigger, [network_delay_s, increase_duration_s], next_run_time=datetime_object)
+    scheduler.add_job(network_delay, cron_trigger, [network_delay_time, spike_duration],
+                      next_run_time=datetime_object)
 
-    if increase_duration_s > 0:
+    if spike_duration > 0:
         log.info('CPU KILLER enabled')
-        log.info('CRON %s' % get_description(cron))
-        log.info('CRON START DATE %s' % datetime_object)
-        log.info('THREADS %d' % cpu_increase_threads)
-        log.info('DURATION (s) %d' % increase_duration_s)
-        log.info('NETWORK DELAY (s) %d' % network_delay_s)
+        log.info('SPIKE CRON %s' % get_description(cron))
+        log.info('SPIKE START DATE %s' % datetime_object)
+        log.info('CPU SPIKE PROCESSES %d' % cpu_spike_processes)
+        log.info('SPIKE DURATION (s) %d' % spike_duration)
+        log.info('NETWORK DELAY %s' % network_delay_time)
         scheduler.start()
         loop.run_forever()
     else:

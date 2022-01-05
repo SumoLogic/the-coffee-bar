@@ -32,7 +32,7 @@ spec:
       containers:
         - name: the-coffee-machine
           securityContext:
-            {{- toYaml .Values.securityContext.common | nindent 12 }}
+            {{- toYaml .Values.securityContext.coffeemachine | nindent 12 }}
           image: "{{ .Values.image.python.repository }}:{{ .Values.image.python.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command:
