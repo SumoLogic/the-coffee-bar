@@ -4,7 +4,7 @@ const utils = require('./utils')
 require('console-stamp')(console);
 
 const UI_URL_ARG = process.argv.slice(2);
-const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
+const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://localhost:3000'; // The Coffee Bar UI URL
 const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 5; // Browser sleep interval in seconds
 const BROWSER = process.env.PUPPETEER_PRODUCT || 'chrome'
 const DEBUG_DUMPIO_ENV = process.env.DEBUG_DUMPIO || false
@@ -16,8 +16,16 @@ const GLOBAL_SELECTORS = {
     'billInput': 'input[name="Bill"]',
 };
 
-const COFFEE = ['Espresso', 'Cappuccino', 'Americano'];
-const SWEETS = ['Tiramisu', 'Cornetto', 'Muffin'];
+const COFFEE = {
+    'Espresso': [0, 79],
+    'Cappuccino': [80, 94],
+    'Americano': [95, 100],
+};
+const SWEETS = {
+    'Cornetto': [0, 89],
+    'Tiramisu': [90, 94],
+    'Muffin': [95, 100],
+};
 
 const NAVIGATE_RETRY_SECONDS = 60;
 
@@ -45,19 +53,19 @@ const NAVIGATE_RETRY_SECONDS = 60;
         } else {
             dumpio_debug = true;
         }
-      
+
         var browser = null;
         var page = null;
         try {
             browser = await puppeteer.launch({
                 executablePath: executablePath,
-                headless: true,
+                headless: false,
                 dumpio: dumpio_debug,
                 slowMo: 250,
                 devtools: false,
                 args: ['--devtools-flags=disable','--disable-software-rasterizer','--disable-extensions', '--wait-for-browser', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--disable-web-security'],
             });
-            
+
             page = await browser.newPage();
 
             async function clickAndSetFieldValue(selector, value, del) {
@@ -77,7 +85,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), NAVIGATE_RETRY_SECONDS);
 
             // Select Coffee to order
-            let coffee = utils.getItemFromList(COFFEE);
+            let coffee = utils.selectProduct(COFFEE);
             let coffee_selectors = {
                 'input': `input[name="${coffee}"]`,
                 'button': `button[name="${coffee}"]`,
@@ -88,11 +96,11 @@ const NAVIGATE_RETRY_SECONDS = 60;
             // Add Coffee
             await click(coffee_selectors['button'], DELAY);
 
-            // Select Coffee to order
-            let sweets = utils.getItemFromList(SWEETS);
+            // Select Sweets to order
+            let sweets = utils.selectProduct(SWEETS);
             let sweet_selectors = {
-                'input': `input[name="${sweets}"`,
-                'button': `button[name="${sweets}"`,
+                'input': `input[name="${sweets}"]`,
+                'button': `button[name="${sweets}"]`,
             }
 
             // Set Sweets amount
@@ -116,11 +124,9 @@ const NAVIGATE_RETRY_SECONDS = 60;
             } else {
                 await click(GLOBAL_SELECTORS['okBtn'], DELAY);
             }
-        }
-        catch (err) {
+        } catch (err) {
             console.error(err);
-        }
-        finally {
+        } finally {
             await page.close();
             await browser.close();
         }
