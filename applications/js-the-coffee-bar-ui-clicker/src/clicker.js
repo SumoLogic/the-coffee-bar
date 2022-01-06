@@ -59,7 +59,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
         try {
             browser = await puppeteer.launch({
                 executablePath: executablePath,
-                headless: false,
+                headless: true,
                 dumpio: dumpio_debug,
                 slowMo: 250,
                 devtools: false,
