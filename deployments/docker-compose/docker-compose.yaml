@@ -31,7 +31,7 @@ services:
 #    expose:
 #      - 9222
   the-coffee-bar:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.2-ot1.7.1-0.26b1
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.0-ot1.7.1-0.26b1
     container_name: the-coffee-bar
     hostname: the-coffee-bar
     ports:
@@ -48,7 +48,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
-    image: public.ecr.aws/sumologic/the-coffee-bar:frontend-jsv0.0.2-ot0.24.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:frontend-jsv0.1.0-ot0.24.0
     container_name: the-coffee-bar-frontend
     hostname: the-coffee-bar-frontend
     ports:
@@ -59,9 +59,9 @@ services:
       /bin/bash -c "python3 ./cpu_killer/cpu_killer.py & \
        npm start"
     environment:
-      - CRON=*/2 * * * *
-      - DURATION=60
-      - THREADS_NO=1
+      - SPIKE_CRON=*/2 * * * *
+      - SPIKE_DURATION=60
+      - CPU_SPIKE_PROCESSES=1
       - CHOKIDAR_USEPOLLING=true
       - REACT_APP_RUM_SCRIPT_URL=https://rum.sumologic.com/sumologic-rum.js
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
@@ -71,20 +71,20 @@ services:
       - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
   the-coffee-machine:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.2-ot1.7.1-0.26b1
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.0-ot1.7.1-0.26b1
     container_name: the-coffee-machine
     hostname: the-coffee-machine
     ports:
       - 8083:8083
     command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py",
               "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
-              "--machine-svc-port=9090", "--cpu-increase-cron=*/2 * * * *", "--cpu-increase-duration=60", "--cpu-increase-threads=500"]
+              "--machine-svc-port=9090", "--spike-cron=*/2 * * * *", "--spike-duration=60", "--cpu-spike-processes=1"]
     environment:
       - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
   the-cashdesk:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.2-ot1.7.1-0.26b1
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.0-ot1.7.1-0.26b1
     container_name: the-cashdesk
     hostname: the-cashdesk
     ports:
@@ -97,7 +97,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-cashdesk
 #  the-coffee-lover:
-#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.1.2-ot1.7.1-0.26b1
+#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.0-ot1.7.1-0.26b1
 #    container_name: the-coffee-lover
 #    hostname: the-coffee-lover
 #    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",

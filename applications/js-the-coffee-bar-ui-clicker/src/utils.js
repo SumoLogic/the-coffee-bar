@@ -28,5 +28,22 @@ module.exports = {
                 retryDelay = retryDelay * 2
             }
         }
+    },
+
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
+    },
+
+    selectProduct(productDct) {
+        let random = this.getRandomInt(0, 100)
+
+        for (const [key, val] of Object.entries(productDct)) {
+            if (random >= val[0] && random <= val[1]) {
+                return key
+            }
+        }
+
     }
 }
