@@ -46,7 +46,7 @@ class CoffeeMachine(HttpServer):
         log.info('Spike start date is: %s', self.start_date_datetime)
 
         if self.interval_based_cron == 'true':
-            self.trigger = AndTrigger([IntervalTrigger(spike_interval_days=self.spike_interval_days),
+            self.trigger = AndTrigger([IntervalTrigger(days=self.spike_interval_days),
                       self.cron])
 
         if self.spike_duration is not None:

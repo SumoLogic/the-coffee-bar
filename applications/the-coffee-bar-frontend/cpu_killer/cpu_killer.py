@@ -71,7 +71,7 @@ try:
     scheduler = BackgroundScheduler()
 
     if interval_based_cron == 'true':
-        trigger = AndTrigger([IntervalTrigger(spike_interval_days=spike_interval_days),
+        trigger = AndTrigger([IntervalTrigger(days=spike_interval_days),
                 cron_trigger])
 
     scheduler.add_job(increase_cpu, trigger, [spike_duration, cpu_spike_processes],
