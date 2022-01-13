@@ -9,6 +9,8 @@ from os import getenv
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.combining import AndTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.util import undefined
 from cron_descriptor import get_description
 
@@ -52,28 +54,35 @@ try:
     spike_duration = int(getenv('SPIKE_DURATION')) if getenv('SPIKE_DURATION') is not None else 60
     network_delay_time = str(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else '1sec'
     spike_start_date = str(getenv('SPIKE_START_DATE'))
-    datetime_object = undefined
+    start_date_datetime = undefined
+    spike_interval_days = str(getenv('SPIKE_INTERVAL_DAYS'))
+    interval_based_cron = str(getenv('INTERVAL_BASED_CRON'))
+    cron = str(getenv('SPIKE_CRON')) if getenv('SPIKE_CRON') is not None else '0 * * * *'
+    trigger = cron_trigger = CronTrigger.from_crontab(cron)
+
     try:
         if spike_start_date is not None:
-            datetime_object = datetime.strptime(spike_start_date, '%Y-%m-%d %H:%M:%S')
+            start_date_datetime = datetime.strptime(spike_start_date, '%Y-%m-%d %H:%M:%S')
     except:
         log.info('Invalid Date Format for CRON start date.')
 
-    log.info('Cron Start Date %s', datetime_object)
-    cron = str(getenv('SPIKE_CRON')) if getenv('SPIKE_CRON') is not None else '0 * * * *'
+    log.info('Cron Start Date %s', start_date_datetime)
 
     scheduler = BackgroundScheduler()
-    cron_trigger = CronTrigger.from_crontab(cron)
 
-    scheduler.add_job(increase_cpu, cron_trigger, [spike_duration, cpu_spike_processes],
-                      next_run_time=datetime_object)
-    scheduler.add_job(network_delay, cron_trigger, [network_delay_time, spike_duration],
-                      next_run_time=datetime_object)
+    if interval_based_cron == 'true':
+        trigger = AndTrigger([IntervalTrigger(spike_interval_days=spike_interval_days),
+                cron_trigger])
+
+    scheduler.add_job(increase_cpu, trigger, [spike_duration, cpu_spike_processes],
+                      next_run_time=start_date_datetime)
+    scheduler.add_job(network_delay, trigger, [network_delay_time, spike_duration],
+                      next_run_time=start_date_datetime)
 
     if spike_duration > 0:
         log.info('CPU KILLER enabled')
         log.info('SPIKE CRON %s' % get_description(cron))
-        log.info('SPIKE START DATE %s' % datetime_object)
+        log.info('SPIKE START DATE %s' % start_date_datetime)
         log.info('CPU SPIKE PROCESSES %d' % cpu_spike_processes)
         log.info('SPIKE DURATION (s) %d' % spike_duration)
         log.info('NETWORK DELAY %s' % network_delay_time)
