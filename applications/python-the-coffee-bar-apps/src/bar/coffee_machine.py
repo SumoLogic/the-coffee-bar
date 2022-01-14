@@ -32,6 +32,7 @@ class CoffeeMachine(HttpServer):
         self.spike_interval_days = spike_interval_days
         self.interval_based_cron = interval_based_cron
         self.trigger = self.cron = CronTrigger.from_crontab(self.spike_cron)
+        self.interval_trigger = IntervalTrigger(days=self.spike_interval_days)
         self.add_all_endpoints()
 
         # Increase CPU usage for some time and add network delay
@@ -44,10 +45,15 @@ class CoffeeMachine(HttpServer):
             log.info('Invalid Date Format for CRON start date.')
 
         log.info('Spike start date is: %s', self.start_date_datetime)
-
+        log.info('interval_based_cron is: %s', self.interval_based_cron)
+        log.info('Cron Trigger: %s)',  self.cron)
+        log.info('Cron Trigger Next Fire Time: %s)',  self.cron.get_next_fire_time)
+        log.info('Interval Trigger: %s)', self.interval_trigger)
+        log.info('Interval Trigger Next Fire Time: %s)', self.interval_trigger.get_next_fire_time)
         if self.interval_based_cron == 'true':
-            self.trigger = AndTrigger([IntervalTrigger(days=self.spike_interval_days),
+            self.trigger = AndTrigger([self.interval_trigger,
                       self.cron])
+        log.info('trigger is: %s', self.trigger)
 
         if self.spike_duration is not None:
             self.scheduler.add_job(func=increase_cpu,
