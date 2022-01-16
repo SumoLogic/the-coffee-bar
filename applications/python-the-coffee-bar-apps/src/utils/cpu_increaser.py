@@ -1,7 +1,9 @@
+from datetime import datetime
 import logging as log
 import subprocess
 import time
 from multiprocessing.pool import Pool
+from apscheduler.util import undefined
 
 
 def magic_cpu_usage_increaser(period: int):
@@ -12,20 +14,26 @@ def magic_cpu_usage_increaser(period: int):
               'Too many open files.', period)
 
 
-def increase_cpu(period: int, threads: int):
-    log.info('Deploying new version 1.20.124')
-    log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
-    with Pool(threads) as p:
-        p.map(magic_cpu_usage_increaser, [period])
+def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_cron: str):
+    if interval_based_cron == 'false' or (interval_based_cron == 'true' and datetime.now() - start_date).days % interval_days == 0:
+        log.info('Deploying new version 1.20.124')
+        log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
+        with Pool(threads) as p:
+            p.map(magic_cpu_usage_increaser, [period])
 
-    log.info('Deploying new version 1.20.123')
+        log.info('Deploying new version 1.20.123')
+    else:
+        log.info('Not yet time for the CPU trigger.')
 
 
-def set_network_delay(delay: str, period: int):
-    log.info('Adding network delay: %s' % delay)
-    subprocess.call(['tcset', 'eth0', '--delay', delay])
+def set_network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_cron: str):
+    if interval_based_cron == 'false' or (interval_based_cron == 'true' and datetime.now() - start_date).days % interval_days == 0:
+        log.info('Adding network delay: %s' % delay)
+        subprocess.call(['tcset', 'eth0', '--delay', delay])
 
-    time.sleep(period)
+        time.sleep(period)
 
-    log.info('Removing network delay')
-    subprocess.call(['tcdel', 'eth0', '--all'])
+        log.info('Removing network delay')
+        subprocess.call(['tcdel', 'eth0', '--all'])
+    else:
+        log.info('Not yet time for the network trigger.')
