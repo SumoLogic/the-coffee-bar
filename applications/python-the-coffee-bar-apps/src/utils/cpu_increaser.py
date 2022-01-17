@@ -14,8 +14,8 @@ def magic_cpu_usage_increaser(period: int):
               'Too many open files.', period)
 
 
-def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_cron: str):
-    if interval_based_cron == 'false' or (interval_based_cron == 'true' and datetime.now() - start_date).days % interval_days == 0:
+def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+    if interval_based_trigger == 'false' or (interval_based_trigger == 'true' and (datetime.now().day - start_date.day) % interval_days == 0):
         log.info('Deploying new version 1.20.124')
         log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
         with Pool(threads) as p:
@@ -26,8 +26,8 @@ def increase_cpu(period: int, threads: int, interval_days: int, start_date: date
         log.info('Not yet time for the CPU trigger.')
 
 
-def set_network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_cron: str):
-    if interval_based_cron == 'false' or (interval_based_cron == 'true' and datetime.now() - start_date).days % interval_days == 0:
+def set_network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+    if interval_based_trigger == 'false' or (interval_based_trigger == 'true' and (datetime.now().day - start_date.day) % interval_days == 0):
         log.info('Adding network delay: %s' % delay)
         subprocess.call(['tcset', 'eth0', '--delay', delay])
 

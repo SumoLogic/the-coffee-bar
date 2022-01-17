@@ -21,15 +21,17 @@ def magic_cpu_usage_increaser(period: int):
         pass
 
 
-def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_cron: str):
-    if interval_based_cron == 'false' or (interval_based_cron == 'true' and datetime.now() - start_date).days % interval_days == 0:
+def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+    if interval_based_trigger == 'false' or (interval_based_trigger == 'true' and (datetime.now().day - start_date.day) % interval_days == 0):
         log.info('Increasing CPU Usage - threads=%d' % threads)
         with Pool(threads) as p:
             p.map(magic_cpu_usage_increaser, [period])
+    else:
+        log.info('Not yet time for CPU Spike.')
 
 
-def network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_cron: str):
-    if interval_based_cron == 'false' or (interval_based_cron == 'true' and datetime.now() - start_date).days % interval_days == 0:
+def network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+    if interval_based_trigger == 'false' or (interval_based_trigger == 'true' and (datetime.now().day - start_date.day) % interval_days == 0):
         log.info('Adding network delay: %s' % delay)
         subprocess.call(['tcset', 'eth0', '--delay', delay])
 
@@ -37,6 +39,8 @@ def network_delay(delay: str, period: int, interval_days: int, start_date: datet
 
         log.info('Removing network delay')
         subprocess.call(['tcdel', 'eth0', '--all'])
+    else:
+        log.info('Not yet time for Network Spike.')
 
 
 root = log.getLogger()
@@ -57,17 +61,15 @@ try:
     network_delay_time = str(getenv('NETWORK_DELAY')) if getenv('NETWORK_DELAY') is not None else '1sec'
     spike_start_date = str(getenv('SPIKE_START_DATE'))
     start_date_datetime = undefined
-    interval_based_cron = str(getenv('INTERVAL_BASED_CRON')) if getenv('INTERVAL_BASED_CRON') is not None else 'false'
+    interval_based_trigger = str(getenv('INTERVAL_BASED_TRIGGER')) if getenv('INTERVAL_BASED_TRIGGER') is not None else 'false'
     spike_interval_hours = 1
     spike_interval_days = 0
     start_date_datetime_interval = datetime.now() + timedelta(hours = spike_interval_hours)
 
-    log.info('Cron Start Date %s', start_date_datetime)
-
     scheduler = BackgroundScheduler()
 
-    if interval_based_cron == 'true':
-        spike_interval_days = str(getenv('SPIKE_INTERVAL_DAYS')) if getenv('SPIKE_INTERVAL_DAYS') is not None else '0'
+    if interval_based_trigger == 'true':
+        spike_interval_days = int(getenv('SPIKE_INTERVAL_DAYS')) if getenv('SPIKE_INTERVAL_DAYS') is not None else 0
         spike_interval_hours = int(getenv('SPIKE_INTERVAL_HOURS')) if getenv('SPIKE_INTERVAL_HOURS') is not None else 1
         start_date_datetime_interval = datetime.now() + timedelta(hours = spike_interval_hours)
         trigger = IntervalTrigger(hours=spike_interval_hours)
@@ -83,9 +85,9 @@ try:
     except:
         log.info('Invalid Date Format for CRON start date.')
 
-    scheduler.add_job(increase_cpu, trigger, [spike_duration, cpu_spike_processes, spike_interval_days, start_date_datetime_interval, interval_based_cron],
+    scheduler.add_job(increase_cpu, trigger, [spike_duration, cpu_spike_processes, spike_interval_days, start_date_datetime_interval, interval_based_trigger],
                       next_run_time=start_date_datetime)
-    scheduler.add_job(network_delay, trigger, [network_delay_time, spike_duration, spike_interval_days, start_date_datetime_interval, interval_based_cron],
+    scheduler.add_job(network_delay, trigger, [network_delay_time, spike_duration, spike_interval_days, start_date_datetime_interval, interval_based_trigger],
                       next_run_time=start_date_datetime)
 
     if spike_duration > 0:
@@ -94,6 +96,7 @@ try:
         log.info('CPU SPIKE PROCESSES %d' % cpu_spike_processes)
         log.info('SPIKE DURATION (s) %d' % spike_duration)
         log.info('NETWORK DELAY %s' % network_delay_time)
+        log.info('CRON START DATE %s', start_date_datetime)
         scheduler.start()
         loop.run_forever()
     else:

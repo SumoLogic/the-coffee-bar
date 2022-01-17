@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+replicaCountClicker: 1
 
 image:
   dotnet:
@@ -258,7 +259,10 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
-    SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "0" # default 0
+    SPIKE_INTERVAL_HOURS: "1" # default 1
+    SPIKE_CRON: "0 * * * *"
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
@@ -272,7 +276,10 @@ envs:
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     ## Envs to configure CPU Killer and Network Delay
-    SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "0" # default 0
+    SPIKE_INTERVAL_HOURS: "1" # default 1
+    SPIKE_CRON: "0 * * * *"
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process
