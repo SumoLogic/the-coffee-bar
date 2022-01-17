@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
-from apscheduler.triggers.combining import AndTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.util import undefined
 from flask import Response

@@ -481,7 +481,7 @@ Create commands/args
 - --port=8083
 - --machine-svc-host={{ template "sumologic.thecoffeebar.metadata.name.machinesvc.service" . }}
 - --machine-svc-port=9090
-- --interval-based-cron=$(INTERVAL_BASED_TRIGGER)
+- --interval-based-trigger=$(INTERVAL_BASED_TRIGGER)
 - --spike-cron=$(SPIKE_CRON)
 - --spike-interval-days=$(SPIKE_INTERVAL_DAYS)
 - --spike-interval-hours=$(SPIKE_INTERVAL_HOURS)

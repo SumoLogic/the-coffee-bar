@@ -3,7 +3,6 @@ import logging as log
 import subprocess
 import time
 from multiprocessing.pool import Pool
-from apscheduler.util import undefined
 
 
 def magic_cpu_usage_increaser(period: int):
