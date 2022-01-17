@@ -28,6 +28,9 @@ class CoffeeMachine(HttpServer):
         self.machine_svc_port = machine_svc_port
         self.start_date_datetime = undefined
         self.interval_based_trigger = interval_based_trigger
+        self.spike_interval_hours = 1
+        self.spike_interval_days = 0
+        self.start_date_datetime_interval = datetime.now() + timedelta(hours = self.spike_interval_hours)
         self.add_all_endpoints()
 
         # Increase CPU usage for some time and add network delay
