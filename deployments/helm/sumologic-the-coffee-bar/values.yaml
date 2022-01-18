@@ -11,10 +11,10 @@ image:
     tag: calculator-dotnet-1.1.0-1.0.0rc7
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: frontend-jsv0.1.0-ot0.24.0
+    tag: frontend-jsv0.1.1-ot0.24.0
   python:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: pythonAppsv0.2.0-ot1.7.1-0.26b1
+    tag: pythonAppsv0.2.1-ot1.7.1-0.26b1
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
