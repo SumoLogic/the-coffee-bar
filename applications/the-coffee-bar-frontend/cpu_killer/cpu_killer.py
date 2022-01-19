@@ -33,7 +33,7 @@ def increase_cpu(period: int, threads: int, interval_days: int, start_date: date
 
 def network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
     if interval_based_trigger == 'false' or \
-        (interval_based_trigger == 'true' and interval_days==0) \
+        (interval_based_trigger == 'true' and interval_days==0) or \
             (interval_based_trigger == 'true' and (datetime.now().day - start_date.day) % interval_days == 0):
         log.info('Adding network delay: %s' % delay)
         subprocess.call(['tcset', 'eth0', '--delay', delay])
