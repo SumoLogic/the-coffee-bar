@@ -82,7 +82,7 @@ services:
       - 8083:8083
     command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py",
               "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
-              "--machine-svc-port=9090", "--spike-cron=*/2 * * * *", "--spike-duration=60", "--cpu-spike-processes=1", "--interval-based-trigger=false", "--spike-interval-days=0", "--spike-interval-hours=1"]
+              "--machine-svc-port=9090", "--spike-cron=*/2 * * * *", "--spike-duration=60", "--cpu-spike-processes=1", "--interval-based-trigger=true", "--spike-interval-days=0", "--spike-interval-hours=1"]
     environment:
       - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces

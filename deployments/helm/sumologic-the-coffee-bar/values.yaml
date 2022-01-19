@@ -260,8 +260,8 @@ envs:
     DELAY: "5"
   coffeemachine:
     INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
-    SPIKE_INTERVAL_DAYS: "0" # default 0
-    SPIKE_INTERVAL_HOURS: "1" # default 1
+    SPIKE_INTERVAL_DAYS: "0" # default 0 How many day to skip before next trigger. It will combine with SPIKE_INTERVAL_HOURS to determine next trigger time.
+    SPIKE_INTERVAL_HOURS: "1" # default 1 How many hours to skip before next trigger. It will combine with SPIKE_INTERVAL_DAYS to determine next trigger time. Example: To schedule after every 5 days and every 6 hours set SPIKE_INTERVAL_HOURS as 6 and SPIKE_INTERVAL_DAYS as 5
     SPIKE_CRON: "0 * * * *"
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
