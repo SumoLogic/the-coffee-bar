@@ -4,6 +4,7 @@
 
 replicaCount: 1
 replicaCountClicker: 1
+replicaCountBar: 1
 
 image:
   dotnet:
