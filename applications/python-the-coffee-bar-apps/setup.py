@@ -39,6 +39,7 @@ setup(
                       'opentelemetry-instrumentation==0.26b1',
                       'opentelemetry-sdk==1.7.1',
                       'opentelemetry-propagator-aws-xray==1.0.1',
+                      'opentelemetry-propagator-b3==1.7.1',
                       'paste==3.5.0',
                       'psycopg2==2.9.3',
                       'pyjson==1.3.0',
