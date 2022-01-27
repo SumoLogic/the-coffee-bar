@@ -61,6 +61,7 @@ class OrderForm extends Component {
     sweets: '',
     sweets_amount: 0,
     bill: 0,
+    total: 0,
   };
 
   handleUpdateOrder() {
@@ -71,12 +72,22 @@ class OrderForm extends Component {
     this.order.sweets = this.state.sweets;
     this.order.sweets_amount = this.state.sweets_amount;
     this.order.bill = this.state.bill;
+    this.order.total = (this.state.coffee_amount * this.state.coffee_price)
+      + (this.state.sweets_amount * this.state.sweets_price);
   }
 
   handleOrder = event => {
     event.preventDefault();
     this.handleUpdateOrder();
     this.setState({ order_dialog: false });
+
+    const currentSpan = window.sumoLogicOpenTelemetryRum.api.trace.getSpan(window.sumoLogicOpenTelemetryRum.api.context.active());
+    currentSpan.setAttribute('order.coffee', this.order.coffee);
+    currentSpan.setAttribute('order.coffee_amount', this.order.coffee_amount);
+    currentSpan.setAttribute('order.sweets', this.order.sweets);
+    currentSpan.setAttribute('order.sweets_amount', this.order.sweets_amount)
+    currentSpan.setAttribute('order.total_amount_to_pay', this.order.total);
+
     fetch(process.env.REACT_APP_COFFEE_BAR_URL, {
       method: 'POST',
       headers: {
