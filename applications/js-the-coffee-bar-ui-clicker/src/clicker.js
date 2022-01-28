@@ -87,7 +87,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             // Select Coffee to order
             let coffee = utils.selectProduct(COFFEE);
             let coffee_selectors = {
-                'input': `input[name="amt${coffee}"]`,
+                'input': `input[name="amount${coffee}"]`,
                 'button': `button[name="add${coffee}"]`,
             }
 
@@ -99,7 +99,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             // Select Sweets to order
             let sweets = utils.selectProduct(SWEETS);
             let sweet_selectors = {
-                'input': `input[name="amt${sweets}"]`,
+                'input': `input[name="amount${sweets}"]`,
                 'button': `button[name="add${sweets}"]`,
             }
 
