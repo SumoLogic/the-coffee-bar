@@ -70,6 +70,7 @@ services:
       - REACT_APP_APPLICATION_NAME=tcb-local
       - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
+      - REACT_APP_DROP_SINGLE_TRACES=false
   the-coffee-machine:
     image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.0-ot1.7.1-0.26b1
     container_name: the-coffee-machine
