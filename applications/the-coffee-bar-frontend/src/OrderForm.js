@@ -202,7 +202,7 @@ class OrderForm extends Component {
   createProduct = (img, name, product, product_desc, price, handleChange, handleAdd) => {
     let servings = name + ' servings number';
     let addBtn = 'add' + name
-    let setAmt = 'amt' + name
+    let setAmt = 'amount' + name
     let box = 'box' + name
     return (
       <Box w={this.boxSettings.width} rounded={this.boxSettings.round} overflow={this.boxSettings.overflow}
