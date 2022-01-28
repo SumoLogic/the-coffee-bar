@@ -271,6 +271,7 @@ envs:
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
+    REACT_APP_DROP_SINGLE_TRACES: false
     ## Envs to configure CPU Killer and Network Delay
     SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
