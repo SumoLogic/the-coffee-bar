@@ -27,6 +27,118 @@ const SWEETS = {
     'Muffin': [95, 100],
 };
 
+const USER_AGENTS = {
+    'Windows': {
+        'value': '(Windows NT 10.0; Win64; x64)',
+        'probScope': [0, 32],
+        'browsers': {
+            'Firefox': {
+                'probScope': [0, 49],
+                'versions': {
+                    'v1': {
+                        'value': 'Gecko/20100101 Firefox/96.0',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'Gecko/20100101 Firefox/89.0',
+                        'probScope': [50, 100],
+                    },
+                },
+            },
+            'Chrome': {
+                'probScope': [50, 100],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.0 Safari/537.36',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+                        'probScope': [50, 100],
+                    },
+                },
+            }
+        },
+    },
+    'Linux': {
+        'value': '(X11; Linux x86_64)',
+        'probScope': [33, 66],
+        'browsers': {
+            'Firefox': {
+                'probScope': [0, 49],
+                'versions': {
+                    'v1': {
+                        'value': 'Gecko/20100101 Firefox/96.0',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'Gecko/20100101 Firefox/89.0',
+                        'probScope': [50, 100],
+                    },
+                },
+            },
+            'Chrome': {
+                'probScope': [50, 100],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.0 Safari/537.36',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+                        'probScope': [50, 100],
+                    },
+                },
+            }
+        },
+    },
+    'Mac': {
+        'value': '(Macintosh; Intel Mac OS X 12_2)',
+        'probScope': [33, 66],
+        'browsers': {
+            'Firefox': {
+                'probScope': [0, 11],
+                'versions': {
+                    'v1': {
+                        'value': 'Gecko/20100101 Firefox/96.0',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'Gecko/20100101 Firefox/89.0',
+                        'probScope': [50, 100],
+                    },
+                },
+            },
+            'Chrome': {
+                'probScope': [12, 35],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.0 Safari/537.36',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+                        'probScope': [50, 100],
+                    },
+                },
+            },
+            'Safari': {
+                'probScope': [36, 100],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Safari/605.1.15',
+                        'probScope': [0, 49],
+                    },
+                    'v2': {
+                        'value': 'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.1 Safari/605.1.15',
+                        'probScope': [50, 100],
+                    },
+                },
+            }
+        },
+    },
+};
+
 const NAVIGATE_RETRY_SECONDS = 60;
 
 (async () => {
@@ -63,10 +175,15 @@ const NAVIGATE_RETRY_SECONDS = 60;
                 dumpio: dumpio_debug,
                 slowMo: 250,
                 devtools: false,
-                args: ['--devtools-flags=disable','--disable-software-rasterizer','--disable-extensions', '--wait-for-browser', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--disable-web-security'],
+                args: ['--devtools-flags=disable', '--disable-software-rasterizer', '--disable-extensions', '--wait-for-browser', '--disable-gpu', '--no-sandbox', '--disable-dev-shm-usage', '--disable-web-security'],
             });
 
             page = await browser.newPage();
+
+            var userAgent = utils.chooseUserAgent(USER_AGENTS);
+            var userAgentStr = `Mozilla/5.0 ${userAgent[0]} ${userAgent[1]}`;
+            console.info(`User Agent: ${userAgentStr}`);
+            page.setUserAgent(userAgentStr);
 
             async function clickAndSetFieldValue(selector, value, del) {
                 console.info(`Setting value: ${value} for: ${selector}`);
@@ -85,7 +202,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             await utils.retry(() => page.goto(COFFEE_BAR_UI_URL), NAVIGATE_RETRY_SECONDS);
 
             // Select Coffee to order
-            let coffee = utils.selectProduct(COFFEE);
+            let coffee = utils.choose(COFFEE);
             let coffee_selectors = {
                 'input': `input[name="amount${coffee}"]`,
                 'button': `button[name="add${coffee}"]`,
@@ -97,7 +214,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             await click(coffee_selectors['button'], DELAY);
 
             // Select Sweets to order
-            let sweets = utils.selectProduct(SWEETS);
+            let sweets = utils.choose(SWEETS);
             let sweet_selectors = {
                 'input': `input[name="amount${sweets}"]`,
                 'button': `button[name="add${sweets}"]`,
