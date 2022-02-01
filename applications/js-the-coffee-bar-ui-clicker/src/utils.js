@@ -57,16 +57,16 @@ module.exports = {
                 system = val['value'];
                 console.info(`Select system: ${system} - ${random}`);
 
-                random = this.getRandomInt(0, 100);
+                var randomB = this.getRandomInt(0, 100);
                 for (const [bkey, bval] of Object.entries(val['browsers'])) {
-                    if (random >= bval['probScope'][0] && random <= bval['probScope'][1]) {
-                        random = this.getRandomInt(0, 100);
-                        console.info(`Select browser: ${bkey} - ${random}`);
+                    if (randomB >= bval['probScope'][0] && randomB <= bval['probScope'][1]) {
+                        var randomV = this.getRandomInt(0, 100);
+                        console.info(`Select browser: ${bkey} - ${randomB}`);
                         for (const [vkey, vval] of Object.entries(bval['versions'])) {
-                            if (random >= vval['probScope'][0] && random <= vval['probScope'][1]) {
+                            if (randomV >= vval['probScope'][0] && randomV <= vval['probScope'][1]) {
                                 browserVersion = vval['value'];
 
-                                console.info(`Select browser version: ${browserVersion}  - ${random}`);
+                                console.info(`Select browser version: ${browserVersion}  - ${randomV}`);
                                 break;
                             }
                         }
