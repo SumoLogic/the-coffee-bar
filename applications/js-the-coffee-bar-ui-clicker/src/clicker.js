@@ -94,7 +94,7 @@ const USER_AGENTS = {
     },
     'Mac': {
         'value': '(Macintosh; Intel Mac OS X 12_2)',
-        'probScope': [33, 66],
+        'probScope': [67, 100],
         'browsers': {
             'Firefox': {
                 'probScope': [0, 11],
@@ -183,7 +183,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             var userAgent = utils.chooseUserAgent(USER_AGENTS);
             var userAgentStr = `Mozilla/5.0 ${userAgent[0]} ${userAgent[1]}`;
             console.info(`User Agent: ${userAgentStr}`);
-            page.setUserAgent(userAgentStr);
+            await page.setUserAgent(userAgentStr);
 
             async function clickAndSetFieldValue(selector, value, del) {
                 console.info(`Setting value: ${value} for: ${selector}`);
