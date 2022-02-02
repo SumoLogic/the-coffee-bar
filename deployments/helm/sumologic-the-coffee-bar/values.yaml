@@ -5,6 +5,7 @@
 replicaCount: 1
 replicaCountClicker: 1
 replicaCountBar: 1
+replicaCountPostgres: 1
 
 image:
   dotnet:
