@@ -30,7 +30,7 @@ const SWEETS = {
 const USER_AGENTS = {
     'Windows': {
         'value': '(Windows NT 10.0; Win64; x64)',
-        'probScope': [0, 32],
+        'probScope': [0, 20],
         'browsers': {
             'Firefox': {
                 'probScope': [0, 49],
@@ -62,7 +62,7 @@ const USER_AGENTS = {
     },
     'Linux': {
         'value': '(X11; Linux x86_64)',
-        'probScope': [33, 66],
+        'probScope': [21, 45],
         'browsers': {
             'Firefox': {
                 'probScope': [0, 49],
@@ -94,7 +94,7 @@ const USER_AGENTS = {
     },
     'Mac': {
         'value': '(Macintosh; Intel Mac OS X 12_2)',
-        'probScope': [67, 100],
+        'probScope': [46, 60],
         'browsers': {
             'Firefox': {
                 'probScope': [0, 11],
@@ -135,6 +135,63 @@ const USER_AGENTS = {
                     },
                 },
             }
+        },
+    },
+    'iOS': {
+        'value': '(iPhone; CPU iPhone OS 15_3 like Mac OS X)',
+        'probScope': [61, 80],
+        'browsers': {
+            'Firefox': {
+                'probScope': [0, 6],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/96.0 Mobile/15E148 Safari/605.1.15',
+                        'probScope': [0, 100],
+                    },
+                },
+            },
+            'Chrome': {
+                'probScope': [7, 25],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/98.0.4758.85 Mobile/15E148 Safari/604.1',
+                        'probScope': [0, 100],
+                    },
+                },
+            },
+            'Safari': {
+                'probScope': [26, 100],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Mobile/15E148 Safari/604.1',
+                        'probScope': [0, 100],
+                    },
+                },
+            }
+        },
+    },
+    'Android': {
+        'value': '(Android 12; Mobile; rv:68.0)',
+        'probScope': [81, 100],
+        'browsers': {
+            'Firefox': {
+                'probScope': [0, 20],
+                'versions': {
+                    'v1': {
+                        'value': 'Gecko/68.0 Firefox/96.0',
+                        'probScope': [0, 100],
+                    },
+                },
+            },
+            'Chrome': {
+                'probScope': [21, 100],
+                'versions': {
+                    'v1': {
+                        'value': 'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.87 Mobile Safari/537.36',
+                        'probScope': [0, 100],
+                    },
+                },
+            },
         },
     },
 };
