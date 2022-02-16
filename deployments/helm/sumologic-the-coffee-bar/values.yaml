@@ -16,7 +16,7 @@ image:
     tag: pythonAppsv0.2.0-ot1.7.1-0.26b1
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: rubyAppsv0.1.1-ot1.0.2-0.22.0-0.21.0
+    tag: rubyAppsv0.1.1-ot1.0.2-0.23.0-0.21.2
   clicker:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: clicker-linux
