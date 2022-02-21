@@ -3,19 +3,19 @@ receivers:
   jaeger:
     protocols:
       thrift_compact:
-        endpoint: 0.0.0.0:6831
+        endpoint:
       thrift_http:
-        endpoint: 0.0.0.0:14268
+        endpoint:
       grpc:
-        endpoint: 0.0.0.0:14251
+        endpoint:
   otlp:
     protocols:
       grpc:
-        endpoint: 0.0.0.0:4317
+        endpoint:
       http:
-        endpoint: 0.0.0.0:55681
+        endpoint:
   zipkin:
-    endpoint: 0.0.0.0:9411
+    endpoint:
 processors:
   memory_limiter:
     # check_interval is the time between measurements of memory usage for the
