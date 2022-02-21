@@ -4,7 +4,7 @@
 
 The Coffee Bar App require below listed things to be configured:
 
-- *helm3* - [Helm Installation guide](https://helm.sh/docs/intro/install/)
+- *helm* - [Helm Installation guide](https://helm.sh/docs/intro/install/)
 - *Sumologic OpenTelemetry Collector Hostname* (`OTELCOL_HOSTNAME`) - Sumologic Kubernetes Collection OT Collector hostname 
 (RELEASE-NAME-sumologic-otelcol.NAMESPACE), default=collection-sumologic-otelcol.sumologic
 - *RUM HTTP Traces URL* (`RUM_ENDPOINT_URL`) - an endpoint where The Coffee Bar Frontend will send the spans 
@@ -15,8 +15,7 @@ The Coffee Bar App require below listed things to be configured:
 The Coffee Bar App deployment command:
 
 ```bash
-helm3 upgrade --install sumologic-the-coffee-bar . \
-  --create-namespace \
+helm upgrade --install sumologic-the-coffee-bar . \
   --namespace the-coffee-bar-ns \
   --set extras.otelColHostName="<OTELCOL_HOSTNAME>" \
   --set extras.lambdaSweetsUrl="<LAMBDA_SWEETS_URL>" \

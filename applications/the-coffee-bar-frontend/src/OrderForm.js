@@ -201,11 +201,14 @@ class OrderForm extends Component {
 
   createProduct = (img, name, product, product_desc, price, handleChange, handleAdd) => {
     let servings = name + ' servings number';
+    let addBtn = 'add' + name
+    let setAmt = 'amount' + name
+    let box = 'box' + name
     return (
       <Box w={this.boxSettings.width} rounded={this.boxSettings.round} overflow={this.boxSettings.overflow}
            backgroundColor={this.boxSettings.bgc} boxShadow={this.boxSettings.bs}>
         <Center>
-          <Image boxSize='sm' borderRadius='full' src={img} alt={name} />
+          <Image boxSize='sm' borderRadius='full' src={img} alt={box} />
         </Center>
         <Text as={this.productTxtSettings.h} fontWeight={this.productTxtSettings.fw}
               fontSize={this.productTxtSettings.fs}>{product}</Text>
@@ -214,14 +217,14 @@ class OrderForm extends Component {
               _webkit-box-orient='vertical'>{product_desc}</Text>
         <Badge>Price: ${price}</Badge>
         <Center>
-          <NumberInput name={name} id={name} placeholder={servings} inputMode='numeric' min={0} max={30} allowMouseWheel
+          <NumberInput name={setAmt} id={setAmt} placeholder={servings} inputMode='numeric' min={0} max={30} allowMouseWheel
                        focusBorderColor='lime' w='350px'>
             <NumberInputField value={this.state.coffee_amount} placeholder={servings} textTransform='uppercase'
                               onChange={handleChange} onWheel={handleChange} />
           </NumberInput>
         </Center>
         <Center>
-          <Button name={name} id={name} size='lg' mt={3} boxShadow='sm' _hover={{ boxShadow: 'md ' }}
+          <Button name={addBtn} id={addBtn} size='lg' mt={3} boxShadow='sm' _hover={{ boxShadow: 'md ' }}
                   _active={{ boxShadow: 'lg' }} textTransform='uppercase' onClick={handleAdd}>
             Add
           </Button>
