@@ -48,7 +48,7 @@ services:
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
-    image: public.ecr.aws/sumologic/the-coffee-bar:frontend-jsv0.1.0-ot0.24.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:frontend-v0.1.1
     container_name: the-coffee-bar-frontend
     hostname: the-coffee-bar-frontend
     ports:

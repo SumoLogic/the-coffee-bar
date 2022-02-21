@@ -10,7 +10,7 @@ image:
     tag: calculator-dotnet-1.1.0-1.0.0rc7
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: frontend-jsv0.1.0-ot0.24.0
+    tag: frontend-v0.1.1
   python:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: pythonAppsv0.2.0-ot1.9.1-0.28b1
