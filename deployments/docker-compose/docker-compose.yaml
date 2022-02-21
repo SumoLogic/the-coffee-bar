@@ -12,7 +12,7 @@ services:
     environment:
       POSTGRES_HOST_AUTH_METHOD: "trust"
 #  clicker:
-#    image: public.ecr.aws/sumologic/the-coffee-bar:clicker-linux
+#    image: public.ecr.aws/sumologic/the-coffee-bar:clicker-v1.0
 #    container_name: clicker
 #    hostname: clicker
 #    environment:
