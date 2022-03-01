@@ -252,7 +252,8 @@ envs:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-bar,application=the-coffee-bar-app"
     OTEL_PROPAGATORS: "xray,tracecontext,baggage"
   calculatorsvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=calculator-svc,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_SERVICE_NAME: "calculator-svc"
   cashdesk:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=the-cashdesk,application=the-coffee-bar-app"
   clicker:
