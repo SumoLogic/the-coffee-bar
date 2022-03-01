@@ -287,9 +287,10 @@ envs:
     OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=the-coffee-bar-app"
 
 crons:
-  clicker: '0 */4 * * *' # cron spec of time, here, 4 o'clock
-  postgres: '0 */8 * * *' # cron spec of time, here, 8 o'clock
-  cashdesk: '0 */8 * * *' # cron spec of time, here, 8 o'clock
+  clicker: '30 */4 * * *' # cron spec of time, here, 4 o'clock
+  postgres: '30 */8 * * *' # cron spec of time, here, 8 o'clock
+  cashdesk: '30 */8 * * *' # cron spec of time, here, 8 o'clock
+  bar: '30 */8 * * *' # cron spec of time, here, 8 o'clock
 
 extras:
   otelColHostName: collection-sumologic-otelcol.sumologic
