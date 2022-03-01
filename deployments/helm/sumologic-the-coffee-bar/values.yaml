@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   dotnet:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: calculator-dotnet-1.1.0-1.0.0rc7
+    tag: calculator-dotnet-1.2.0-1.0.0rc9
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: frontend-v0.1.1
