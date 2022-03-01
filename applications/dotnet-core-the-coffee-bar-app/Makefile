@@ -1,4 +1,4 @@
-BASE_TAG = calculator-dotnet-1.1.0-1.0.0rc7
+BASE_TAG = calculator-dotnet-1.2.0-1.0.0rc9
 
 ifndef GITHUB_HEAD_REF
 	TAG = $(BASE_TAG)
