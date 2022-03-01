@@ -250,13 +250,17 @@ affinity: {}
 
 envs:
   bar:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-bar,application=the-coffee-bar-app"
-    OTEL_PROPAGATORS: "xray,tracecontext,baggage"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+
+    OTEL_PROPAGATORS: "b3,xray,tracecontext,baggage"
   calculatorsvc:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
     OTEL_SERVICE_NAME: "calculator-svc"
+    OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
   cashdesk:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-cashdesk,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_SERVICE_NAME: "the-cashdesk"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
   clicker:
     DELAY: "5"
   coffeemachine:
@@ -265,27 +269,35 @@ envs:
     SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
     NETWORK_DELAY: "1sec"
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=the-coffee-machine,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
+    OTEL_SERVICE_NAME: "the-coffee-machine"
   coffeesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=coffee-svc,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
+    OTEL_SERVICE_NAME: "coffee-svc"
   frontend:
     REACT_APP_RUM_SCRIPT_URL: "https://rum.sumologic.com/sumologic-rum.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
-    REACT_APP_DROP_SINGLE_TRACES: false
+    REACT_APP_DROP_SINGLE_TRACES: 'false'
     ## Envs to configure CPU Killer and Network Delay
     SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process
-    NETWORK_DELAY: "100ms" # with 100 ms network delay
+    NETWORK_DELAY: "1sec" # with 100 ms network delay
   machinesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=machine-svc,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
+    OTEL_SERVICE_NAME: "machine-svc"
   postgres:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
-    OTEL_RESOURCE_ATTRIBUTES: "service.name=water-svc,application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
+    OTEL_SERVICE_NAME: "water-svc"
 
 crons:
   clicker: '30 */4 * * *' # cron spec of time, here, 4 o'clock
