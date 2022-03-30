@@ -8,7 +8,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.util import undefined
 from flask import Response
 from src.common.http_server import HttpServer
-from src.utils.cpu_increaser import increase_cpu, set_network_delay
+from src.utils.cpu_increaser import outage_start, network_outage_start
 
 GET_COFFEE_ENDPOINT = '/get_coffee'
 
@@ -58,12 +58,12 @@ class CoffeeMachine(HttpServer):
         log.info('Spike Start Date: %s', self.start_date_datetime)
 
         if self.spike_duration is not None:
-            self.scheduler.add_job(func=increase_cpu,
+            self.scheduler.add_job(func=outage_start,
                                    trigger=self.trigger,
                                    args=[self.spike_duration, self.cpu_spike_processes, self.spike_interval_days, self.start_date_datetime_interval, self.interval_based_trigger],
                                    next_run_time=self.start_date_datetime)
         if self.network_delay is not None:
-            self.scheduler.add_job(func=set_network_delay,
+            self.scheduler.add_job(func=network_outage_start,
                                    trigger=self.trigger,
                                    args=[self.network_delay, self.spike_duration, self.spike_interval_days, self.start_date_datetime_interval, self.interval_based_trigger],
                                    next_run_time=self.start_date_datetime)

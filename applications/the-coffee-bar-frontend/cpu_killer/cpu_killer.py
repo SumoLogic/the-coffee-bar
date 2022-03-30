@@ -20,7 +20,7 @@ def magic_cpu_usage_increaser(period: int):
         pass
 
 
-def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+def outage_start(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
 
     date_format = "%m/%d/%Y"
     if interval_based_trigger == 'false' or \
@@ -34,7 +34,7 @@ def increase_cpu(period: int, threads: int, interval_days: int, start_date: date
         log.info('Not yet time for CPU Spike.')
 
 
-def network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+def network_outage_start(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
 
     date_format = "%m/%d/%Y"
     if interval_based_trigger == 'false' or \
@@ -93,9 +93,9 @@ try:
     except:
         log.info('Invalid Date Format for CRON start date.')
 
-    scheduler.add_job(increase_cpu, trigger, [spike_duration, cpu_spike_processes, spike_interval_days, start_date_datetime_interval, interval_based_trigger],
+    scheduler.add_job(outage_start, trigger, [spike_duration, cpu_spike_processes, spike_interval_days, start_date_datetime_interval, interval_based_trigger],
                       next_run_time=start_date_datetime)
-    scheduler.add_job(network_delay, trigger, [network_delay_time, spike_duration, spike_interval_days, start_date_datetime_interval, interval_based_trigger],
+    scheduler.add_job(network_outage_start, trigger, [network_delay_time, spike_duration, spike_interval_days, start_date_datetime_interval, interval_based_trigger],
                       next_run_time=start_date_datetime)
 
     if spike_duration > 0:

@@ -178,9 +178,9 @@ services:
     hostname: calculator-svc
     command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
     environment:
-      - EXPORTER=otlp
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
-      - OTEL_RESOURCE_ATTRIBUTES=service.name=calculator-svc,application=tcb-local
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local
+      - OTEL_SERVICE_NAME=calculator-svc
     ports:
       - 8090:8090
   otelcol:

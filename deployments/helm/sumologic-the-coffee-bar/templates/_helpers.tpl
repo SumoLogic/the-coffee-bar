@@ -621,7 +621,7 @@ Create envs
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
-{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.grpc" . }}
+{{- include "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" . }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.clicker" }}

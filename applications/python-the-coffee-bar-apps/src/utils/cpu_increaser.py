@@ -16,7 +16,7 @@ def magic_cpu_usage_increaser(period: int):
     log.error('Thread stuck in kernel module for %s seconds, waiting for file descriptor to be released.'
                       'Too many open files.', period)
 
-def increase_cpu(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+def outage_start(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
 
     date_format = "%m/%d/%Y"
     if interval_based_trigger == 'false' or \
@@ -32,7 +32,7 @@ def increase_cpu(period: int, threads: int, interval_days: int, start_date: date
         log.info('Not yet time for the CPU trigger.')
 
 
-def set_network_delay(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
+def network_outage_start(delay: str, period: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
 
     date_format = "%m/%d/%Y"
     if interval_based_trigger == 'false' or \

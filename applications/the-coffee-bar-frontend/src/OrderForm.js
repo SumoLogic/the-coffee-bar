@@ -61,6 +61,7 @@ class OrderForm extends Component {
     sweets: '',
     sweets_amount: 0,
     bill: 0,
+    total: 0,
   };
 
   handleUpdateOrder() {
@@ -71,12 +72,22 @@ class OrderForm extends Component {
     this.order.sweets = this.state.sweets;
     this.order.sweets_amount = this.state.sweets_amount;
     this.order.bill = this.state.bill;
+    this.order.total = (this.state.coffee_amount * this.state.coffee_price)
+      + (this.state.sweets_amount * this.state.sweets_price);
   }
 
   handleOrder = event => {
     event.preventDefault();
     this.handleUpdateOrder();
     this.setState({ order_dialog: false });
+
+    const currentSpan = window.sumoLogicOpenTelemetryRum.api.trace.getSpan(window.sumoLogicOpenTelemetryRum.api.context.active());
+    currentSpan.setAttribute('order.coffee', this.order.coffee);
+    currentSpan.setAttribute('order.coffee_amount', this.order.coffee_amount);
+    currentSpan.setAttribute('order.sweets', this.order.sweets);
+    currentSpan.setAttribute('order.sweets_amount', this.order.sweets_amount)
+    currentSpan.setAttribute('order.total_amount_to_pay', this.order.total);
+
     fetch(process.env.REACT_APP_COFFEE_BAR_URL, {
       method: 'POST',
       headers: {
@@ -190,11 +201,14 @@ class OrderForm extends Component {
 
   createProduct = (img, name, product, product_desc, price, handleChange, handleAdd) => {
     let servings = name + ' servings number';
+    let addBtn = 'add' + name
+    let setAmt = 'amount' + name
+    let box = 'box' + name
     return (
       <Box w={this.boxSettings.width} rounded={this.boxSettings.round} overflow={this.boxSettings.overflow}
            backgroundColor={this.boxSettings.bgc} boxShadow={this.boxSettings.bs}>
         <Center>
-          <Image boxSize='sm' borderRadius='full' src={img} alt={name} />
+          <Image boxSize='sm' borderRadius='full' src={img} alt={box} />
         </Center>
         <Text as={this.productTxtSettings.h} fontWeight={this.productTxtSettings.fw}
               fontSize={this.productTxtSettings.fs}>{product}</Text>
@@ -203,14 +217,14 @@ class OrderForm extends Component {
               _webkit-box-orient='vertical'>{product_desc}</Text>
         <Badge>Price: ${price}</Badge>
         <Center>
-          <NumberInput name={name} id={name} placeholder={servings} inputMode='numeric' min={0} max={30} allowMouseWheel
+          <NumberInput name={setAmt} id={setAmt} placeholder={servings} inputMode='numeric' min={0} max={30} allowMouseWheel
                        focusBorderColor='lime' w='350px'>
             <NumberInputField value={this.state.coffee_amount} placeholder={servings} textTransform='uppercase'
                               onChange={handleChange} onWheel={handleChange} />
           </NumberInput>
         </Center>
         <Center>
-          <Button name={name} id={name} size='lg' mt={3} boxShadow='sm' _hover={{ boxShadow: 'md ' }}
+          <Button name={addBtn} id={addBtn} size='lg' mt={3} boxShadow='sm' _hover={{ boxShadow: 'md ' }}
                   _active={{ boxShadow: 'lg' }} textTransform='uppercase' onClick={handleAdd}>
             Add
           </Button>

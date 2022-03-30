@@ -106,10 +106,11 @@ services:
     image: sumo/the-coffee-bar-app:dotnet-core-calculator-svc
     container_name: calculator-svc
     hostname: calculator-svc
+    command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:4317
-      - SERVICE_NAME=aws-lambda-calculator-svc
-      - SERVER_ENDPOINT=http://calculator-svc:8090
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4317
+      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local
+      - OTEL_SERVICE_NAME=calculator-svc
     ports:
       - 8090:8090
   otelcol:
