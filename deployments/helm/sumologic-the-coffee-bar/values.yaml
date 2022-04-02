@@ -253,8 +253,8 @@ affinity: {}
 envs:
   bar:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
-
-    OTEL_PROPAGATORS: "b3,xray,tracecontext,baggage"
+    OTEL_SERVICE_NAME: "the-coffee-bar"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
   calculatorsvc:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
     OTEL_SERVICE_NAME: "calculator-svc"
