@@ -13,7 +13,7 @@ setup(
     description='The Coffee Bar - OpenTelemetry instrumented demo application',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/Sanyaku/the-coffee-bar',
+    url='https://github.com/SumoLogic/the-coffee-bar',
     author='Mateusz "mat" Rumian',
     author_email='mrumian@sumologic.com',
     classifiers=[
