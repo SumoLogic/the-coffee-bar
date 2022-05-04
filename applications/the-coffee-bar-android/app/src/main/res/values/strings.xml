@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">The Coffee Bar</string>
+    <string name="title_home">The Sumo Logic Coffee Bar</string>
+    <string name="title_checkout">Accept order?</string>
+    <string name="nav_checkout">Checkout</string>
+    <string name="title_signin">Sign in</string>
+</resources>
