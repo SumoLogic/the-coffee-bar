@@ -459,8 +459,8 @@ Create commands/args
 - --coffeemachine-port=8083
 - --cashdesk-host={{ template "sumologic.thecoffeebar.metadata.name.cashdesk.service" . }}
 - --cashdesk-port=8084
-{{- if .Values.extras.lambdaSweetsUrl }}
-- --sweets-url={{ .Values.extras.lambdaSweetsUrl }}
+{{- if .Values.extras.lambdaCakesUrl }}
+- --cakes-url={{ .Values.extras.lambdaCakesUrl }}
 {{ end }}
 {{- end }}
 
