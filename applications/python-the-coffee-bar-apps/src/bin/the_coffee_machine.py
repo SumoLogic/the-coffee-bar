@@ -17,6 +17,9 @@ def main():
     parser.add_argument('-n', '--machine-svc-port', type=int, help='Machine Service Port')
     parser.add_argument('-c', '--config', type=str, help='Configuration file path')
     parser.add_argument('-i', '--spike-cron', type=str, help='CPU/Network delay CRON string')
+    parser.add_argument('-I', '--interval-based-trigger', type=str, help='Use interval trigger or CRON trigger. - true or false')
+    parser.add_argument('-S', '--spike-interval-days', type=int, help='How many days to skip?')
+    parser.add_argument('-Ih', '--spike-interval-hours', type=int, help='How many hours to skip?')
     parser.add_argument('-s', '--spike-start-date', type=str, help='CPU/Network delay cron start date string')
     parser.add_argument('-d', '--spike-duration', type=int, help='CPU/Network delay spike duration [seconds]')
     parser.add_argument('-t', '--cpu-spike-processes', type=int, help='Number of processes for CPU increaser')
@@ -38,6 +41,9 @@ def main():
                                    machine_svc_host=configuration['machine_svc_host'],
                                    machine_svc_port=configuration['machine_svc_port'],
                                    spike_cron=configuration['spike_cron'],
+                                   interval_based_trigger=configuration['interval_based_trigger'],
+                                   spike_interval_days=configuration['spike_interval_days'],
+                                   spike_interval_hours=configuration['spike_interval_hours'],
                                    spike_start_date=configuration['spike_start_date'],
                                    spike_duration=configuration['spike_duration'],
                                    cpu_spike_processes=configuration['cpu_spike_processes'],

@@ -199,15 +199,15 @@ const USER_AGENTS = {
 const NAVIGATE_RETRY_SECONDS = 60;
 
 (async () => {
-    console.info('Starting The Coffee Bar UI Clicker');
-    console.info(`COFFEE_BAR_UI_URL=${COFFEE_BAR_UI_URL}`);
-    console.info(`DELAY=${DELAY}`);
-    console.info(`BROWSER=${BROWSER}`);
-    console.info(`DEBUG_DUMPIO_ENV=${DEBUG_DUMPIO_ENV}`);
+    // console.info('Starting The Coffee Bar UI Clicker');
+    // console.info(`COFFEE_BAR_UI_URL=${COFFEE_BAR_UI_URL}`);
+    // console.info(`DELAY=${DELAY}`);
+    // console.info(`BROWSER=${BROWSER}`);
+    // console.info(`DEBUG_DUMPIO_ENV=${DEBUG_DUMPIO_ENV}`);
 
 
     while (true) {
-        console.info('Starting new browser');
+        //console.info('Starting new browser');
 
         let executablePath = null;
         if (BROWSER === 'firefox') {
@@ -239,18 +239,18 @@ const NAVIGATE_RETRY_SECONDS = 60;
 
             var userAgent = utils.chooseUserAgent(USER_AGENTS);
             var userAgentStr = `Mozilla/5.0 ${userAgent[0]} ${userAgent[1]}`;
-            console.info(`User Agent: ${userAgentStr}`);
+            //console.info(`User Agent: ${userAgentStr}`);
             await page.setUserAgent(userAgentStr);
 
             async function clickAndSetFieldValue(selector, value, del) {
-                console.info(`Setting value: ${value} for: ${selector}`);
+                //console.info(`Setting value: ${value} for: ${selector}`);
                 await page.waitForSelector(selector, {timeout: del * 1000});
                 await page.click(selector);
                 await page.type(selector, String(value), {delay: utils.getRandomNumber(1000, 2000)});
             }
 
             async function click(selector, del) {
-                console.info(`Clicking on: ${selector}`);
+                //console.info(`Clicking on: ${selector}`);
                 await page.waitForSelector(selector, {timeout: del * 1000});
                 await page.click(selector);
             }

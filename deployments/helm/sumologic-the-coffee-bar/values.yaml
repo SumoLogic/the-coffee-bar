@@ -3,6 +3,8 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
+replicaCountClicker: 1
+replicaCountBar: 1
 replicaCountPostgres: 2
 
 image:
@@ -11,16 +13,16 @@ image:
     tag: calculator-dotnet-1.2.0-1.0.0rc9
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: frontend-v0.1.1
+    tag: frontend-v0.1.2
   python:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: pythonAppsv0.2.0-ot1.9.1-0.28b1
+    tag: pythonAppsv0.2.0-ot1.10.1-0.28b1
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.0.2-0.23.0-0.21.2
   clicker:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: clicker-v1.0
+    tag: clicker-v1.1
   postgres:
     repository: postgres
     tag: 9.6.2-alpine
@@ -251,8 +253,8 @@ affinity: {}
 envs:
   bar:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
-
-    OTEL_PROPAGATORS: "b3,xray,tracecontext,baggage"
+    OTEL_SERVICE_NAME: "the-coffee-bar"
+    OTEL_PROPAGATORS: "b3,tracecontext,baggage"
   calculatorsvc:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
     OTEL_SERVICE_NAME: "calculator-svc"
@@ -264,7 +266,10 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
-    SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "0" # default 0 How many day to skip before next trigger. It will combine with SPIKE_INTERVAL_HOURS to determine next trigger time.
+    SPIKE_INTERVAL_HOURS: "1" # default 1 How many hours to skip before next trigger. It will combine with SPIKE_INTERVAL_DAYS to determine next trigger time. Example: To schedule after every 5 days and every 6 hours set SPIKE_INTERVAL_HOURS as 6 and SPIKE_INTERVAL_DAYS as 5
+    SPIKE_CRON: "0 * * * *"
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
@@ -283,7 +288,10 @@ envs:
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     REACT_APP_DROP_SINGLE_TRACES: 'false'
     ## Envs to configure CPU Killer and Network Delay
-    SPIKE_CRON: "0 * * * *" # Use 0 */12 * * */4 Run every 12th hour every 4 days
+    INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "0" # default 0
+    SPIKE_INTERVAL_HOURS: "1" # default 1
+    SPIKE_CRON: "0 * * * *"
     SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process

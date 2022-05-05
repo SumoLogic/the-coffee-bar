@@ -1,4 +1,4 @@
-BASE_TAG = clicker-v1.0
+BASE_TAG = clicker-v1.1
 
 ifndef GITHUB_HEAD_REF
 	TAG = $(BASE_TAG)
