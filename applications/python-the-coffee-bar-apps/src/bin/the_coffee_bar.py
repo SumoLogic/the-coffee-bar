@@ -16,7 +16,7 @@ def main():
     parser.add_argument('-n', '--coffeemachine-port', type=int, help='Coffee Machine Port')
     parser.add_argument('-j', '--cashdesk-host', type=str, help='Cashdesk Host')
     parser.add_argument('-k', '--cashdesk-port', type=int, help='Cashdeks Port')
-    parser.add_argument('-s', '--sweets-url', type=str, help='Sweets Endpoint URL')
+    parser.add_argument('-s', '--cakes-url', type=str, help='Cakes Endpoint URL')
     parser.add_argument('-c', '--config', type=str, help='Configuration file path')
     parser.add_argument('-l', '--log-level', type=str, help='Application log level', default='info')
     args = parser.parse_args()
@@ -32,7 +32,7 @@ def main():
                   coffee_machine_port=configuration['coffeemachine_port'],
                   cashdesk_host=configuration['cashdesk_host'],
                   cashdesk_port=configuration['cashdesk_port'],
-                  sweets_url=configuration['sweets_url'],
+                  cakes_url=configuration['cakes_url'],
                   )
 
     the_bar.run()

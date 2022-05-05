@@ -22,8 +22,8 @@ class CoffeeLover:
             'coffee_amount': randint(1, 3),
             'water': randint(-5, 50),
             'grains': randint(-5, 50),
-            'sweets_amount': randint(1, 3),
-            'sweets': choice(SWEETS),
+            'cakes_amount': randint(1, 3),
+            'cakes': choice(SWEETS),
             'bill': randint(1, 20),
         }
 
