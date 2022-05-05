@@ -7,17 +7,17 @@ FUNCTION_NAME = os.getenv('INVOKE_FUNCTION_NAME')
 client = boto3.client('lambda')
 
 
-def invoke(sweets):
-    print('Invoke %s with data: %s' % (FUNCTION_NAME, sweets))
+def invoke(cakes):
+    print('Invoke %s with data: %s' % (FUNCTION_NAME, cakes))
     response = client.invoke(
         FunctionName=FUNCTION_NAME,
         InvocationType='RequestResponse',
-        Payload=json.dumps(sweets),
+        Payload=json.dumps(cakes),
     )
     return response
 
 
-def get_sweets(event, context):
+def get_cakes(event, context):
     body = event['body']
 
     print('Check if %s is available' % str(body))
