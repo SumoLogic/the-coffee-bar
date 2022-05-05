@@ -6,7 +6,7 @@ from time import sleep
 import requests
 
 
-SWEETS = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin', 'budini_fiorentini', 'tiramisu']
+CAKES = ['cornetto', 'cannolo_siciliano', 'torta', 'muffin', 'budini_fiorentini', 'tiramisu']
 
 
 class CoffeeLover:
@@ -23,7 +23,7 @@ class CoffeeLover:
             'water': randint(-5, 50),
             'grains': randint(-5, 50),
             'cakes_amount': randint(1, 3),
-            'cakes': choice(SWEETS),
+            'cakes': choice(CAKES),
             'bill': randint(1, 20),
         }
 
