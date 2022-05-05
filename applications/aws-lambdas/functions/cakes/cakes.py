@@ -8,7 +8,7 @@ s3 = boto3.resource('s3')
 
 
 def is_avi(data):
-    sweet = str(data['cakes'])
+    cake = str(data['cakes'])
     context = data['link_context']
     span_context = trace.SpanContext(context['trace_id'],
                                      context['span_id'],
@@ -19,12 +19,12 @@ def is_avi(data):
 
     tracer = trace.get_tracer(__name__)
     with tracer.start_as_current_span("is_cake_available", links=[link]) as span:
-        span.set_attribute('requested_sweet', sweet)
-        if sweet in AVAILABLE_CAKES:
+        span.set_attribute('requested_cake', cake)
+        if cake in AVAILABLE_CAKES:
             span.set_attribute('is_avi', True)
             status = 200
         else:
-            span.set_attribute('requested_sweet', sweet)
+            span.set_attribute('requested_cake', cake)
             span.set_attribute('is_avi', False)
             status = 404
 
