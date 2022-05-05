@@ -20,7 +20,7 @@ services:
     command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_bar.py",
               "--host=the-coffee-bar", "--port=8082", "--coffeemachine-host=the-coffee-machine",
               "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
-              "--sweets-url=URL_TO_LAMBDA_FUNC"]
+              "--cakes-url=URL_TO_LAMBDA_FUNC"]
     environment:
       - OTEL_EXPORTER=otlp_span
       - OTEL_EXPORTER_OTLP_ENDPOINT=otelcol:4317
