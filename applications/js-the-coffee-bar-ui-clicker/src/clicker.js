@@ -21,7 +21,7 @@ const COFFEE = {
     'Cappuccino': [80, 94],
     'Americano': [95, 100],
 };
-const SWEETS = {
+const CAKES = {
     'Cornetto': [0, 89],
     'Tiramisu': [90, 94],
     'Muffin': [95, 100],
@@ -270,17 +270,17 @@ const NAVIGATE_RETRY_SECONDS = 60;
             // Add Coffee
             await click(coffee_selectors['button'], DELAY);
 
-            // Select Sweets to order
-            let sweets = utils.choose(SWEETS);
-            let sweet_selectors = {
-                'input': `input[name="amount${sweets}"]`,
-                'button': `button[name="add${sweets}"]`,
+            // Select Cakes to order
+            let cakes = utils.choose(CAKES);
+            let cake_selectors = {
+                'input': `input[name="amount${cakes}"]`,
+                'button': `button[name="add${cakes}"]`,
             }
 
-            // Set Sweets amount
-            await clickAndSetFieldValue(sweet_selectors['input'], utils.getRandomNumber(1, 3), DELAY);
-            // Add Sweets
-            await click(sweet_selectors['button'], DELAY);
+            // Set Cakes amount
+            await clickAndSetFieldValue(cake_selectors['input'], utils.getRandomNumber(1, 3), DELAY);
+            // Add Cakes
+            await click(cake_selectors['button'], DELAY);
 
 
             // Checkout
