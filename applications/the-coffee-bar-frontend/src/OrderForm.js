@@ -25,9 +25,9 @@ class OrderForm extends Component {
     coffee_price: 0,
     water: 0,
     grains: 0,
-    sweets: '',
-    sweets_amount: 0,
-    sweets_price: 0,
+    cakes: '',
+    cakes_amount: 0,
+    cakes_price: 0,
     bill: 0,
     order_dialog: false,
     order_response: false,
@@ -58,8 +58,8 @@ class OrderForm extends Component {
     coffee_amount: 0,
     water: 0,
     grains: 0,
-    sweets: '',
-    sweets_amount: 0,
+    cakes: '',
+    cakes_amount: 0,
     bill: 0,
     total: 0,
   };
@@ -69,11 +69,11 @@ class OrderForm extends Component {
     this.order.coffee_amount = this.state.coffee_amount;
     this.order.water = this.state.water;
     this.order.grains = this.state.grains;
-    this.order.sweets = this.state.sweets;
-    this.order.sweets_amount = this.state.sweets_amount;
+    this.order.cakes = this.state.cakes;
+    this.order.cakes_amount = this.state.cakes_amount;
     this.order.bill = this.state.bill;
     this.order.total = (this.state.coffee_amount * this.state.coffee_price)
-      + (this.state.sweets_amount * this.state.sweets_price);
+      + (this.state.cakes_amount * this.state.cakes_price);
   }
 
   handleOrder = event => {
@@ -84,8 +84,8 @@ class OrderForm extends Component {
     const currentSpan = window.sumoLogicOpenTelemetryRum.api.trace.getSpan(window.sumoLogicOpenTelemetryRum.api.context.active());
     currentSpan.setAttribute('order.coffee', this.order.coffee);
     currentSpan.setAttribute('order.coffee_amount', this.order.coffee_amount);
-    currentSpan.setAttribute('order.sweets', this.order.sweets);
-    currentSpan.setAttribute('order.sweets_amount', this.order.sweets_amount)
+    currentSpan.setAttribute('order.cakes', this.order.cakes);
+    currentSpan.setAttribute('order.cakes_amount', this.order.cakes_amount)
     currentSpan.setAttribute('order.total_amount_to_pay', this.order.total);
 
     fetch(process.env.REACT_APP_COFFEE_BAR_URL, {
@@ -141,13 +141,13 @@ class OrderForm extends Component {
     }
   };
 
-  changeSweetsAmount = val => {
+  changeCakesAmount = val => {
     if (val instanceof String) {
-      this.setState({ sweets_amount: +val });
+      this.setState({ cakes_amount: +val });
     } else if (Number.isInteger(val)) {
-      this.setState({ sweets_amount: val });
+      this.setState({ cakes_amount: val });
     } else if (val instanceof Object) {
-      this.setState({ sweets_amount: +val.target.value });
+      this.setState({ cakes_amount: +val.target.value });
     }
   };
 
@@ -180,22 +180,22 @@ class OrderForm extends Component {
 
   handleAddTiramisu = () => {
     this.setState({
-      sweets: 'tiramisu',
-      sweets_price: 3,
+      cakes: 'tiramisu',
+      cakes_price: 3,
     });
   };
 
   handleAddCornetto = () => {
     this.setState({
-      sweets: 'cornetto',
-      sweets_price: 1,
+      cakes: 'cornetto',
+      cakes_price: 1,
     });
   };
 
   handleAddMuffin = () => {
     this.setState({
-      sweets: 'muffin',
-      sweets_price: 1,
+      cakes: 'muffin',
+      cakes_price: 1,
     });
   };
 
@@ -280,7 +280,7 @@ class OrderForm extends Component {
               'Tiramisu, elegant and rich layered!',
               'Tiramisu, the delicate flavor of layers of mascarpone and Italian custard are contrasted with the darklyrobust presence of espresso and sharpness of cocoa powder.',
               '3',
-              this.changeSweetsAmount,
+              this.changeCakesAmount,
               this.handleAddTiramisu,
             )
             }
@@ -290,7 +290,7 @@ class OrderForm extends Component {
               'Cornetto, delicious and crispy-baked wafer!',
               'Cornetto is an Italian variation of the Austrian kipferl. A cornetto with an espresso or cappuccino at a coffee bar is considered to be the most common breakfast in Italy.',
               '1',
-              this.changeSweetsAmount,
+              this.changeCakesAmount,
               this.handleAddCornetto,
             )
             }
@@ -300,7 +300,7 @@ class OrderForm extends Component {
               'Muffin, just a bit of sweetness!',
               'A muffin is batter-based bakery product. It’s formulation is somewhere in between a low-ratio cake and quick bread. Muffin batter is typically deposited or placed into deep, small cup-shaped pan before baking.',
               '1',
-              this.changeSweetsAmount,
+              this.changeCakesAmount,
               this.handleAddMuffin,
             )
             }
@@ -327,8 +327,8 @@ class OrderForm extends Component {
                 <AlertDialogCloseButton />
                 <AlertDialogBody>
                   Coffee: {this.state.coffee} x{this.state.coffee_amount} {this.state.coffee_amount * this.state.coffee_price}$<br />
-                  Pastry: {this.state.sweets} x{this.state.sweets_amount} {this.state.sweets_amount * this.state.sweets_price}$<br />
-                  Total: {this.state.coffee_amount * this.state.coffee_price + this.state.sweets_amount * this.state.sweets_price}$
+                  Pastry: {this.state.cakes} x{this.state.cakes_amount} {this.state.cakes_amount * this.state.cakes_price}$<br />
+                  Total: {this.state.coffee_amount * this.state.coffee_price + this.state.cakes_amount * this.state.cakes_price}$
                 </AlertDialogBody>
                 <AlertDialogFooter>
                   <NumberInput name='Bill' id='Bill' placeholder='Please provide bill \$' inputMode='numeric' min={0}

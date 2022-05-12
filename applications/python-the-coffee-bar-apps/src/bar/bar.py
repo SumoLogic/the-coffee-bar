@@ -3,6 +3,7 @@ import logging as log
 from flask import make_response
 import requests
 import datetime
+from opentelemetry import trace
 
 from src.bar.coffee_machine import GET_COFFEE_ENDPOINT
 from src.common.http_server import HttpServer
@@ -21,13 +22,13 @@ def set_product_status(response: requests.models.Response, status_key: str):
 
 class Bar(HttpServer):
     def __init__(self, coffee_machine_host: str, coffee_machine_port: str, cashdesk_host: str, cashdesk_port: int,
-                 name: str = 'The Coffee Bar', host: str = 'localhost', port: int = 8082, sweets_url: str = None):
+                 name: str = 'The Coffee Bar', host: str = 'localhost', port: int = 8082, cakes_url: str = None):
         super().__init__(name, host, port)
         self.coffee_machine_host = coffee_machine_host
         self.coffee_machine_port = coffee_machine_port
         self.cashdesk_host = cashdesk_host
         self.cashdesk_port = cashdesk_port
-        self.sweets_url = sweets_url
+        self.cakes_url = cakes_url
         self.add_all_endpoints()
 
     def add_all_endpoints(self):
@@ -35,16 +36,16 @@ class Bar(HttpServer):
                           handler=self.order)
 
     def order(self, data):
-        # OPTIONAL: If sweets_url is set, get sweets_status
-        sweets_status = {'sweets_status': False}
-        if self.sweets_url:
-            if data['sweets_amount'] > 0:
-                sweets_status = self.get_sweets(data=data)
-                data.update(sweets_status)
+        # OPTIONAL: If cakes_url is set, get cakes_status
+        cakes_status = {'cakes_status': False}
+        if self.cakes_url:
+            if data['cakes_amount'] > 0:
+                cakes_status = self.get_cakes(data=data)
+                data.update(cakes_status)
             else:
-                log.warning('Sweets were not requested.')
+                log.warning('Cakes were not requested.')
         else:
-            log.warning('Sweets URL not configured. Sweets will be not provided.')
+            log.warning('Cakes URL not configured. Cakes will be not provided.')
 
         # Get coffee_status
         coffee_status = {'coffee_status': False}
@@ -54,36 +55,45 @@ class Bar(HttpServer):
         else:
             log.warning('Coffee was not requested.')
 
-        # Coffee Amount and Sweets Amount <= 0 - no order
-        if data['coffee_amount'] <= 0 and data['sweets_amount'] <= 0:
+        # Coffee Amount and Cakes Amount <= 0 - no order
+        if data['coffee_amount'] <= 0 and data['cakes_amount'] <= 0:
             result = {
                 'reason': 'Please make an order.'
             }
             log.warning('Please make an order.')
             return make_response(result, 204)
 
-        if coffee_status['coffee_status'] is True or sweets_status['sweets_status'] is True:
+        if coffee_status['coffee_status'] is True or cakes_status['cakes_status'] is True:
             return self.process_payment(data=data)
         else:
-            if coffee_status['coffee_status'] is False and sweets_status['sweets_status'] is False:
+            if coffee_status['coffee_status'] is False and cakes_status['cakes_status'] is False:
                 result = {
-                    'reason': 'Lack of requested products: {}, {}'.format(data['coffee'], data['sweets']),
+                    'reason': 'Lack of requested products: {}, {}'.format(data['coffee'], data['cakes']),
                 }
-            elif coffee_status['coffee_status'] is True and sweets_status['sweets_status'] is False:
+            elif coffee_status['coffee_status'] is True and cakes_status['cakes_status'] is False:
                 result = {
-                    'reason': 'Lack of requested product: {}, {} provided.'.format(data['sweets'], data['coffee']),
+                    'reason': 'Lack of requested product: {}, {} provided.'.format(data['cakes'], data['coffee']),
                 }
-            elif coffee_status['coffee_status'] is False and sweets_status['sweets_status'] is True:
+            elif coffee_status['coffee_status'] is False and cakes_status['cakes_status'] is True:
                 result = {
-                    'reason': 'Lack of requested product: {}, {} provided.'.format(data['coffee'], data['sweets']),
+                    'reason': 'Lack of requested product: {}, {} provided.'.format(data['coffee'], data['cakes']),
                 }
             return make_response(result, 404)
 
-    def get_sweets(self, data):
-        log.info('Check if %s is available', data['sweets'])
-        response = requests.post(url=self.sweets_url, json=data)
+    def get_cakes(self, data):
+        log.info('Check if %s is available', data['cakes'])
+        context = trace.get_current_span().get_span_context()
+        data['link_context'] = {
+            'trace_id': int(context.trace_id),
+            'span_id': int(context.span_id),
+            'is_remote': bool(context.is_remote),
+            'trace_flags': int(context.trace_flags),
+            'trace_state': bool(context.trace_state),
+        }
 
-        return set_product_status(response=response, status_key='sweets_status')
+        response = requests.post(url=self.cakes_url, json=data)
+
+        return set_product_status(response=response, status_key='cakes_status')
 
     def get_coffee(self, data):
         start_time = datetime.datetime.now()

@@ -2,24 +2,24 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Description: The Coffee Bar App Lambda Functions
 Resources:
-  SweetsApi:
+  CakesApi:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: SweetsApi
+      StageName: CakesApi
       TracingEnabled: true
       OpenApiVersion: 3.0.2
-  CheckSweetsApi:
+  CheckCakesApi:
     Type: AWS::Serverless::Api
     Properties:
-      StageName: CheckSweetsApi
+      StageName: CheckCakesApi
       TracingEnabled: true
       OpenApiVersion: 3.0.2
-  SweetsFunction:
+  CakesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: sweets.lambda_handler
+      Handler: cakes.lambda_handler
       Runtime: python3.8
-      CodeUri: ./functions/sweets
+      CodeUri: ./functions/cakes
       Description: Build AWS Observability layer
       MemorySize: 512
       Timeout: 35
@@ -42,7 +42,7 @@ Resources:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
           AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
-          OTEL_SERVICE_NAME: lambda-SweetsFunction
+          OTEL_SERVICE_NAME: lambda-CakesFunction
           OTEL_RESOURCE_ATTRIBUTES: application=the-coffee-bar-app
           OTEL_TRACES_SAMPLER: always_on
       Layers:
@@ -51,15 +51,15 @@ Resources:
         getEndpoint:
           Type: Api
           Properties:
-            RestApiId: !Ref SweetsApi
+            RestApiId: !Ref CakesApi
             Path: /
             Method: POST
-  CheckSweetsFunction:
+  CheckCakesFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: check_sweets.get_sweets
+      Handler: check_cakes.get_cakes
       Runtime: python3.8
-      CodeUri: ./functions/check_sweets
+      CodeUri: ./functions/check_cakes
       Description: Build AWS Observability layer
       MemorySize: 512
       Timeout: 35
@@ -81,54 +81,54 @@ Resources:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
           AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
-          OTEL_SERVICE_NAME: lambda‑CheckSweetsFunction
+          OTEL_SERVICE_NAME: lambda‑CheckCakesFunction
           OTEL_RESOURCE_ATTRIBUTES: application=the-coffee-bar-app
           OTEL_TRACES_SAMPLER: always_on
           OTEL_PROPAGATORS: xray
-          INVOKE_FUNCTION_NAME: !Ref SweetsFunction
+          INVOKE_FUNCTION_NAME: !Ref CakesFunction
       Layers:
         - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
       Events:
         getEndpoint:
           Type: Api
           Properties:
-            RestApiId: !Ref CheckSweetsApi
+            RestApiId: !Ref CheckCakesApi
             Path: /
             Method: POST
 Mappings:
   RegionLayers:
     ap-northeast-1:
-      layer: "arn:aws:lambda:ap-northeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-northeast-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     ap-northeast-2:
-      layer: "arn:aws:lambda:ap-northeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-northeast-2:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     ap-south-1:
-      layer: "arn:aws:lambda:ap-south-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-south-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     ap-southeast-1:
-      layer: "arn:aws:lambda:ap-southeast-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-southeast-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
     ap-southeast-2:
-      layer: "arn:aws:lambda:ap-southeast-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:ap-southeast-2:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     ca-central-1:
-      layer: "arn:aws:lambda:ca-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:ca-central-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
     eu-central-1:
-      layer: "arn:aws:lambda:eu-central-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:2"
+      layer: "arn:aws:lambda:eu-central-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
     eu-north-1:
-      layer: "arn:aws:lambda:eu-north-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-north-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     eu-west-1:
-      layer: "arn:aws:lambda:eu-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-west-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     eu-west-2:
-      layer: "arn:aws:lambda:eu-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-west-2:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
     eu-west-3:
-      layer: "arn:aws:lambda:eu-west-3:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:eu-west-3:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     sa-east-1:
-      layer: "	arn:aws:lambda:sa-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "	arn:aws:lambda:sa-east-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     us-east-1:
-      layer: "arn:aws:lambda:us-east-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:us-east-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:1"
     us-east-2:
-      layer: "arn:aws:lambda:us-east-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:2"
+      layer: "arn:aws:lambda:us-east-2:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
     us-west-1:
-      layer: "arn:aws:lambda:us-west-1:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:us-west-1:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
     us-west-2:
-      layer: "arn:aws:lambda:us-west-2:663229565520:layer:sumologic-aws-distro-otel-col-python-lambda-layer:1"
+      layer: "arn:aws:lambda:us-west-2:663229565520:layer:sumologic-otel-python-x86_64-ver-1-10-0:2"
 Metadata:
   AWS::ServerlessRepo::Application:
     Name: The-Coffee-Bar-App-Functions

@@ -77,11 +77,11 @@ class CashDesk(HttpServer):
     def payment(self, data: dict):
         log.info('Payment in progress: %s', data)
 
-        sweets_amount_to_pay = 0
-        if 'sweets_status' in data and data['sweets_status'] is True:
-            success, res = self.make_calculation(data=data, product='sweets')
+        cakes_amount_to_pay = 0
+        if 'cakes_status' in data and data['cakes_status'] is True:
+            success, res = self.make_calculation(data=data, product='cakes')
             if success:
-                sweets_amount_to_pay = res
+                cakes_amount_to_pay = res
             else:
                 return make_response({'reason': 'Calculation error, check logs'}, 500)
 
@@ -93,13 +93,13 @@ class CashDesk(HttpServer):
             else:
                 return make_response({'reason': 'Calculation error, check logs'}, 500)
 
-        total_amount_to_pay = sweets_amount_to_pay + coffee_amount_to_pay
+        total_amount_to_pay = cakes_amount_to_pay + coffee_amount_to_pay
 
         payout = data['bill'] - total_amount_to_pay
         if payout >= 0:
             log.info('Process payment')
-            if 'sweets_status' in data and data['sweets_status'] is True:
-                success = self.update_items_status(data=data, product='sweets')
+            if 'cakes_status' in data and data['cakes_status'] is True:
+                success = self.update_items_status(data=data, product='cakes')
                 if success is False:
                     return make_response({'reason': 'Database error, check logs'}, 500)
             if 'coffee_status' in data and data['coffee_status'] is True:
