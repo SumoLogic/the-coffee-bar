@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Microsoft.Extensions.Logging;
 
 namespace dotnet_core_calculator_svc;
 
@@ -28,7 +29,7 @@ public class Startup
             .AddOtlpExporter()
         );
     }
-    public void Configure(IApplicationBuilder app, IHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -38,5 +39,9 @@ public class Startup
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+            // Optional logging to file
+            var log_to_file = Environment.GetEnvironmentVariable("LOG_TO_FILE");
+            if (log_to_file != null) loggerFactory.AddFile("/tmp/calculator-svc.log");
         }
 }
