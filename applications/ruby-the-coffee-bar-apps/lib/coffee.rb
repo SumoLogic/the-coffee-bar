@@ -34,7 +34,7 @@ class Coffee < Sinatra::Base
 
     configure do
         if ENV['LOG_TO_FILE'] != nil
-            log_file = File.open("/tmp/water-svc.log", "w")
+            log_file = File.open("/tmp/coffee-svc.log", "w")
             logger = ::Logger.new MultiIO.new(STDOUT, log_file)
         else
             logger = ::Logger.new(STDOUT)
