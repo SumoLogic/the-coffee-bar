@@ -50,9 +50,9 @@ class Machine < Sinatra::Base
     set :port, port
 
     configure do
-        if ENV['LOG_TO_FILE'] != nil
-            log_file = File.open("/tmp/machine-svc.log", "w")
-            logger = ::Logger.new MultiIO.new(STDOUT, log_file)
+        if ENV['SYSLOG'] != nil
+            syslog = ENV['SYSLOG'].split(':')
+            logger = RemoteSyslogLogger.new(syslog[0], syslog[1])
         else
             logger = ::Logger.new(STDOUT)
         end
