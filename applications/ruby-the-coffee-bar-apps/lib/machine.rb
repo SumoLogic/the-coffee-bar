@@ -12,6 +12,20 @@ require 'logger'
 require_relative "opentelemetry-instrumentation"
 require_relative "version"
 
+class MultiIO
+  def initialize(*targets)
+     @targets = targets
+  end
+
+  def write(*args)
+    @targets.each {|t| t.write(*args)}
+  end
+
+  def close
+    @targets.each(&:close)
+  end
+end
+
 def make_request(uri, order)
     header = {'Content-Type': 'application/json'}
 
@@ -36,7 +50,8 @@ class Machine < Sinatra::Base
     set :port, port
 
     configure do
-        logger = ::Logger.new(STDOUT)
+        log_file = File.open("/tmp/machine-svc.log", "a")
+        logger = ::Logger.new MultiIO.new(STDOUT, log_file)
         logger.formatter = proc do | severity, time, progname, msg |
             span_id = OpenTelemetry::Trace.current_span.context.hex_span_id
             trace_id = OpenTelemetry::Trace.current_span.context.hex_trace_id
