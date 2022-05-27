@@ -45,6 +45,7 @@ class SpanFormatter(log.Formatter):
 
 def configure_logging(log_level: str):
     log_level = _LOG_LEVEL[log_level]
+    handlers = []
 
     span_formatter = SpanFormatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s '
                                    '- trace_id=%(trace_id)s - span_id=%(span_id)s')
@@ -52,21 +53,22 @@ def configure_logging(log_level: str):
     console_handler = log.StreamHandler(sys.stdout)
     console_handler.setFormatter(span_formatter)
     console_handler.addFilter(NoCpuIncreaserFilter())
+    handlers.append(console_handler)
 
     cpu_increaser_logging = log.StreamHandler(sys.stdout)
     cpu_increaser_logging.setFormatter(BASIC_FORMAT)
     cpu_increaser_logging.addFilter(OnlyCpuIncreaserFilter())
-
-    # Configure basic logging
-    log.basicConfig(level=log_level, handlers=[console_handler, cpu_increaser_logging])
+    handlers.append(cpu_increaser_logging)
 
     if os.getenv('SYSLOG'):
         syslog_address = os.getenv('SYSLOG').split(':')
         syslog_handler = SysLogHandler(address=(syslog_address[0], int(syslog_address[1])))
         syslog_handler.setLevel(log_level)
         syslog_handler.setFormatter(span_formatter)
-        root = log.getLogger(__name__)
-        root.addHandler(syslog_handler)
+        handlers.append(syslog_handler)
+
+    # Configure basic logging
+    log.basicConfig(level=log_level, handlers=handlers)
 
     return log
 
