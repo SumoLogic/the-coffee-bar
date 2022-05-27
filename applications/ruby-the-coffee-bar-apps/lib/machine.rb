@@ -51,7 +51,7 @@ class Machine < Sinatra::Base
 
     configure do
         if ENV['LOG_TO_FILE'] != nil
-            log_file = File.open("/tmp/machine-svc.log", "a")
+            log_file = File.open("/tmp/water-svc.log", "w")
             logger = ::Logger.new MultiIO.new(STDOUT, log_file)
         else
             logger = ::Logger.new(STDOUT)
