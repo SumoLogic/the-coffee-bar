@@ -5,6 +5,7 @@ require 'bundler/setup'
 require 'sinatra'
 require 'json'
 require 'logger'
+require 'remote_syslog_logger'
 
 require_relative "opentelemetry-instrumentation"
 require_relative "version"
@@ -32,9 +33,9 @@ class Water < Sinatra::Base
     set :port, port
 
     configure do
-        if ENV['LOG_TO_FILE'] != nil
-            log_file = File.open("/tmp/water-svc.log", "w")
-            logger = ::Logger.new MultiIO.new(STDOUT, log_file)
+        if ENV['SYSLOG'] != nil
+            syslog = ENV['SYSLOG'].split(':')
+            logger = RemoteSyslogLogger.new(syslog[0], syslog[1])
         else
             logger = ::Logger.new(STDOUT)
         end
