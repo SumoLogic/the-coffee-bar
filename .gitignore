@@ -41,3 +41,6 @@ Gemfile.lock
 
 # VS Code ignores
 .vscode/*
+
+# Mac
+.DS_Store
