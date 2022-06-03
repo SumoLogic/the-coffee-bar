@@ -301,6 +301,9 @@ const NAVIGATE_RETRY_SECONDS = 60;
         } catch (err) {
             console.error(err);
         } finally {
+            await page.evaluate(() => {
+                window.dispatchEvent(new Event("pagehide"));
+            });
             await page.close();
             await browser.close();
         }
