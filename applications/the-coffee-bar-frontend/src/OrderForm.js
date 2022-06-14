@@ -111,12 +111,7 @@ class OrderForm extends Component {
 
         if ('trace_id' in res) {
           this.setState({ trace_id: res['trace_id'] });
-        }
-
-        if (res['reason'] !== undefined) {
-          console.error('Order: ', JSON.stringify(this.order), 'Reason: ', res['reason'],'TraceID: ', res['trace_id']);
-        } else {
-          console.info('Order: ', JSON.stringify(this.order), 'Result: ', res['result'], 'TraceID: ', res['trace_id']);
+          console.info('TraceID:', res['trace_id']);
         }
       })
       .catch((error) => {
