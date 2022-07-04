@@ -44,7 +44,8 @@ services:
  #             ,"--cakes-url=LAMBDA_URL_HERE"]
     environment:
       - OTEL_TRACES_EXPORTER=otlp_proto_http
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
       - OTEL_PROPAGATORS=xray,tracecontext,baggage
   the-coffee-bar-frontend:
@@ -85,7 +86,8 @@ services:
               "--machine-svc-port=9090", "--spike-cron=*/2 * * * *", "--spike-duration=60", "--cpu-spike-processes=1", "--interval-based-trigger=true", "--spike-interval-days=0", "--spike-interval-hours=1"]
     environment:
       - OTEL_TRACES_EXPORTER=otlp_proto_http
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
   the-cashdesk:
     image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.1-ot1.7.1-0.26b1
@@ -98,7 +100,8 @@ services:
               "--connection-string=postgresql://account:account@postgres:5432/account"]
     environment:
       - OTEL_TRACES_EXPORTER=otlp_proto_http
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-cashdesk
 #  the-coffee-lover:
 #    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.2.1-ot1.7.1-0.26b1
@@ -118,7 +121,7 @@ services:
       - 9090:9090
     command: ["ruby", "/app/lib/machine.rb"]
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
   coffee-svc:
@@ -129,7 +132,7 @@ services:
       - 9091:9091
     command: ["ruby", "/app/lib/coffee.rb"]
     environment:
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
   water-svc:
@@ -141,7 +144,7 @@ services:
     command: ["ruby", "/app/lib/water.rb"]
     environment:
       - OTEL_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=water-svc
   calculator-svc:
@@ -166,6 +169,7 @@ services:
       - "6831:6831"
       - "14251:14251"
       - "4317:4317"
+      - "4318:4318"
       - "55680:55680"
       - "55681:55681"
       - "14268:14268"

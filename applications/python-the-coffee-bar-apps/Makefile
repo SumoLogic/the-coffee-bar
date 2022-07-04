@@ -1,4 +1,4 @@
-BASE_TAG = pythonAppsv0.2.1-ot1.10.1-0.28b1
+BASE_TAG = pythonAppsv0.2.1-ot1.12.0rc2-0.32b0
 
 ifndef GITHUB_HEAD_REF
 	TAG = $(BASE_TAG)
