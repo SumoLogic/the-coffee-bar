@@ -7,7 +7,6 @@ import * as serviceWorker from './serviceWorker';
 
 window.addEventListener('load', () => {
   var randNum = Math.floor(Math.random() * 100);
-  console.log(">>> " + randNum)
   if (randNum % 4 === 0) {
     setTimeout(async () => { fetch() })
   }

@@ -144,14 +144,14 @@ class OrderForm extends Component {
     }
 
     if (val instanceof String) {
-      throwTypeErrorIfNegative(+val);
       this.setState({ coffee_amount: +val });
+      throwTypeErrorIfNegative(+val);
     } else if (Number.isInteger(val)) {
-      throwTypeErrorIfNegative(val);
       this.setState({ coffee_amount: val });
+      throwTypeErrorIfNegative(val);
     } else if (val instanceof Object) {
-      throwTypeErrorIfNegative(+val.target.value);
       this.setState({ coffee_amount: +val.target.value });
+      throwTypeErrorIfNegative(+val.target.value);
     }
   };
 
@@ -165,14 +165,14 @@ class OrderForm extends Component {
     }
 
     if (val instanceof String) {
-      throwResourceErrorIfNegative(+val);
       this.setState({ cakes_amount: +val });
+      throwResourceErrorIfNegative(+val);
     } else if (Number.isInteger(val)) {
-      throwResourceErrorIfNegative(val);
       this.setState({ cakes_amount: val });
+      throwResourceErrorIfNegative(val);
     } else if (val instanceof Object) {
-      throwResourceErrorIfNegative(+val.target.value);
       this.setState({ cakes_amount: +val.target.value });
+      throwResourceErrorIfNegative(+val.target.value);
     }
   };
 
