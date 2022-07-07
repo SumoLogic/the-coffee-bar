@@ -137,21 +137,41 @@ class OrderForm extends Component {
   };
 
   changeCoffeeAmount = val => {
+    function throwTypeErrorIfNegative(number) {
+      if (number < 0) {
+        window.coffee.bar.store.non.existing.property = val
+      }
+    }
+
     if (val instanceof String) {
+      throwTypeErrorIfNegative(+val);
       this.setState({ coffee_amount: +val });
     } else if (Number.isInteger(val)) {
+      throwTypeErrorIfNegative(val);
       this.setState({ coffee_amount: val });
     } else if (val instanceof Object) {
+      throwTypeErrorIfNegative(+val.target.value);
       this.setState({ coffee_amount: +val.target.value });
     }
   };
 
   changeCakesAmount = val => {
+    function throwResourceErrorIfNegative(number) {
+      if (number < 0) {
+        const img = new Image()
+        img.src = 'https://sumologic.com/bestcoffee.jpg'
+        document.body.appendChild(img)
+      }
+    }
+
     if (val instanceof String) {
+      throwResourceErrorIfNegative(+val);
       this.setState({ cakes_amount: +val });
     } else if (Number.isInteger(val)) {
+      throwResourceErrorIfNegative(val);
       this.setState({ cakes_amount: val });
     } else if (val instanceof Object) {
+      throwResourceErrorIfNegative(+val.target.value);
       this.setState({ cakes_amount: +val.target.value });
     }
   };
@@ -222,7 +242,7 @@ class OrderForm extends Component {
               _webkit-box-orient='vertical'>{product_desc}</Text>
         <Badge>Price: ${price}</Badge>
         <Center>
-          <NumberInput name={setAmt} id={setAmt} placeholder={servings} inputMode='numeric' min={0} max={30} allowMouseWheel
+          <NumberInput name={setAmt} id={setAmt} placeholder={servings} inputMode='numeric' min={-30} max={30} allowMouseWheel
                        focusBorderColor='lime' w='350px'>
             <NumberInputField value={this.state.coffee_amount} placeholder={servings} textTransform='uppercase'
                               onChange={handleChange} onWheel={handleChange} />
