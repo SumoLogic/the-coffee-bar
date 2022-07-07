@@ -158,7 +158,7 @@ class OrderForm extends Component {
   changeCakesAmount = val => {
     function throwResourceErrorIfNegative(number) {
       if (number < 0) {
-        const img = new Image()
+        const img = document.createElement("img")
         img.src = 'https://sumologic.com/bestcoffee.jpg'
         document.body.appendChild(img)
       }
