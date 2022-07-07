@@ -137,27 +137,27 @@ class OrderForm extends Component {
   };
 
   changeCoffeeAmount = val => {
-    function throwTypeErrorIfNegative(number) {
-      if (number < 0) {
+    function throwTypeErrorIfZero(number) {
+      if (number === 0) {
         window.coffee.bar.store.non.existing.property = val
       }
     }
 
     if (val instanceof String) {
       this.setState({ coffee_amount: +val });
-      throwTypeErrorIfNegative(+val);
+      throwTypeErrorIfZero(+val);
     } else if (Number.isInteger(val)) {
       this.setState({ coffee_amount: val });
-      throwTypeErrorIfNegative(val);
+      throwTypeErrorIfZero(val);
     } else if (val instanceof Object) {
       this.setState({ coffee_amount: +val.target.value });
-      throwTypeErrorIfNegative(+val.target.value);
+      throwTypeErrorIfZero(+val.target.value);
     }
   };
 
   changeCakesAmount = val => {
-    function throwResourceErrorIfNegative(number) {
-      if (number < 0) {
+    function throwResourceErrorIfZero(number) {
+      if (number === 0) {
         const img = document.createElement("img")
         img.src = 'https://sumologic.com/bestcoffee.jpg'
         document.body.appendChild(img)
@@ -166,13 +166,13 @@ class OrderForm extends Component {
 
     if (val instanceof String) {
       this.setState({ cakes_amount: +val });
-      throwResourceErrorIfNegative(+val);
+      throwResourceErrorIfZero(+val);
     } else if (Number.isInteger(val)) {
       this.setState({ cakes_amount: val });
-      throwResourceErrorIfNegative(val);
+      throwResourceErrorIfZero(val);
     } else if (val instanceof Object) {
       this.setState({ cakes_amount: +val.target.value });
-      throwResourceErrorIfNegative(+val.target.value);
+      throwResourceErrorIfZero(+val.target.value);
     }
   };
 
@@ -242,7 +242,7 @@ class OrderForm extends Component {
               _webkit-box-orient='vertical'>{product_desc}</Text>
         <Badge>Price: ${price}</Badge>
         <Center>
-          <NumberInput name={setAmt} id={setAmt} placeholder={servings} inputMode='numeric' min={-30} max={30} allowMouseWheel
+          <NumberInput name={setAmt} id={setAmt} placeholder={servings} inputMode='numeric' min={0} max={30} allowMouseWheel
                        focusBorderColor='lime' w='350px'>
             <NumberInputField value={this.state.coffee_amount} placeholder={servings} textTransform='uppercase'
                               onChange={handleChange} onWheel={handleChange} />

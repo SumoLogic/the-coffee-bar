@@ -266,7 +266,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             }
 
             // Set Coffee amount
-            await clickAndSetFieldValue(coffee_selectors['input'], utils.getRandomNumber(-1, 6), DELAY);
+            await clickAndSetFieldValue(coffee_selectors['input'], utils.getRandomNumber(0, 5), DELAY);
             // Add Coffee
             await click(coffee_selectors['button'], DELAY);
 
@@ -278,7 +278,7 @@ const NAVIGATE_RETRY_SECONDS = 60;
             }
 
             // Set Cakes amount
-            await clickAndSetFieldValue(cake_selectors['input'], utils.getRandomNumber(-1, 6), DELAY);
+            await clickAndSetFieldValue(cake_selectors['input'], utils.getRandomNumber(0, 5), DELAY);
             // Add Cakes
             await click(cake_selectors['button'], DELAY);
 
