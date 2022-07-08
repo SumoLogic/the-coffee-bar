@@ -67,12 +67,14 @@ services:
       - DURATION=1
       - THREADS_NO=500
       - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_RUM_SCRIPT_URL=https://rum.sumologic.com/sumologic-rum.js
       - REACT_APP_COFFEE_BAR_URL=http://localhost:8082/order
       - REACT_APP_SERVICE_NAME=the-coffee-bar-frontend
       - REACT_APP_COLLECTION_SOURCE_URL=
       - REACT_APP_APPLICATION_NAME=tcb-local
       - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
+      - REACT_APP_DROP_SINGLE_TRACES=false
   the-coffee-bar:
     build:
       context: ../../applications/python-the-coffee-bar-apps
@@ -104,13 +106,13 @@ services:
     hostname: the-coffee-machine
     ports:
       - 8083:8083
-    command: ["opentelemetry-instrument", "the-coffee-machine",
-              "--host=the-coffee-machine", "--port=8083",
+    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_machine.py",
+              "--host=the-coffee-machine", "--port=8083", 
               "--machine-svc-host=machine-svc",
-              "--machine-svc-port=9090",
-              "--cpu-increase-cron=*/2 * * * *",
-              "--cpu-increase-duration=1",
-              "--cpu-increase-threads=500"]
+              "--machine-svc-port=9090", 
+              "--spike-cron=*/2 * * * *", 
+              "--spike-duration=60", 
+              "--cpu-spike-processes=1"]
     environment:
       - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
