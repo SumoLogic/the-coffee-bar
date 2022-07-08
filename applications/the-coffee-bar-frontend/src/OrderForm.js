@@ -137,22 +137,42 @@ class OrderForm extends Component {
   };
 
   changeCoffeeAmount = val => {
+    function throwTypeErrorIfZero(number) {
+      if (number === 0) {
+        window.coffee.bar.store.non.existing.property = val
+      }
+    }
+
     if (val instanceof String) {
       this.setState({ coffee_amount: +val });
+      throwTypeErrorIfZero(+val);
     } else if (Number.isInteger(val)) {
       this.setState({ coffee_amount: val });
+      throwTypeErrorIfZero(val);
     } else if (val instanceof Object) {
       this.setState({ coffee_amount: +val.target.value });
+      throwTypeErrorIfZero(+val.target.value);
     }
   };
 
   changeCakesAmount = val => {
+    function throwResourceErrorIfZero(number) {
+      if (number === 0) {
+        const img = document.createElement("img")
+        img.src = 'https://sumologic.com/bestcoffee.jpg'
+        document.body.appendChild(img)
+      }
+    }
+
     if (val instanceof String) {
       this.setState({ cakes_amount: +val });
+      throwResourceErrorIfZero(+val);
     } else if (Number.isInteger(val)) {
       this.setState({ cakes_amount: val });
+      throwResourceErrorIfZero(val);
     } else if (val instanceof Object) {
       this.setState({ cakes_amount: +val.target.value });
+      throwResourceErrorIfZero(+val.target.value);
     }
   };
 

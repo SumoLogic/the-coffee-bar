@@ -5,6 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 
+window.addEventListener('load', () => {
+  var randNum = Math.floor(Math.random() * 100);
+  if (randNum % 4 === 0) {
+    setTimeout(async () => { fetch() })
+  }
+});
+
 ReactDOM.render(
   <StrictMode>
     <ColorModeScript />
