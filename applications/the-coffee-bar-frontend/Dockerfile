@@ -26,4 +26,6 @@ ENV CHOKIDAR_USEPOLLING=true
 # Fix for timezone
 RUN ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime
 
-CMD ["npm", "start"]
+RUN npm run build
+
+CMD ["npm", "run", "serve"]

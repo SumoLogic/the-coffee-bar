@@ -61,7 +61,7 @@ services:
       - 3000
     command: |
       /bin/bash -c "python3 ./cpu_killer/cpu_killer.py & \
-       npm start"
+       npm run serve"
     environment:
       - CRON=*/2 * * * *
       - DURATION=1
