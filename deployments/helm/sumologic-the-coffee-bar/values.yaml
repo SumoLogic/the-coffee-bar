@@ -22,7 +22,7 @@ image:
     tag: rubyAppsv0.1.1-ot1.0.2-0.23.0-0.21.2
   clicker:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: clicker-v1.1
+    tag: clicker-v1.2
   postgres:
     repository: postgres
     tag: 9.6.2-alpine
