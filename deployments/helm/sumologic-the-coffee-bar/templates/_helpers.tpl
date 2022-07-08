@@ -531,7 +531,7 @@ Create commands/args
 {{ define "sumologic.thecoffeebar.command.frontend" }}
 - /bin/sh
 - '-c'
-- python3 ./cpu_killer/cpu_killer.py & npm start
+- python3 ./cpu_killer/cpu_killer.py & npm run serve
 {{- end }}
 
 {{/*
