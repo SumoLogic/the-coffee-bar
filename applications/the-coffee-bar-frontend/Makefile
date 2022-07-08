@@ -1,4 +1,4 @@
-BASE_TAG = frontend-v0.1.3
+BASE_TAG = frontend-v0.1.4
 
 ifndef GITHUB_HEAD_REF
 	TAG = $(BASE_TAG)
