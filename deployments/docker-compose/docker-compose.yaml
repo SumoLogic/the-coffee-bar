@@ -58,7 +58,7 @@ services:
       - 3000
     command: |
       /bin/bash -c "python3 ./cpu_killer/cpu_killer.py & \
-       npm start"
+       npm run serve"
     environment:
       - SPIKE_CRON=*/2 * * * *
       - SPIKE_DURATION=60
