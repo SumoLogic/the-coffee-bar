@@ -6,19 +6,19 @@ Resources:
     Type: AWS::Serverless::Api
     Properties:
       StageName: CakesApi
-      TracingEnabled: true
+      TracingEnabled: false
       OpenApiVersion: 3.0.2
   CheckCakesApi:
     Type: AWS::Serverless::Api
     Properties:
       StageName: CheckCakesApi
-      TracingEnabled: true
+      TracingEnabled: false
       OpenApiVersion: 3.0.2
   CakesFunction:
     Type: AWS::Serverless::Function
     Properties:
       Handler: cakes.lambda_handler
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./functions/cakes
       Description: Build AWS Observability layer
       MemorySize: 512
@@ -58,7 +58,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: check_cakes.get_cakes
-      Runtime: python3.8
+      Runtime: python3.9
       CodeUri: ./functions/check_cakes
       Description: Build AWS Observability layer
       MemorySize: 512
@@ -133,10 +133,10 @@ Metadata:
   AWS::ServerlessRepo::Application:
     Name: The-Coffee-Bar-App-Functions
     Description: The Coffee Bar App
-    Author: Sumologic, Mateusz 'mat' Rumian
+    Author: Sumo Logic, Mateusz 'mat' Rumian
     SpdxLicenseId: Apache-2.0
     ReadmeUrl: README.md
-    Labels: ['opentelemetry', 'python38', 'the-coffee-bar']
+    Labels: ['opentelemetry', 'python39', 'the-coffee-bar']
     HomePageUrl: https://github.com/SumoLogic/the-coffee-bar
     SemanticVersion: 1.0.0
     SourceCodeUrl: https://github.com/SumoLogic/the-coffee-bar/tree/main/applications/aws-lambdas
