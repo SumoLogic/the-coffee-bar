@@ -84,7 +84,6 @@ Resources:
           OTEL_SERVICE_NAME: lambda‑CheckCakesFunction
           OTEL_RESOURCE_ATTRIBUTES: application=the-coffee-bar-app
           OTEL_TRACES_SAMPLER: always_on
-          OTEL_PROPAGATORS: xray
           INVOKE_FUNCTION_NAME: !Ref CakesFunction
       Layers:
         - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
