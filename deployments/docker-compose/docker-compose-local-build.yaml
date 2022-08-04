@@ -190,7 +190,7 @@ services:
     ports:
       - 8090:8090
   otelcol:
-    image: public.ecr.aws/sumologic/opentelemetry-collector:latest
+    image: public.ecr.aws/sumologic/sumologic-otel-collector:latest
     container_name: otelcol
     hostname: otelcol
     command: ["--config=/etc/otel-collector-config.yaml"]
