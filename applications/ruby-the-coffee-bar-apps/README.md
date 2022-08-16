@@ -35,27 +35,27 @@ based on the environment variables. Application supports right now only OTLP Spa
     COFFEE_PORT - define port on which Coffee Sinatra server is running
     WATER_HOST - define host name where Water Sinatra server is running
     WATER_PORT - define port on which Water Sinatra server is running
-    OTEL_RESOURCE_ATTRIBUTES - define service-name for Jaeger exporter (service.name=NAME)
-    OTEL_EXPORTER_OTLP_SPAN_ENDPOINT - define HTTP OTLP collector endpoint
-    OTEL_EXPORTER_OTLP_INSECURE - define HTTP/HTTPS (false/true) for HTTP OTLP collector endpoint
+    OTEL_SERVICE_NAME - define service name
+    OTEL_RESOURCE_ATTRIBUTES - define additional attributes e.g. (application=my-app)
+    OTEL_EXPORTER_OTLP_ENDPOINT - define HTTP OTLP collector endpoint
     ```
 
 - **coffee.rb environment variables**
     ```bash
     HOST - define host name for Sinatra server
     PORT - define port for Sinatra server
-    OTEL_RESOURCE_ATTRIBUTES - define service-name for Jaeger exporter (service.name=NAME)
-    OTEL_EXPORTER_OTLP_SPAN_ENDPOINT - define HTTP OTLP collector endpoint
-    OTEL_EXPORTER_OTLP_INSECURE - define HTTP/HTTPS (false/true) for HTTP OTLP collector endpoint
+    OTEL_SERVICE_NAME - define service name
+    OTEL_RESOURCE_ATTRIBUTES - define additional attributes e.g. (application=my-app)
+    OTEL_EXPORTER_OTLP_ENDPOINT - define HTTP OTLP collector endpoint
     ```
 
 - **water.rb environment variables**
     ```bash
     HOST - define host name for Sinatra server
     PORT - define port for Sinatra server
-    OTEL_RESOURCE_ATTRIBUTES - define service-name for Jaeger exporter (service.name=NAME)
-    OTEL_EXPORTER_OTLP_SPAN_ENDPOINT - define HTTP OTLP collector endpoint
-    OTEL_EXPORTER_OTLP_INSECURE - define HTTP/HTTPS (false/true) for HTTP OTLP collector endpoint
+    OTEL_SERVICE_NAME - define service name
+    OTEL_RESOURCE_ATTRIBUTES - define additional attributes e.g. (application=my-app)
+    OTEL_EXPORTER_OTLP_ENDPOINT - define HTTP OTLP collector endpoint
     ```
     
 # Contact
