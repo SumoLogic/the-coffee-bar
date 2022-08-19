@@ -54,14 +54,19 @@ class CashDesk(HttpServer):
 
         success, error, result = self.db.get_price_of_product(product_name=data[product])
         if success:
-            product_price = result['price']
-            calculation_data = calculation_order(product=data[product], price=product_price,
-                                                 amount=data[product_amount])
-            callculation_success, data = self.call_calculator(data=calculation_data)
-            if callculation_success:
-                data = data['total']
-            return callculation_success, data
+            if type(result) == str:
+                log.error("Error in make_calculation: %s result: %s", error, result)
+                return False, "Invalid result"
+            else:
+                product_price = result['price']
+                calculation_data = calculation_order(product=data[product], price=product_price,
+                                                     amount=data[product_amount])
+                callculation_success, data = self.call_calculator(data=calculation_data)
+                if callculation_success:
+                    data = data['total']
+                return callculation_success, data
         else:
+            log.error("Failure in make_calculation: %s", error)
             return success, error
 
     def update_items_status(self, data: dict, product: str):
