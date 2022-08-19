@@ -61,7 +61,7 @@ stdout_handler = log.StreamHandler(sys.stdout)
 stdout_handler.setLevel(log.INFO)
 stdout_handler.setFormatter(span_formattter)
 root.addHandler(stdout_handler)
-
+log.getLogger('apscheduler.executors.default').setLevel(log.WARNING)
 loop = asyncio.get_event_loop()
 try:
     cpu_spike_processes = int(getenv('CPU_SPIKE_PROCESSES')) if getenv('CPU_SPIKE_PROCESSES') is not None else 475
