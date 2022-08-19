@@ -3,9 +3,9 @@
 # Declare variables to be passed into your templates.
 
 replicaCount: 1
-replicaCountClicker: 1
-replicaCountBar: 1
-replicaCountPostgres: 2
+replicaCountClicker: 5
+replicaCountBar: 2
+replicaCountPostgres: 4
 
 image:
   dotnet:
@@ -13,10 +13,10 @@ image:
     tag: calculator-dotnet-1.2.0-1.0.0rc9
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: frontend-v0.1.4
+    tag: frontend-v0.1.5
   python:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: pythonAppsv0.2.1-ot1.12.0rc2-0.32b0
+    tag: python-apps-1.8.0-0.24b0
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
@@ -277,14 +277,14 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
-    INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
-    SPIKE_INTERVAL_DAYS: "0" # default 0 How many day to skip before next trigger. It will combine with SPIKE_INTERVAL_HOURS to determine next trigger time.
-    SPIKE_INTERVAL_HOURS: "1" # default 1 How many hours to skip before next trigger. It will combine with SPIKE_INTERVAL_DAYS to determine next trigger time. Example: To schedule after every 5 days and every 6 hours set SPIKE_INTERVAL_HOURS as 6 and SPIKE_INTERVAL_DAYS as 5
+    INTERVAL_BASED_TRIGGER: "true" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "5" # default 0
+    SPIKE_INTERVAL_HOURS: "12" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
-    SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
+    SPIKE_START_DATE: "2022-07-01 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_DURATION: "1800" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
-    NETWORK_DELAY: "1sec"
+    NETWORK_DELAY: "600ms"
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "the-coffee-machine"
@@ -300,14 +300,14 @@ envs:
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     REACT_APP_DROP_SINGLE_TRACES: 'false'
     ## Envs to configure CPU Killer and Network Delay
-    INTERVAL_BASED_TRIGGER: "false" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
-    SPIKE_INTERVAL_DAYS: "0" # default 0
-    SPIKE_INTERVAL_HOURS: "1" # default 1
+    INTERVAL_BASED_TRIGGER: "true" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "5" # default 0
+    SPIKE_INTERVAL_HOURS: "12" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
-    SPIKE_DURATION: "300" # for 5 minutes
+    SPIKE_START_DATE: "2022-07-01 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_DURATION: "1800" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process
-    NETWORK_DELAY: "1sec" # with 100 ms network delay
+    NETWORK_DELAY: "800ms" # with 100 ms network delay
   machinesvc:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
@@ -321,9 +321,9 @@ envs:
 
 crons:
   clicker: '30 */4 * * *' # cron spec of time, here, 4 o'clock
-  postgres: '30 */8 * * *' # cron spec of time, here, 8 o'clock
-  cashdesk: '30 */8 * * *' # cron spec of time, here, 8 o'clock
-  bar: '30 */8 * * *' # cron spec of time, here, 8 o'clock
+  postgres: '30 */4 * * *' # cron spec of time, here, 8 o'clock
+  cashdesk: '30 */4 * * *' # cron spec of time, here, 8 o'clock
+  bar: '30 */4 * * *' # cron spec of time, here, 8 o'clock
 
 extras:
   otelColHostName: collection-sumologic-otelcol.sumologic
