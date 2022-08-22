@@ -51,23 +51,18 @@ class CashDesk(HttpServer):
     def make_calculation(self, data: dict, product: str):
         log.info('Get product price: %s', data[product])
         product_amount = '{}_amount'.format(product)
-
         success, error, result = self.db.get_price_of_product(product_name=data[product])
-        if success:
-            if type(result) == str:
-                log.error("Error in make_calculation: %s result: %s", error, result)
-                return False, "Invalid result"
-            else:
-                product_price = result['price']
-                calculation_data = calculation_order(product=data[product], price=product_price,
-                                                     amount=data[product_amount])
-                callculation_success, data = self.call_calculator(data=calculation_data)
-                if callculation_success:
-                    data = data['total']
-                return callculation_success, data
+        if success and type(result)==dict and result.has_key('price'):
+            product_price = result['price']
+            calculation_data = calculation_order(product=data[product], price=product_price,
+                                                    amount=data[product_amount])
+            callculation_success, data = self.call_calculator(data=calculation_data)
+            if callculation_success:
+                data = data['total']
+            return callculation_success, data
         else:
             log.error("Failure in make_calculation: %s", error)
-            return success, error
+            return False, error
 
     def update_items_status(self, data: dict, product: str):
         success, error, result = self.db.get_items_sold(product_name=data[product])
@@ -118,3 +113,6 @@ class CashDesk(HttpServer):
         else:
             log.error('Payment failed. Not enough money')
             return make_response({'reason': 'Not enough money'}, 402)
+
+
+
