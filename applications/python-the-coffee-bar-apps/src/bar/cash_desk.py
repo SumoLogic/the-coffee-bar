@@ -52,7 +52,7 @@ class CashDesk(HttpServer):
         log.info('Get product price: %s', data[product])
         product_amount = '{}_amount'.format(product)
         success, error, result = self.db.get_price_of_product(product_name=data[product])
-        if success and type(result)==dict and result.has_key('price'):
+        if success and type(result)==dict and ('price' in result):
             product_price = result['price']
             calculation_data = calculation_order(product=data[product], price=product_price,
                                                     amount=data[product_amount])
@@ -113,6 +113,4 @@ class CashDesk(HttpServer):
         else:
             log.error('Payment failed. Not enough money')
             return make_response({'reason': 'Not enough money'}, 402)
-
-
 
