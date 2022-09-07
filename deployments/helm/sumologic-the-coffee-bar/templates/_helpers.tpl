@@ -547,12 +547,12 @@ Create envs
 - name: OTEL_TRACES_EXPORTER
   value: otlp_proto_http
 - name: OTEL_EXPORTER_OTLP_ENDPOINT
-  value: {{ printf "http://%s:55681/v1/traces" .Values.extras.otelColHostName | quote }}
+  value: {{ printf "http://%s:4318" .Values.extras.otelColHostName | quote }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.otel.exporter.otlp.http" }}
 - name: OTEL_EXPORTER_OTLP_ENDPOINT
-  value: {{ printf "http://%s:55681" .Values.extras.otelColHostName | quote }}
+  value: {{ printf "http://%s:4318" .Values.extras.otelColHostName | quote }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.frontend" }}
