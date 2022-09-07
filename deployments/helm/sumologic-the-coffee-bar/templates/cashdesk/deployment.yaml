@@ -58,12 +58,12 @@ spec:
             initialDelaySeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.initialDelaySeconds }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources.python.common | nindent 12 }}
+            {{- toYaml .Values.resources.cashdesk | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.cashdesk_affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}

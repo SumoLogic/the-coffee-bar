@@ -58,7 +58,7 @@ spec:
             initialDelaySeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.initialDelaySeconds }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources.ruby.common | nindent 12 }}
+            {{- toYaml .Values.resources.coffeesvc | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

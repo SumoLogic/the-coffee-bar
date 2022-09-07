@@ -6,7 +6,7 @@ metadata:
     app: {{ include "sumologic.thecoffeebar.labels.app.machinesvc.deployment" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCountMachineSvc }}
   selector:
     matchLabels:
       app: {{ include "sumologic.thecoffeebar.selectorLabels.machinesvc" . }}
@@ -58,7 +58,7 @@ spec:
             initialDelaySeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.initialDelaySeconds }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources.ruby.common | nindent 12 }}
+            {{- toYaml .Values.resources.machinesvc | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
