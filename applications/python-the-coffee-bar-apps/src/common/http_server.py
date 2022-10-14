@@ -28,7 +28,8 @@ class EndpointAction:
     def __call__(self, *args, **kwargs):
         if self.stats:
             self.stats.incr('endpoint_calls')
-        log.warning(request.headers)
+        if os.getenv('HEADERS_INVESTIGATION'):
+            log.warning(request.headers)
         data = to_json(request.json)
         result = self.action(data)
 
