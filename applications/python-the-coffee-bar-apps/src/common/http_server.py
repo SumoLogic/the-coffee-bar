@@ -92,7 +92,7 @@ class HttpServer:
         return Response("I'm alive!", status=200, mimetype='text/plain')
 
     def run(self):
-        serve(TransLogger(application=self.app, logger=log.getLogger('root')), host=self.host, port=self.port,
+        serve(TransLogger(application=self.app, logger=log.getLogger('root')), listen='{}:{}'.format(self.host, self.port),
               server_name=self.host, threads=self.WAITRESS_THREADS_NO)
 
     def add_endpoint(self, endpoint: str = None, endpoint_name: str = None, handler: staticmethod = None):
