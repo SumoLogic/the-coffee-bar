@@ -53,7 +53,7 @@ class CashDesk(HttpServer):
         product_amount = '{}_amount'.format(product)
 
         success, error, result = self.db.get_price_of_product(product_name=data[product])
-        if success:
+        if success and type(result) == dict and ('price' in result):
             product_price = result['price']
             calculation_data = calculation_order(product=data[product], price=product_price,
                                                  amount=data[product_amount])
@@ -62,7 +62,8 @@ class CashDesk(HttpServer):
                 data = data['total']
             return callculation_success, data
         else:
-            return success, error
+            log.error("Failure in make_calculation: %s", error)
+            return False, error
 
     def update_items_status(self, data: dict, product: str):
         success, error, result = self.db.get_items_sold(product_name=data[product])
