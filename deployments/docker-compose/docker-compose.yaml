@@ -143,7 +143,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=water-svc
   calculator-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:calculator-dotnet-1.2.0-1.0.0rc9
+    image: public.ecr.aws/sumologic/the-coffee-bar:calculator-dotnet-1.4.0-beta.3-1.0.0-rc9.9
     container_name: calculator-svc
     hostname: calculator-svc
     command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]

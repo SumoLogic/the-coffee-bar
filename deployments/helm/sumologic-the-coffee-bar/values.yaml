@@ -10,7 +10,7 @@ replicaCountPostgres: 2
 image:
   dotnet:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: calculator-dotnet-1.2.0-1.0.0rc9
+    tag: calculator-dotnet-1.4.0-beta.3-1.0.0-rc9.9
   frontend:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: frontend-v0.1.4
