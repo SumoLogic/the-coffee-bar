@@ -16,7 +16,7 @@ image:
     tag: frontend-v0.1.4
   python:
     repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: pythonAppsv0.3.1-ot1.12.0rc2-0.32b0
+    tag: pythonAppsv0.3.1-ot1.14.0-0.35b0
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
