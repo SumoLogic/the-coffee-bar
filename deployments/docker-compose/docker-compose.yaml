@@ -111,7 +111,7 @@ services:
 #      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
 #      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
   machine-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
     container_name: machine-svc
     hostname: machine-svc
     ports:
@@ -121,7 +121,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
   coffee-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
     container_name: coffee-svc
     hostname: coffee-svc
     ports:
@@ -131,7 +131,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
   water-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
     container_name: water-svc
     hostname: water-svc
     ports:

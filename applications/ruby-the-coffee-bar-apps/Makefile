@@ -1,4 +1,4 @@
-BASE_TAG = rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+BASE_TAG = rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
 
 ifndef GITHUB_HEAD_REF
 	TAG = $(BASE_TAG)
