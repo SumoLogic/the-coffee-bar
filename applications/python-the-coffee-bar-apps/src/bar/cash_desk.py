@@ -53,7 +53,7 @@ class CashDesk(HttpServer):
         product_amount = '{}_amount'.format(product)
 
         success, error, result = self.db.get_price_of_product(product_name=data[product])
-        if success and type(result) == dict and ('price' in result):
+        if success and isinstance(result, dict) and 'price' in result:
             product_price = result['price']
             calculation_data = calculation_order(product=data[product], price=product_price,
                                                  amount=data[product_amount])
