@@ -42,7 +42,7 @@ Resources:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
           AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
-          OTEL_SERVICE_NAME: lambda-CakesFunction
+          OTEL_SERVICE_NAME: lambdaCakesFunction
           OTEL_RESOURCE_ATTRIBUTES: !Sub 'application=the-coffee-bar-app,cloud.account.id=${AWS::AccountId}'
           OTEL_TRACES_SAMPLER: always_on
       Layers:
@@ -81,7 +81,7 @@ Resources:
         Variables:
           SUMOLOGIC_HTTP_TRACES_ENDPOINT_URL: HTTP_TRACES_URL
           AWS_LAMBDA_EXEC_WRAPPER: /opt/otel-instrument
-          OTEL_SERVICE_NAME: lambda‑CheckCakesFunction
+          OTEL_SERVICE_NAME: lambdaCheckCakesFunction
           OTEL_RESOURCE_ATTRIBUTES: !Sub 'application=the-coffee-bar-app,cloud.account.id=${AWS::AccountId}'
           OTEL_TRACES_SAMPLER: always_on
           INVOKE_FUNCTION_NAME: !Ref CakesFunction
