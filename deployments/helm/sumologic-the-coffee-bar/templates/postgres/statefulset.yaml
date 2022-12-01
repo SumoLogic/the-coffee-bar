@@ -14,12 +14,20 @@ spec:
       {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
+    {{- with .Values.PostgrespodAnnotations.podAnnotations }}
       annotations:
+
         {{- toYaml . | nindent 8 }}
     {{- end }}
       labels:
         app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}
+        environment: staging
+        db_cluster: sedemo-stagingv2
+        db_system: postgresql
+        component: database
+
+
+
         {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}

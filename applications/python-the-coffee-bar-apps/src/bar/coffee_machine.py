@@ -11,7 +11,7 @@ from src.common.http_server import HttpServer
 from src.utils.cpu_increaser import outage_start, network_outage_start
 
 GET_COFFEE_ENDPOINT = '/get_coffee'
-
+log.getLogger('apscheduler.executors.default').setLevel(log.DEBUG)
 
 class CoffeeMachine(HttpServer):
 

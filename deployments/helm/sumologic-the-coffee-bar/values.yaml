@@ -18,7 +18,9 @@ image:
   python:
     #repository: public.ecr.aws/sumologic/the-coffee-bar
     repository: public.ecr.aws/g0d6f4n6/the-coffee-bar-arun
-    tag: python-apps-1.9.0-0.29b0
+    tag: python-apps-1.5.0-0.30b0
+    # repository: public.ecr.aws/sumologic/the-coffee-bar
+    # tag: pythonAppsv0.3.1-ot1.12.0rc2-0.32b0
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
@@ -45,7 +47,117 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {}
+podAnnotations: {
+
+
+
+
+}
+
+PostgrespodAnnotations: 
+  podAnnotations:
+    sumologic.com/format: "json"
+    prometheus.io/port: "9273"
+    prometheus.io/scrape: "true"
+    telegraf.influxdata.com/class: sumologic-prometheus
+    telegraf.influxdata.com/agent: |+
+      interval: "60s"
+      flush_interval: "60s"
+    telegraf.influxdata.com/inputs: |+
+      [[inputs.postgresql_extensible]]
+        address = "host=localhost user=account dbname=postgres password=account sslmode=disable"
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT datname as db,numbackends,xact_commit,xact_rollback,blks_read,blks_hit,tup_inserted,tup_updated,tup_deleted,deadlocks,tup_fetched,tup_returned FROM pg_stat_database"
+          version=901
+          withdbname=false
+          tagvalue="db"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT checkpoints_timed,checkpoints_req,buffers_checkpoint,buffers_clean,buffers_backend FROM pg_stat_bgwriter"
+          version=901
+          withdbname=false
+          tagvalue=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT count(*) as stat_ssl_compression_count FROM pg_stat_ssl where compression = TRUE"
+          version=901
+          withdbname=false
+          tagvalue=""
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT CASE WHEN pg_last_wal_receive_lsn() = pg_last_wal_replay_lsn() THEN 0 ELSE GREATEST (0, EXTRACT (EPOCH FROM now() - pg_last_xact_replay_timestamp())) END AS replication_delay WHERE (SELECT pg_is_in_recovery())"
+          version=901
+          withdbname=false
+          tagvalue=""
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT abs(pg_wal_lsn_diff(pg_last_wal_receive_lsn(), pg_last_wal_replay_lsn())) AS replication_lag WHERE (SELECT pg_is_in_recovery())"
+          version=901
+          withdbname=false
+          tagvalue=""
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT application_name,state,sync_state,GREATEST (0, EXTRACT(epoch from flush_lag)) AS flush_lag,GREATEST (0, EXTRACT(epoch from write_lag)) as write_lag,GREATEST (0, EXTRACT(epoch from replay_lag)) AS replay_lag FROM pg_stat_replication"
+          version=901
+          withdbname=false
+          tagvalue="application_name,state,sync_state"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="select t1.datname AS db,pg_database_size(t1.datname) as db_size from pg_database t1 order by pg_database_size(t1.datname) desc"
+          version=901
+          withdbname=false
+          tagvalue="db"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT pg_database.datname as db,tmp.mode as mode,COALESCE(count,0) as num_locks FROM (VALUES ('accesssharelock'), ('rowsharelock'), ('rowexclusivelock'), ('shareupdateexclusivelock'), ('sharelock'), ('sharerowexclusivelock'), ('exclusivelock'), ('accessexclusivelock'), ('sireadlock') ) AS tmp(mode) CROSS JOIN pg_database LEFT JOIN (SELECT database, lower(mode) AS mode,count(*) AS count FROM pg_locks WHERE database IS NOT NULL GROUP BY database, lower(mode) ) AS tmp2 ON tmp.mode=tmp2.mode and pg_database.oid = tmp2.database ORDER BY 1"
+          version=901
+          withdbname=false
+          tagvalue="db,mode"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT current_database() AS db,schemaname,relname,seq_scan,seq_tup_read,idx_scan,idx_tup_fetch,n_tup_ins,n_tup_upd,n_tup_del,n_tup_hot_upd,n_live_tup,n_dead_tup FROM pg_stat_user_tables"
+          version=901
+          withdbname=false
+          tagvalue="db,schemaname,relname"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT current_database() AS db,schemaname, relname, indexrelname, idx_scan, idx_tup_read, idx_tup_fetch FROM pg_stat_user_indexes"
+          version=901
+          withdbname=false
+          tagvalue="db,schemaname,relname,indexrelname"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT current_database() AS db,schemaname,relname,indexrelname,idx_blks_read,idx_blks_hit FROM pg_statio_user_indexes"
+          version=901
+          withdbname=false
+          tagvalue="db,schemaname,relname,indexrelname"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT current_database() AS db, schemaname,relname,heap_blks_read,heap_blks_hit,idx_blks_read,idx_blks_hit,toast_blks_read,toast_blks_hit,tidx_blks_read,tidx_blks_hit FROM pg_statio_user_tables"
+          version=901
+          withdbname=false
+          tagvalue="db,schemaname,relname"
+          measurement=""
+        [[inputs.postgresql_extensible.query]]
+          sqlquery="SELECT current_database() AS db,nspname as schemaname, relname, pg_total_relation_size(C.oid) AS table_size, pg_indexes_size(C.oid) AS index_size FROM pg_class C LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace) WHERE nspname NOT IN ('pg_catalog', 'information_schema') AND C.relkind <> 'i' AND nspname !~ '^pg_toast' ORDER BY pg_total_relation_size(C.oid) DESC"
+          version=901
+          withdbname=false
+          tagvalue="db,schemaname,relname"
+          measurement=""
+        [inputs.postgresql_extensible.tags]
+          environment = "staging"
+          db_cluster = "sedemo-stagingv2"
+          db_system = "postgresql"
+          component = "database"
+
+
+
+
+
+
+
+
+
+
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -355,7 +467,7 @@ envs:
     SPIKE_INTERVAL_DAYS: "5" # default 0
     SPIKE_INTERVAL_HOURS: "12" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: "2022-09-02 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_START_DATE: " 2022-09-02 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "1800" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
     NETWORK_DELAY: "600ms"
@@ -376,9 +488,9 @@ envs:
     ## Envs to configure CPU Killer and Network Delay
     INTERVAL_BASED_TRIGGER: "true" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
     SPIKE_INTERVAL_DAYS: "5" # default 0
-    SPIKE_INTERVAL_HOURS: "12" # default 1
+    SPIKE_INTERVAL_HOURS: 12" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: "2022-09-02 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_START_DATE: " 2022-09-02 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "1800" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process
     NETWORK_DELAY: "800ms" # with 100 ms network delay
