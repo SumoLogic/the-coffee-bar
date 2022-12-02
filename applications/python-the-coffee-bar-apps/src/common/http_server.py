@@ -69,8 +69,6 @@ class HttpServer:
     # WARNI [waitress][WARNING] Task queue depth is 2
     WAITRESS_THREADS_NO = int(os.getenv('WAITRESS_THREADS_NO', 10))
     CONNECTION_LIMIT = int(os.getenv('CONNECTION_LIMIT', 1000))
-    # channel_timeout = int(os.getenv('CHANNEL_TIMEOUT', '120'))
-    # cleanup_interval=os.getenv('CLEANUP_INTERVAL', '30'),
     app = None
     stats = None
 

@@ -83,13 +83,13 @@ class OrderState: ObservableObject {
             coffee = "americano"
         }
         
-        var sweets: String = ""
+        var cakes: String = ""
         if (items[.tiramisu]!.amount > 0) {
-            sweets = "tiramisu"
+            cakes = "tiramisu"
         } else if (items[.cornetto]!.amount > 0) {
-            sweets = "cornetto"
+            cakes = "cornetto"
         } else if (items[.muffin]!.amount > 0) {
-            sweets = "muffin"
+            cakes = "muffin"
         }
         
         let jsonData = try? JSONSerialization.data(withJSONObject: [
@@ -97,8 +97,8 @@ class OrderState: ObservableObject {
             "coffee": coffee,
             "coffee_amount": getCoffeeTotalAmount(),
             "grains": coffee == "espresso" ? 80 : 0,
-            "sweets": sweets,
-            "sweets_amount": getPastryTotalAmount(),
+            "cakes": cakes,
+            "cakes_amount": getPastryTotalAmount(),
             "total": (getCoffeeTotalPrice() + getPastryTotalPrice()) / 100,
             "water": 10
         ])

@@ -12,6 +12,7 @@
 		A5B664E027C3E2FA0050519A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B664DF27C3E2FA0050519A /* Assets.xcassets */; };
 		A5B664E327C3E2FA0050519A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B664E227C3E2FA0050519A /* Preview Assets.xcassets */; };
 		A5B6650627C52D120050519A /* state.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B6650527C52D120050519A /* state.swift */; };
+		C5C5018B2923A0C700128CD7 /* SumoLogicRum in Frameworks */ = {isa = PBXBuildFile; productRef = C5C5018A2923A0C700128CD7 /* SumoLogicRum */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5C5018B2923A0C700128CD7 /* SumoLogicRum in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +125,9 @@
 			dependencies = (
 			);
 			name = "the-coffee-bar";
+			packageProductDependencies = (
+				C5C5018A2923A0C700128CD7 /* SumoLogicRum */,
+			);
 			productName = "the-coffee-bar";
 			productReference = A5B664D827C3E2F80050519A /* the-coffee-bar.app */;
 			productType = "com.apple.product-type.application";
@@ -195,6 +200,9 @@
 				Base,
 			);
 			mainGroup = A5B664CF27C3E2F80050519A;
+			packageReferences = (
+				C5C501892923A0C700128CD7 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */,
+			);
 			productRefGroup = A5B664D927C3E2F80050519A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -561,6 +569,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C5C501892923A0C700128CD7 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SumoLogic/sumologic-opentelemetry-ios";
+			requirement = {
+				kind = exactVersion;
+				version = 1.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C5C5018A2923A0C700128CD7 /* SumoLogicRum */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C5C501892923A0C700128CD7 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */;
+			productName = SumoLogicRum;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A5B664D027C3E2F80050519A /* Project object */;
 }
