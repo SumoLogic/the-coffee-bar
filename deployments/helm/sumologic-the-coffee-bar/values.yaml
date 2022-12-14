@@ -17,7 +17,7 @@ image:
     tag: frontend-v0.1.5
   python:
     repository: public.ecr.aws/g0d6f4n6/the-coffee-bar-arun
-    tag: python-apps-1.5.0-0.30b0
+    tag: python-apps-1.5.0-0.33b0
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
@@ -464,7 +464,7 @@ envs:
     SPIKE_INTERVAL_DAYS: "5" # default 0
     SPIKE_INTERVAL_HOURS: "12" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: " 2022-09-02 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_START_DATE: "2022-09-01 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "1800" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
     NETWORK_DELAY: "600ms"
@@ -485,9 +485,9 @@ envs:
     ## Envs to configure CPU Killer and Network Delay
     INTERVAL_BASED_TRIGGER: "true" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
     SPIKE_INTERVAL_DAYS: "5" # default 0
-    SPIKE_INTERVAL_HOURS: 12" # default 1
+    SPIKE_INTERVAL_HOURS: "12" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: " 2022-09-02 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_START_DATE: "2022-09-01 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "1800" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process
     NETWORK_DELAY: "800ms" # with 100 ms network delay
