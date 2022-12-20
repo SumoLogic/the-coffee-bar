@@ -2,7 +2,6 @@ import json
 import os
 import requests
 
-FUNCTION_NAME = os.getenv('INVOKE_FUNCTION_NAME')
 FUNCTION_URL = os.getenv('INVOKE_FUNCTION_URL')
 
 
