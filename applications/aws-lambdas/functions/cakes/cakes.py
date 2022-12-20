@@ -10,12 +10,10 @@ def is_avi(cake):
     current_span.set_attribute('requested_cake', cake)
     if cake in AVAILABLE_CAKES:
         current_span.set_attribute('is_avi', True)
-        status = 200
-    else:
-        current_span.set_attribute('is_avi', False)
-        status = 404
-
-    return status
+        return 200
+    
+    current_span.set_attribute('is_avi', False)
+    return 404
 
 
 def lambda_handler(event, context):
