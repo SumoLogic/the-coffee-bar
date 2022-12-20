@@ -8,7 +8,7 @@ import requests
 
 from src.utils.utils import to_json
 from opentelemetry import trace
-from opentelemetry.util._time import _time_ns
+from time import time_ns
 import statsd
 
 from waitress import serve
@@ -38,7 +38,7 @@ class EndpointAction:
                 if result.status_code == 402:
                     trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
                                                                      "exception.message": str(result.content)},
-                                                       _time_ns())
+                                                       time_ns())
             except:
                 pass
         else:
@@ -48,7 +48,7 @@ class EndpointAction:
             if result.status_code == 402:
                 trace.get_current_span().add_event("exception", {"exception.code": int(result.status_code),
                                                                  "exception.message": str(result.response)},
-                                                   _time_ns())
+                                                   time_ns())
 
         # Add trace_id into response
         try:

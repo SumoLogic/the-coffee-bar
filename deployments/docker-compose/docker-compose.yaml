@@ -31,7 +31,7 @@ services:
 #    expose:
 #      - 9222
   the-coffee-bar:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.12.0rc2-0.32b0
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.14.0-0.35b0
     container_name: the-coffee-bar
     hostname: the-coffee-bar
     ports:
@@ -73,7 +73,7 @@ services:
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
       - REACT_APP_DROP_SINGLE_TRACES=false
   the-coffee-machine:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.12.0rc2-0.32b0
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.14.0-0.35b0
     container_name: the-coffee-machine
     hostname: the-coffee-machine
     ports:
@@ -87,7 +87,7 @@ services:
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
   the-cashdesk:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.12.0rc2-0.32b0
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.14.0-0.35b0
     container_name: the-cashdesk
     hostname: the-cashdesk
     ports:
@@ -101,7 +101,7 @@ services:
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-cashdesk
 #  the-coffee-lover:
-#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.12.0rc2-0.32b0
+#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.14.0-0.35b0
 #    container_name: the-coffee-lover
 #    hostname: the-coffee-lover
 #    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",
@@ -111,7 +111,7 @@ services:
 #      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
 #      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
   machine-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
     container_name: machine-svc
     hostname: machine-svc
     ports:
@@ -121,7 +121,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=machine-svc
   coffee-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
     container_name: coffee-svc
     hostname: coffee-svc
     ports:
@@ -131,7 +131,7 @@ services:
       - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=coffee-svc
   water-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.1.1-ot1.1.0-0.25.0-0.23.0
+    image: public.ecr.aws/sumologic/the-coffee-bar:rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
     container_name: water-svc
     hostname: water-svc
     ports:
@@ -143,7 +143,7 @@ services:
       - OTEL_EXPORTER_OTLP_INSECURE=true
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=water-svc
   calculator-svc:
-    image: public.ecr.aws/sumologic/the-coffee-bar:calculator-dotnet-1.2.0-1.0.0rc9
+    image: public.ecr.aws/sumologic/the-coffee-bar:calculator-dotnet-1.4.0-beta.3-1.0.0-rc9.9
     container_name: calculator-svc
     hostname: calculator-svc
     command: ["dotnet", "dotnet-core-calculator-svc.dll", "http://calculator-svc:8090"]
