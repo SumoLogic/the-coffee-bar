@@ -1,27 +1,20 @@
 import json
 import os
-import boto3
+import requests
 
-FUNCTION_NAME = os.getenv('INVOKE_FUNCTION_NAME')
-
-client = boto3.client('lambda')
+FUNCTION_URL = os.getenv('INVOKE_FUNCTION_URL')
 
 
-def invoke(cakes):
-    print('Invoke %s with data: %s' % (FUNCTION_NAME, cakes))
-    response = client.invoke(
-        FunctionName=FUNCTION_NAME,
-        InvocationType='RequestResponse',
-        Payload=json.dumps(cakes),
-    )
+
+def make_request(body):
+    response = requests.post(FUNCTION_URL, json=body)
     return response
 
-
 def get_cakes(event, context):
-    body = event['body']
+    request = event['body']
+    print('Check if %s is available' % str(request))
+    response = make_request(json.loads(request))
+    response_body = response.json()
+    print(response_body)
 
-    print('Check if %s is available' % str(body))
-    response = invoke(body)
-    payload = json.loads(response["Payload"].read())
-
-    return {'statusCode': payload['statusCode'], 'body': json.dumps(payload['body'])}
+    return {'statusCode': response.status_code, 'body': json.dumps(response_body)}
