@@ -84,6 +84,7 @@ Resources:
           OTEL_SERVICE_NAME: lambda‑CheckCakesFunction
           OTEL_RESOURCE_ATTRIBUTES: !Sub 'application=the-coffee-bar-app,cloud.account.id=${AWS::AccountId}'
           OTEL_TRACES_SAMPLER: always_on
+          INVOKE_FUNCTION_URL: !Sub "https://${CakesApi}.execute-api.${AWS::Region}.amazonaws.com/CakesApi"
           INVOKE_FUNCTION_NAME: !Ref CakesFunction
       Layers:
         - !FindInMap [RegionLayers, !Ref "AWS::Region", layer]
