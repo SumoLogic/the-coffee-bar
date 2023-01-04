@@ -28,7 +28,7 @@ setup(
     packages=find_packages(),
     python_requires='>=3.8, <4',
 
-    install_requires=['APScheduler==3.8.1',
+    install_requires=['APScheduler==3.9.1',
                       'cron-descriptor==1.2.24',
                       'Flask==2.0.3',
                       'flask-cors==3.0.10',
