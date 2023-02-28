@@ -114,7 +114,7 @@ class Bar(HttpServer):
         cashdesk_url = 'http://{}:{}{}'.format(self.cashdesk_host, self.cashdesk_port, '/pay_in')
         try:
 
-            cashdesk_status = requests.post(url=cashdesk_url, json=data, timeout=10)
+            cashdesk_status = requests.post(url=cashdesk_url, json=data, timeout=2)
         except requests.Timeout:
             return make_response({'reason': 'Request Timeout'}, 504)
         except requests.ConnectionError:
