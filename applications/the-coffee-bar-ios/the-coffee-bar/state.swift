@@ -1,4 +1,6 @@
 import SwiftUI
+import OpenTelemetryApi
+import OpenTelemetrySdk
 
 enum OrderItemType: String {
     case espresso, cappucino, americano, tiramisu, cornetto, muffin
@@ -67,6 +69,11 @@ class OrderState: ObservableObject {
     }
     
     func makeOrder(money: Decimal) -> Void {
+        let tracer = OpenTelemetry.instance.tracerProvider.get(instrumentationName: "app", instrumentationVersion: "0.0.1")
+
+        let span = tracer.spanBuilder(spanName: "Making order").startSpan()
+        OpenTelemetry.instance.contextProvider.setActiveSpan(span)
+
         print("make order with \(money)")
         isOrderInProgress = true
         let url = URL(string: "http://a03e06822ab5946b986382a8830bbb76-1553635081.us-west-2.elb.amazonaws.com:8082/order")!
@@ -116,6 +123,7 @@ class OrderState: ObservableObject {
                         self.orderResult = "Status: \(res.statusCode)"
                     }
                     self.isOrderResultVisible = true
+                    span.end()
                 }
             }
         }
