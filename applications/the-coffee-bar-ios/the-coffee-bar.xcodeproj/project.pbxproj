@@ -12,7 +12,7 @@
 		A5B664E027C3E2FA0050519A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B664DF27C3E2FA0050519A /* Assets.xcassets */; };
 		A5B664E327C3E2FA0050519A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B664E227C3E2FA0050519A /* Preview Assets.xcassets */; };
 		A5B6650627C52D120050519A /* state.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B6650527C52D120050519A /* state.swift */; };
-		C5C5018B2923A0C700128CD7 /* SumoLogicRum in Frameworks */ = {isa = PBXBuildFile; productRef = C5C5018A2923A0C700128CD7 /* SumoLogicRum */; };
+		C5566CF429C31E35007329E0 /* SumoLogicRum in Frameworks */ = {isa = PBXBuildFile; productRef = C5566CF329C31E35007329E0 /* SumoLogicRum */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5C5018B2923A0C700128CD7 /* SumoLogicRum in Frameworks */,
+				C5566CF429C31E35007329E0 /* SumoLogicRum in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,7 +126,7 @@
 			);
 			name = "the-coffee-bar";
 			packageProductDependencies = (
-				C5C5018A2923A0C700128CD7 /* SumoLogicRum */,
+				C5566CF329C31E35007329E0 /* SumoLogicRum */,
 			);
 			productName = "the-coffee-bar";
 			productReference = A5B664D827C3E2F80050519A /* the-coffee-bar.app */;
@@ -201,7 +201,7 @@
 			);
 			mainGroup = A5B664CF27C3E2F80050519A;
 			packageReferences = (
-				C5C501892923A0C700128CD7 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */,
+				C5566CF229C31E35007329E0 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */,
 			);
 			productRefGroup = A5B664D927C3E2F80050519A /* Products */;
 			projectDirPath = "";
@@ -405,7 +405,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"the-coffee-bar/Preview Content\"";
-				DEVELOPMENT_TEAM = GH4UWD2GU6;
+				DEVELOPMENT_TEAM = 7P6497FK2K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "the-coffee-bar/Info.plist";
@@ -419,7 +419,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sumologic.the-coffee-bar";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sumologic.the-coffee-bar-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -435,7 +435,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"the-coffee-bar/Preview Content\"";
-				DEVELOPMENT_TEAM = GH4UWD2GU6;
+				DEVELOPMENT_TEAM = 7P6497FK2K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "the-coffee-bar/Info.plist";
@@ -449,7 +449,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.sumologic.the-coffee-bar";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sumologic.the-coffee-bar-ios";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -571,20 +571,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C5C501892923A0C700128CD7 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */ = {
+		C5566CF229C31E35007329E0 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SumoLogic/sumologic-opentelemetry-ios";
 			requirement = {
 				kind = exactVersion;
-				version = 1.2.0;
+				version = 1.3.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C5C5018A2923A0C700128CD7 /* SumoLogicRum */ = {
+		C5566CF329C31E35007329E0 /* SumoLogicRum */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C5C501892923A0C700128CD7 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */;
+			package = C5566CF229C31E35007329E0 /* XCRemoteSwiftPackageReference "sumologic-opentelemetry-ios" */;
 			productName = SumoLogicRum;
 		};
 /* End XCSwiftPackageProductDependency section */
