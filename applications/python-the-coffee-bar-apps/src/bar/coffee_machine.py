@@ -9,7 +9,6 @@ from apscheduler.util import undefined
 from flask import Response
 from src.common.http_server import HttpServer
 from src.utils.cpu_increaser import outage_start, network_outage_start
-
 GET_COFFEE_ENDPOINT = '/get_coffee'
 log.getLogger('apscheduler.executors.default').setLevel(log.DEBUG)
 
@@ -34,7 +33,7 @@ class CoffeeMachine(HttpServer):
         self.add_all_endpoints()
 
         # Increase CPU usage for some time and add network delay
-        self.scheduler = BackgroundScheduler()
+        self.scheduler = BackgroundScheduler(job_defaults={'max_instances': 2})
 
         if self.interval_based_trigger == 'true':
             self.spike_interval_days = spike_interval_days

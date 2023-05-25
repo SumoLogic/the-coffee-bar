@@ -43,7 +43,7 @@ setup(
                       'paste==3.5.0',
                       'psycopg2==2.9.3',
                       'pyjson==1.3.0',
-                      'requests==2.27.1',
+                      'requests==2.28.2',
                       'statsd==3.3.0',
                       'tcconfig==0.27.1',
                       'waitress==2.0.0',

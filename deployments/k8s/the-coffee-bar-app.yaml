@@ -691,6 +691,15 @@ metadata:
     db: postgres-init-sql
 data:
   init-sql: |
+    ALTER SYSTEM SET log_checkpoints = on;
+    ALTER SYSTEM SET log_disconnections = on;
+    ALTER SYSTEM SET log_min_duration_statement = 1;
+    ALTER SYSTEM SET log_connections = on;
+    ALTER SYSTEM SET log_duration = on;
+    ALTER SYSTEM SET log_hostname = on;
+    ALTER SYSTEM SET log_timezone = 'UTC';
+    ALTER SYSTEM SET log_min_messages = 'WARNING';
+    ALTER SYSTEM SET log_line_prefix = '%m [%p] %q%u@%d ';
     CREATE USER account WITH PASSWORD 'account';
     CREATE DATABASE account;
     GRANT ALL PRIVILEGES ON DATABASE account TO account;
