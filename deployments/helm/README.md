@@ -55,8 +55,6 @@ kubectl -n the-coffee-bar-ns port-forward deployment.apps/sumologic-the-coffee-b
 kubectl -n the-coffee-bar-ns port-forward deployment.apps/sumologic-the-coffee-bar-bar 8082:8082
 ```
 
-Just one additional step is required to run the application in your local cluster. We have t
-
 ## Troubleshooting
 <details>
 <summary>Issue 1: CORS error while sending request to localhost:8082 from localhost:3000</summary>
