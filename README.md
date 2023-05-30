@@ -17,9 +17,22 @@ The demo application instrumented by [OpenTelemetry] framework.
 * Installed [docker]
 * Installed [docker-compose]
 
-## How to build?
-Execute the build script `build_local_all.sh` from `scripts` directory. The script is going to build all of the 
-applications in the docker images.  To run the application execute `docker-compose up` command in the `dockerization` directory.
+## Please follow Setup Instructions for
+* [Docker](#for-docker)
+* [Kubernetes (using Helm)](#for-kubernetes-using-helm)
+
+## For [Docker]
+* ### Prerequisities
+    * Installed [docker]
+    * Installed [docker-compose]
+* ### Steps
+    * Go to the `scripts` directory.
+    * Execute the build script `build_local_all.sh` from `scripts` directory. (This script is going to build all of the applications in the docker images)
+    * Go to the `dockerization` directory.
+    * Execute `docker-compose up` command.
+
+## For Kubernetes (using [Helm])
+* Please follow the deployment guide added [here](deployments/helm/README.md)
 
 ## Application Overview
 The Coffee Bar is an application designed to test instrumentation possibilities using the [OpenTelemetry] framework. 
@@ -67,3 +80,4 @@ In case of any issues please contact Mateusz 'mat' Rumian @ mrumian@sumologic.co
    [OpenTelemetry-Python]: <https://opentelemetry-python.readthedocs.io/en/stable/examples/auto-instrumentation/README.html>
    [OpenTelemetry]: <https://opentelemetry.io/>
    [puppeteer]: <https://github.com/puppeteer/puppeteer>
+   [helm]: <https://helm.sh>
