@@ -2,32 +2,16 @@
 @Library('jenkins-common')
 
 def version
-// public.ecr.aws/sumologic/the-coffee-bar
-// https://gallery.ecr.aws/sumologic/the-coffee-bar
 def sumo_repository = "sumologic/the-coffee-bar" 
-// public.ecr.aws/g0d6f4n6/the-coffee-bar-arun
-// https://gallery.ecr.aws/g0d6f4n6/the-coffee-bar-arun
 def arun_repository = "g0d6f4n6/the-coffee-bar-arun"
-
-// def sumo_ecr_registry = "https://224064240808.dkr.ecr.us-east-1.amazonaws.com" // update this?
-// def arun_ecr_registry = "https://224064240808.dkr.ecr.us-east-1.amazonaws.com" // update this?
-
-def sumo_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com" // update this?
-def arun_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com" // update this?
+def sumo_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com"
+def arun_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com"
 
 
 
 pipeline {
 	
-	agent {
-		docker {
-			label 'general'
-		}
-	}
-  
-	// agent { label 'docker-build' } // just specifies a machine
-  // need to be updated as this must be storing images in some default ECR?
-  // as in docker.build we do not specify which ECR
+	agent { label 'general' }
 
   options {
     timestamps()
