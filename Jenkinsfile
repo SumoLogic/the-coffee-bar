@@ -4,9 +4,10 @@
 def version
 def sumo_repository = "sumologic/the-coffee-bar" 
 def arun_repository = "g0d6f4n6/the-coffee-bar-arun"
-def sumo_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com"
-def arun_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com"
-
+// def sumo_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com"
+// def arun_ecr_registry = "https://366152261300.dkr.ecr.ap-south-1.amazonaws.com"
+def sumo_ecr_registry = "https://681285326029.dkr.ecr.us-west-2.amazonaws.com"
+def arun_ecr_registry = "https://681285326029.dkr.ecr.us-west-2.amazonaws.com"
 
 
 pipeline {
@@ -26,7 +27,7 @@ pipeline {
         script {
           docker.withRegistry(sumo_ecr_registry) {
 
-            withAwsCredentialsFor("amishra") {
+            withAwsCredentialsFor("iahuja") {
 
               ensureECRRepository(sumo_repository)
               
@@ -61,7 +62,7 @@ pipeline {
         script {
           docker.withRegistry(arun_ecr_registry) {
 
-            withAwsCredentialsFor("amishra") {
+            withAwsCredentialsFor("iahuja") {
 
               ensureECRRepository(arun_repository)
 
