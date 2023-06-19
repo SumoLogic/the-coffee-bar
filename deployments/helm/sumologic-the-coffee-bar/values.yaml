@@ -2,20 +2,42 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-replicaCountClicker: 3
-replicaCountBar: 2
-replicaCountPostgres: 1
-replicaCountMachineSvc: 1
+nameOverride: ""
+fullnameOverride: ""
+
+## Specifies number of pod replicas running at any given time
+replicaCount:
+  frontend:
+    replicas: 1
+  calculatorsvc:
+    replicas: 1
+  clicker:
+    replicas: 1
+  postgres:
+    replicas: 1
+  cashdesk:
+    replicas: 1
+  bar:
+    replicas: 1
+  coffeesvc:
+    replicas: 1
+  coffeemachine:
+    replicas: 1
+  machinesvc:
+    replicas: 1
+  watersvc:
+    replicas: 1
+
 image:
   dotnet:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: calculator-dotnet-1.2.0-1.0.0rc9
   frontend:
-    #repository: public.ecr.aws/sumologic/the-coffee-bar
+    # TODO: this should not be arun repo
     repository: public.ecr.aws/g0d6f4n6/the-coffee-bar-arun
     tag: frontend-v0.1.9
   python:
+    # TODO: this should not be arun repo
     repository: public.ecr.aws/g0d6f4n6/the-coffee-bar-arun
     tag: python-apps-1.5.0-0.36b0
   ruby:
@@ -30,10 +52,7 @@ image:
 
   pullPolicy: Always
 
-
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -44,12 +63,58 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {
+## Create a load balancer for bar service and frontend servic
+loadBalancers:
+  bar:
+    enabled: true
+  frontend:
+    enabled: true
 
-}
+## Custom labels to apply to service, deployment and pods
+customLabels:
+  frontend:
+    labels: {}
+  calculatorsvc:
+    labels: {}
+  clicker:
+    labels: {}
+  postgres:
+    labels: {}
+  cashdesk:
+    labels: {}
+  bar:
+    labels: {}
+  coffeesvc: 
+    labels: {}
+  coffeemachine:
+    labels: {}
+  machinesvc:
+    labels: {}
+  watersvc:
+    labels: {}
 
-PostgrespodAnnotations:
-  podAnnotations: {}
+## Custom pod annotations to apply to deployment
+podAnnotations:
+  frontend:
+    podAnnotations: {}
+  calculatorsvc:
+    podAnnotations: {}
+  clicker:
+    podAnnotations: {}
+  postgres:
+    podAnnotations: {}
+  cashdesk:
+    podAnnotations: {}
+  bar:
+    podAnnotations: {}
+  coffeesvc:
+    podAnnotations: {}
+  coffeemachine:
+    podAnnotations: {}
+  machinesvc:
+    podAnnotations: {}
+  watersvc:
+    podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -96,35 +161,19 @@ ingress:
 resources:
   frontend:
     requests:
-      cpu: 500m
+      cpu: 300m
       memory: 512Mi
     limits:
-      cpu: 1000m
+      cpu: 800m
       memory: 768Mi
-  python:
-    common:
-      requests:
-        cpu: 100m
-        memory: 50Mi
-      limits:
-        cpu: 250m
-        memory: 400Mi
-  ruby:
-    common:
-      requests:
-        cpu: 100m
-        memory: 50Mi
-      limits:
-        cpu: 250m
-        memory: 250Mi
   calculatorsvc:
     common:
       requests:
-        cpu: 150m
-        memory: 200Mi
+        cpu: 50m
+        memory: 50Mi
       limits:
-        cpu: 300m
-        memory: 500Mi
+        cpu: 150m
+        memory: 250Mi
   clicker:
     requests:
       cpu: 250m
@@ -132,67 +181,60 @@ resources:
     limits:
       cpu: 500m
       memory: 1024Mi
-  # specifying postgres pod resource limits
   postgres:
     requests:
-      cpu: 300m
-      memory: 550Mi
-  # cpu 250 memory 512
+      cpu: 200m
+      memory: 250Mi
     limits:
-      cpu: 700m
-      memory: 1024Mi
-  # cpu 700
+      cpu: 500m
+      memory: 500Mi
   cashdesk:
     requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
       cpu: 200m
       memory: 200Mi
-    limits:
-      cpu: 400m
-      memory: 400Mi
   bar:
     requests:
-      cpu: 200m
-      memory: 150Mi
+      cpu: 50m
+      memory: 50Mi
     limits:
-      cpu: 400m
-      memory: 300Mi
+      cpu: 200m
+      memory: 200Mi
   coffeesvc:
     requests:
-      cpu: 125m
-      memory: 100Mi #70
+      cpu: 50m
+      memory: 50Mi
     limits:
-      cpu: 250m
-      memory: 250Mi
+      cpu: 150m
+      memory: 150Mi
   coffeemachine:
     requests:
       cpu: 100m
-      memory: 100Mi # 70
-    limits:
-      cpu: 250m
-      memory: 400Mi
-  machinesvc:
-    requests:
-      cpu: 125m
       memory: 100Mi
     limits:
       cpu: 250m
-      memory: 200Mi
+      memory: 300Mi
+  machinesvc:
+    requests:
+      cpu: 50m
+      memory: 50Mi
+    limits:
+      cpu: 150m
+      memory: 150Mi
   watersvc:
     requests:
-      cpu: 125m
+      cpu: 50m
       memory: 60Mi
     limits:
-      cpu: 250m
-      memory: 250Mi
-
-
-
-
+      cpu: 150m
+      memory: 200Mi
 
 healthChecks:
   calculator:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -215,7 +257,7 @@ healthChecks:
       initialDelaySeconds: 15
   clicker:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -238,7 +280,7 @@ healthChecks:
       initialDelaySeconds: 15
   frontend:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -284,7 +326,7 @@ healthChecks:
       initialDelaySeconds: 15
   rubyApps:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -310,35 +352,66 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## By default we don't set affinity:
+affinityRule:
+  frontend:
+    affinity: {}
+  calculatorsvc:
+    affinity: {}
+  clicker:
+    affinity: {}
+  postgres:
+    affinity: {}
+  cashdesk:
+    affinity: {}
+  bar:
+    affinity: {}
+  coffeesvc:
+    affinity: {}
+  coffeemachine:
+    affinity: {}
+  machinesvc:
+    affinity: {}
+  watersvc:
+    affinity: {}
 
-postgres_affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app
-            operator: In
-            values:
-            - postgres-db
-        topologyKey: "kubernetes.io/hostname"
-        namespaces: ["warp001","warp002","warp003","warp004","warp005"]
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical
+## By default we don't set pod priority:
+podPriority:
+  frontend:
+    enabled: false
+    priorityClassName:
+  calculatorsvc:
+    enabled: false
+    priorityClassName:
+  clicker:
+    enabled: false
+    priorityClassName:
+  postgres:
+    enabled: false
+    priorityClassName:
+  cashdesk:
+    enabled: false
+    priorityClassName:
+  bar:
+    enabled: false
+    priorityClassName:
+  coffeesvc:
+    enabled: false
+    priorityClassName:
+  coffeemachine:
+    enabled: false
+    priorityClassName:
+  machinesvc:
+    enabled: false
+    priorityClassName:
+  watersvc:
+    enabled: false
+    priorityClassName:
 
-
-cashdesk_affinity:
-  podAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchExpressions:
-          - key: app
-            operator: In
-            values:
-            - postgres-db
-        topologyKey: "kubernetes.io/hostname"
-        namespaces: ["warp001","warp002","warp003","warp004","warp005"]
-
-
-
+## added deployment.environment=default in OTEL_RESOURCE_ATTRIBUTES for all services
+## added REACT_APP_ENVIRONMENT_NAME: "default" & OTEL_TRACES_EXPORTER: "otlp_proto_http" in frontend service
 envs:
   bar:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
@@ -357,14 +430,14 @@ envs:
   clicker:
     DELAY: "5"
   coffeemachine:
-    INTERVAL_BASED_TRIGGER: "true" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
-    SPIKE_INTERVAL_DAYS: "5" # default 0
-    SPIKE_INTERVAL_HOURS: "12" # default 1
+    INTERVAL_BASED_TRIGGER: "false"  # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "0"  # default 0 How many day to skip before next trigger. It will combine with SPIKE_INTERVAL_HOURS to determine next trigger time.
+    SPIKE_INTERVAL_HOURS: "1"  # default 1 How many hours to skip before next trigger. It will combine with SPIKE_INTERVAL_DAYS to determine next trigger time. Example: To schedule after every 5 days and every 6 hours set SPIKE_INTERVAL_HOURS as 6 and SPIKE_INTERVAL_DAYS as 5
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: "2023-04-12 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
-    SPIKE_DURATION: "1800" # in seconds, Use 3600 for 1 hour
+    SPIKE_START_DATE: null  #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_DURATION: "300"  # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
-    NETWORK_DELAY: "600ms"
+    NETWORK_DELAY: "1sec"
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "the-coffee-machine"
@@ -377,20 +450,19 @@ envs:
     REACT_APP_RUM_SCRIPT_URL: "https://rum.sumologic.com/sumologic-rum.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
-    REACT_APP_ENVIRONMENT_NAME: "default"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     REACT_APP_DROP_SINGLE_TRACES: 'false'
+    REACT_APP_ENVIRONMENT_NAME: "default"
     ## Envs to configure CPU Killer and Network Delay
-    INTERVAL_BASED_TRIGGER: "true" # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
-    SPIKE_INTERVAL_DAYS: "5" # default 0
-    SPIKE_INTERVAL_HOURS: "12" # default 1
+    INTERVAL_BASED_TRIGGER: "false"  # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
+    SPIKE_INTERVAL_DAYS: "0"  # default 0
+    SPIKE_INTERVAL_HOURS: "1"  # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: "2023-04-12 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
-    SPIKE_DURATION: "1800" # for 5 minutes
-    CPU_SPIKE_PROCESSES: "1" # on 1 process
-    NETWORK_DELAY: "800ms" # with 100 ms network delay
+    SPIKE_START_DATE: null  #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_DURATION: "300"  # for 5 minutes
+    CPU_SPIKE_PROCESSES: "1"  # on 1 process
+    NETWORK_DELAY: "1sec"  # with 100 ms network delay
     OTEL_TRACES_EXPORTER: "otlp_proto_http"
-
   machinesvc:
     OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
@@ -409,6 +481,8 @@ crons:
   bar: '30 */4 * * *' # cron spec of time, here, 8 o'clock
 
 extras:
-  otelColHostName: collection-sumologic-otelcol.sumologic
+  otelColHostName: collection-sumologic-otelcol.collection
   lambdaCakesUrl:
   rumColSourceUrl:
+  reactAppCoffeebarBackendUrl:
+  reactAppPropagationCorsUrls:

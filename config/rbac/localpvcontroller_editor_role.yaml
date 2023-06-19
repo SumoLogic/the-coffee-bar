@@ -1,0 +1,24 @@
+# permissions for end users to edit localpvcontrollers.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: localpvcontroller-editor-role
+rules:
+- apiGroups:
+  - storage.local.sumologic.com
+  resources:
+  - localpvcontrollers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - storage.local.sumologic.com
+  resources:
+  - localpvcontrollers/status
+  verbs:
+  - get

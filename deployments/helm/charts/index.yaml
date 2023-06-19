@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  sumologic-the-coffee-bar:
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2023-06-20T01:37:01.454539+05:30"
+    description: A Helm chart for Kubernetes
+    digest: c03f626506f75ad26f80d74e5f4c4cdc158f899935a1f7de9499e5f7ac7efb02
+    name: sumologic-the-coffee-bar
+    type: application
+    urls:
+    - packages/sumologic-the-coffee-bar-0.2.0.tgz
+    version: 0.2.0
+generated: "2023-06-20T01:37:01.452306+05:30"

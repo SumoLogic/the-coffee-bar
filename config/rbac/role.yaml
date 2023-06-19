@@ -1,0 +1,44 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - storage.local.sumologic.com
+  resources:
+  - localpvcontrollers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - storage.local.sumologic.com
+  resources:
+  - localpvcontrollers/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - storage.local.sumologic.com
+  resources:
+  - localpvcontrollers/status
+  verbs:
+  - get
+  - patch
+  - update

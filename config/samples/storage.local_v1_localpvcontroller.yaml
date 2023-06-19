@@ -1,0 +1,12 @@
+apiVersion: storage.local.sumologic.com/v1
+kind: LocalPVController
+metadata:
+  labels:
+    app.kubernetes.io/name: localpvcontroller
+    app.kubernetes.io/instance: localpvcontroller-sample
+    app.kubernetes.io/part-of: local-pv-controller
+    app.kubernetes.io/managed-by: kustomize
+    app.kubernetes.io/created-by: local-pv-controller
+  name: localpvcontroller-sample
+spec:
+  # TODO(user): Add fields here
