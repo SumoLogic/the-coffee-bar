@@ -5,6 +5,9 @@ metadata:
   labels:
     db: {{ include "sumologic.thecoffeebar.labels.app.postgres.configmap" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.postgres.labels }}
+    {{ toYaml .Values.customLabels.postgres.labels | nindent 4 }}
+    {{- end }}
 data:
   init-sql: |
     ALTER SYSTEM SET log_checkpoints = on;

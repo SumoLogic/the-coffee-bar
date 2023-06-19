@@ -5,6 +5,9 @@ metadata:
   labels:
     volume: {{ include "sumologic.thecoffeebar.selectorLabels.postgres.volume" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.postgres.labels }}
+    {{ toYaml .Values.customLabels.postgres.labels | nindent 4 }}
+    {{- end }}
 spec:
   storageClassName: manual
   capacity:

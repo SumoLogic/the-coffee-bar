@@ -561,11 +561,11 @@ Create envs
   value: {{ $value | quote -}}
 {{ end }}
 - name: REACT_APP_COFFEE_BAR_URL
-  value: {{ printf "http://%s:8082/order" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) | quote }}
+  value: {{ .Values.extras.reactAppCoffeebarBackendUrl | quote }}
 - name: REACT_APP_COLLECTION_SOURCE_URL
   value: {{ .Values.extras.rumColSourceUrl | quote }}
 - name: REACT_APP_PROPAGATION_CORS_URLS
-  value: {{ printf "[/^http:\\\\/\\\\/%s:8082\\\\/.*/,]" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) | quote }}
+  value: {{ .Values.extras.reactAppPropagationCorsUrls | quote }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.bar" }}

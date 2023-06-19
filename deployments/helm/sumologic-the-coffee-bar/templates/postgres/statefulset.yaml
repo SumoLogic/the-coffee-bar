@@ -5,16 +5,19 @@ metadata:
   labels:
     app: {{ include "sumologic.thecoffeebar.labels.app.postgres.statefulset" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.postgres.labels }}
+    {{ toYaml .Values.customLabels.postgres.labels | nindent 4 }}
+    {{- end }}
 spec:
   serviceName: {{ include "sumologic.thecoffeebar.metadata.name.postgres.statefulset" . }}
-  replicas: {{ .Values.replicaCountPostgres }}
+  replicas: {{ .Values.replicaCount.postgres.replicas }}
   selector:
     matchLabels:
       app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}
       {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.PostgrespodAnnotations.podAnnotations }}
+    {{- with .Values.podAnnotations.postgres.podAnnotations }}
       annotations:
 
         {{- toYaml . | nindent 8 }}
@@ -97,11 +100,14 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.postgres_affinity }}
+      {{- with .Values.affinityRule.postgres.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podPriority.postgres.enabled }}
+      priorityClassName: {{ .Values.podPriority.postgres.priorityClassName }}
       {{- end }}
