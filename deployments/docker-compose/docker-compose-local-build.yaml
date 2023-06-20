@@ -75,6 +75,7 @@ services:
       - REACT_APP_DEFAULT_ATTRIBUTES={"testKey":"testValue","testListKey":["1"]}
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
       - REACT_APP_DROP_SINGLE_TRACES=false
+      - REACT_APP_ENVIRONMENT_NAME=default
   the-coffee-bar:
     build:
       context: ../../applications/python-the-coffee-bar-apps

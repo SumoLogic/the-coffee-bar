@@ -38,6 +38,8 @@ spec:
               value: "the-coffee-bar-frontend"
             - name: REACT_APP_APPLICATION_NAME
               value: "the-coffee-bar-app"
+            - name: REACT_APP_ENVIRONMENT_NAME
+              value: "default"
           ports:
             - containerPort: 3000
           image: 246946804217.dkr.ecr.us-west-2.amazonaws.com/tracing-demo-java/tracing-demo-java:frontend-js-0.18.2

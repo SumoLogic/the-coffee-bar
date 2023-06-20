@@ -297,6 +297,7 @@ envs:
     REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     REACT_APP_DROP_SINGLE_TRACES: 'false'
+    REACT_APP_ENVIRONMENT_NAME: "default"
     ## Envs to configure CPU Killer and Network Delay
     INTERVAL_BASED_TRIGGER: "false"  # cron trigger or interval based trigger, if interval based provide SPIKE_INTERVAL_DAYS and SPIKE_INTERVAL_HOURS. CRON not considered for interval based trigger.
     SPIKE_INTERVAL_DAYS: "0"  # default 0
