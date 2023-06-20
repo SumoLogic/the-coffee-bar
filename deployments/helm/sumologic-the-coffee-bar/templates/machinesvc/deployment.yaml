@@ -5,15 +5,18 @@ metadata:
   labels:
     app: {{ include "sumologic.thecoffeebar.labels.app.machinesvc.deployment" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.machinesvc.labels }}
+    {{ toYaml .Values.customLabels.machinesvc.labels | nindent 4 }}
+    {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount.machinesvc.replicas }}
   selector:
     matchLabels:
       app: {{ include "sumologic.thecoffeebar.selectorLabels.machinesvc" . }}
       {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
+    {{- with .Values.podAnnotations.machinesvc.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
@@ -58,16 +61,19 @@ spec:
             initialDelaySeconds: {{ .Values.healthChecks.rubyApps.readinessProbe.initialDelaySeconds }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources.ruby.common | nindent 12 }}
+            {{- toYaml .Values.resources.machinesvc | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.affinityRule.machinesvc.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podPriority.machinesvc.enabled }}
+      priorityClassName: {{ .Values.podPriority.machinesvc.priorityClassName }}
       {{- end }}

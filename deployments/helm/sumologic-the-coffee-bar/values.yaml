@@ -2,10 +2,31 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-replicaCountClicker: 1
-replicaCountBar: 1
-replicaCountPostgres: 2
+nameOverride: ""
+fullnameOverride: ""
+
+## Specifies number of pod replicas running at any given time
+replicaCount:
+  frontend:
+    replicas: 1
+  calculatorsvc:
+    replicas: 1
+  clicker:
+    replicas: 1
+  postgres:
+    replicas: 1
+  cashdesk:
+    replicas: 1
+  bar:
+    replicas: 1
+  coffeesvc:
+    replicas: 1
+  coffeemachine:
+    replicas: 1
+  machinesvc:
+    replicas: 1
+  watersvc:
+    replicas: 1
 
 image:
   dotnet:
@@ -29,10 +50,7 @@ image:
 
   pullPolicy: Always
 
-
 imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -43,7 +61,59 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
-podAnnotations: {}
+## Create a load balancer for bar service and frontend servic
+loadBalancers:
+  bar:
+    enabled: true
+  frontend:
+    enabled: true
+
+## Custom labels to apply to service, deployment and pods
+customLabels:
+  frontend:
+    labels: {}
+  calculatorsvc:
+    labels: {}
+  clicker:
+    labels: {}
+  postgres:
+    labels: {}
+    metadataLabels: {}
+  cashdesk:
+    labels: {}
+  bar:
+    labels: {}
+  coffeesvc: 
+    labels: {}
+  coffeemachine:
+    labels: {}
+  machinesvc:
+    labels: {}
+  watersvc:
+    labels: {}
+
+## Custom pod annotations to apply to deployment
+podAnnotations:
+  frontend:
+    podAnnotations: {}
+  calculatorsvc:
+    podAnnotations: {}
+  clicker:
+    podAnnotations: {}
+  postgres:
+    podAnnotations: {}
+  cashdesk:
+    podAnnotations: {}
+  bar:
+    podAnnotations: {}
+  coffeesvc:
+    podAnnotations: {}
+  coffeemachine:
+    podAnnotations: {}
+  machinesvc:
+    podAnnotations: {}
+  watersvc:
+    podAnnotations: {}
 
 podSecurityContext: {}
   # fsGroup: 2000
@@ -90,38 +160,22 @@ ingress:
 resources:
   frontend:
     requests:
-      cpu: 500m
+      cpu: 300m
       memory: 512Mi
     limits:
-      cpu: 1000m
+      cpu: 800m
       memory: 768Mi
-  python:
-    common:
-      requests:
-        cpu: 100m
-        memory: 50Mi
-      limits:
-        cpu: 250m
-        memory: 400Mi
-  ruby:
-    common:
-      requests:
-        cpu: 100m
-        memory: 50Mi
-      limits:
-        cpu: 250m
-        memory: 250Mi
   calculatorsvc:
     common:
       requests:
-        cpu: 100m
+        cpu: 50m
         memory: 50Mi
       limits:
-        cpu: 250m
-        memory: 500Mi
+        cpu: 150m
+        memory: 250Mi
   clicker:
     requests:
-      cpu: 200m
+      cpu: 250m
       memory: 512Mi
     limits:
       cpu: 500m
@@ -133,11 +187,53 @@ resources:
     limits:
       cpu: 500m
       memory: 500Mi
+  cashdesk:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
+  bar:
+    requests:
+      cpu: 50m
+      memory: 50Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
+  coffeesvc:
+    requests:
+      cpu: 50m
+      memory: 50Mi
+    limits:
+      cpu: 150m
+      memory: 150Mi
+  coffeemachine:
+    requests:
+      cpu: 100m
+      memory: 100Mi
+    limits:
+      cpu: 250m
+      memory: 300Mi
+  machinesvc:
+    requests:
+      cpu: 50m
+      memory: 50Mi
+    limits:
+      cpu: 150m
+      memory: 150Mi
+  watersvc:
+    requests:
+      cpu: 50m
+      memory: 60Mi
+    limits:
+      cpu: 150m
+      memory: 200Mi
 
 healthChecks:
   calculator:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -160,7 +256,7 @@ healthChecks:
       initialDelaySeconds: 15
   clicker:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -183,7 +279,7 @@ healthChecks:
       initialDelaySeconds: 15
   frontend:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -229,7 +325,7 @@ healthChecks:
       initialDelaySeconds: 15
   rubyApps:
     livenessProbe:
-      enabled: false
+      enabled: true
       exec:
         command:
           - /bin/sh
@@ -255,20 +351,78 @@ nodeSelector: {}
 
 tolerations: []
 
-affinity: {}
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+## By default we don't set affinity:
+affinityRule:
+  frontend:
+    affinity: {}
+  calculatorsvc:
+    affinity: {}
+  clicker:
+    affinity: {}
+  postgres:
+    affinity: {}
+  cashdesk:
+    affinity: {}
+  bar:
+    affinity: {}
+  coffeesvc:
+    affinity: {}
+  coffeemachine:
+    affinity: {}
+  machinesvc:
+    affinity: {}
+  watersvc:
+    affinity: {}
 
+## ref: https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/#marking-pod-as-critical
+## By default we don't set pod priority:
+podPriority:
+  frontend:
+    enabled: false
+    priorityClassName:
+  calculatorsvc:
+    enabled: false
+    priorityClassName:
+  clicker:
+    enabled: false
+    priorityClassName:
+  postgres:
+    enabled: false
+    priorityClassName:
+  cashdesk:
+    enabled: false
+    priorityClassName:
+  bar:
+    enabled: false
+    priorityClassName:
+  coffeesvc:
+    enabled: false
+    priorityClassName:
+  coffeemachine:
+    enabled: false
+    priorityClassName:
+  machinesvc:
+    enabled: false
+    priorityClassName:
+  watersvc:
+    enabled: false
+    priorityClassName:
+
+## added deployment.environment=default in OTEL_RESOURCE_ATTRIBUTES for all services
+## added REACT_APP_ENVIRONMENT_NAME: "default" & OTEL_TRACES_EXPORTER: "otlp_proto_http" in frontend service
 envs:
   bar:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_SERVICE_NAME: "the-coffee-bar"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_METRICS_EXPORTER: "none"
   calculatorsvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_SERVICE_NAME: "calculator-svc"
     OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
   cashdesk:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_SERVICE_NAME: "the-cashdesk"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_METRICS_EXPORTER: "none"
@@ -283,12 +437,12 @@ envs:
     SPIKE_DURATION: "300"  # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
     NETWORK_DELAY: "1sec"
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "the-coffee-machine"
     OTEL_METRICS_EXPORTER: "none"
   coffeesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "coffee-svc"
   frontend:
@@ -307,24 +461,27 @@ envs:
     SPIKE_DURATION: "300"  # for 5 minutes
     CPU_SPIKE_PROCESSES: "1"  # on 1 process
     NETWORK_DELAY: "1sec"  # with 100 ms network delay
+    OTEL_TRACES_EXPORTER: "otlp_proto_http"
   machinesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "machine-svc"
   postgres:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "water-svc"
 
 crons:
-  clicker: '30 */4 * * *'  # cron spec of time, here, 4 o'clock
-  postgres: '30 */8 * * *'  # cron spec of time, here, 8 o'clock
-  cashdesk: '30 */8 * * *'  # cron spec of time, here, 8 o'clock
-  bar: '30 */8 * * *'  # cron spec of time, here, 8 o'clock
+  clicker: '30 */4 * * *' # cron spec of time, here, 4 o'clock
+  postgres: '30 */8 * * *' # cron spec of time, here, 8 o'clock
+  cashdesk: '30 */4 * * *' # cron spec of time, here, 4 o'clock
+  bar: '30 */4 * * *' # cron spec of time, here, 4 o'clock
 
 extras:
-  otelColHostName: collection-sumologic-otelcol.sumologic
+  otelColHostName: collection-sumologic-otelcol.collection
   lambdaCakesUrl:
   rumColSourceUrl:
+  reactAppCoffeebarBackendUrl:
+  reactAppPropagationCorsUrls:

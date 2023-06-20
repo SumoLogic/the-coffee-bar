@@ -5,15 +5,18 @@ metadata:
   labels:
     app: {{ include "sumologic.thecoffeebar.labels.app.frontend.deployment" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.frontend.labels }}
+    {{ toYaml .Values.customLabels.frontend.labels | nindent 4 }}
+    {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount.frontend.replicas }}
   selector:
     matchLabels:
       app: {{ include "sumologic.thecoffeebar.selectorLabels.frontend" . }}
       {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
+    {{- with .Values.podAnnotations.frontend.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
@@ -63,11 +66,14 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.affinityRule.frontend.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podPriority.frontend.enabled }}
+      priorityClassName: {{ .Values.podPriority.frontend.priorityClassName }}
       {{- end }}
