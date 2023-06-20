@@ -126,6 +126,13 @@ resources:
     limits:
       cpu: 500m
       memory: 1024Mi
+  postgres:
+    requests:
+      cpu: 200m
+      memory: 250Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi
 
 healthChecks:
   calculator:

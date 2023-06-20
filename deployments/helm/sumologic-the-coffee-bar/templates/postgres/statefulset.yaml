@@ -57,10 +57,22 @@ spec:
                   exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432
                   [ -f /tmp/sumologic/postgresql/tmp/.initialized ] || [ -f /sumologic/postgresql/.initialized ]
             failureThreshold: 6
-            initialDelaySeconds: 5
+            initialDelaySeconds: 40
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - -e
+                - |
+                  exec pg_isready -U "postgres" -h 127.0.0.1 -p 5432 --dbname=postgres
+            initialDelaySeconds: 40
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources.postgres | nindent 12 }}
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:
@@ -71,6 +83,8 @@ spec:
               - key: init-sql
                 path: init.sql
           name: postgres-init-script
+      terminationGracePeriodSeconds: 30
+      restartPolicy: Always
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
