@@ -23,7 +23,7 @@ def outage_start(period: int, threads: int, interval_days: int, start_date: date
         (interval_based_trigger == 'true' and interval_days == 0) or \
         (interval_based_trigger == 'true' and interval_days != 0 and (datetime.strptime(datetime.now().strftime(date_format), date_format) - datetime.strptime(start_date.strftime(date_format), date_format)).days % interval_days == 0):
         log.info('Deploying new version 1.20.124')
-        log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
+        log.info('Upgrade initiated: admin mode by joe@sumocoffee.com \n')
         with Pool(threads) as p:
             p.map(magic_cpu_usage_increaser, [period])
 

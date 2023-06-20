@@ -4,6 +4,17 @@ GRANT ALL PRIVILEGES ON DATABASE account TO account;
 
 \c account;
 
+
+ALTER SYSTEM SET log_checkpoints = on;
+ALTER SYSTEM SET log_disconnections = on;
+ALTER SYSTEM SET log_min_duration_statement = 1;
+ALTER SYSTEM SET log_connections = on;
+ALTER SYSTEM SET log_duration = on;
+ALTER SYSTEM SET log_hostname = on;
+ALTER SYSTEM SET log_timezone = 'UTC';
+ALTER SYSTEM SET log_min_messages = 'WARNING';
+ALTER SYSTEM SET log_line_prefix = '%m [%p] %q%u@%d ';
+SELECT pg_reload_conf() ;
 CREATE TABLE IF NOT EXISTS account (
                                     id SERIAL PRIMARY KEY,
                                     product VARCHAR(255),

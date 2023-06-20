@@ -62,6 +62,7 @@ stdout_handler.setLevel(log.INFO)
 stdout_handler.setFormatter(span_formattter)
 root.addHandler(stdout_handler)
 
+log.getLogger('apscheduler.executors.default').setLevel(log.WARNING)
 loop = asyncio.get_event_loop()
 try:
     cpu_spike_processes = int(getenv('CPU_SPIKE_PROCESSES')) if getenv('CPU_SPIKE_PROCESSES') is not None else 475
@@ -74,7 +75,7 @@ try:
     spike_interval_days = 0
     start_date_datetime_interval = datetime.now() + timedelta(hours = spike_interval_hours)
 
-    scheduler = BackgroundScheduler()
+    scheduler = BackgroundScheduler(job_defaults={'max_instances': 2})
 
     if interval_based_trigger == 'true':
         spike_interval_days = int(getenv('SPIKE_INTERVAL_DAYS')) if getenv('SPIKE_INTERVAL_DAYS') is not None else 0
