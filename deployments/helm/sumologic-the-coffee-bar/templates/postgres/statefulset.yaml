@@ -24,7 +24,7 @@ spec:
       labels:
         app: {{ include "sumologic.thecoffeebar.selectorLabels.postgres" . }}
         {{- if .Values.customLabels.postgres.metadataLabels }}
-        {{ toYaml .Values.customLabels.postgres.metadataLabels | nindent 4 }}
+        {{ toYaml .Values.customLabels.postgres.metadataLabels | nindent 8 }}
         {{- end }}
 
         {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 8 }}
