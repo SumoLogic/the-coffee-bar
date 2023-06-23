@@ -5,15 +5,18 @@ metadata:
   labels:
     app: {{ include "sumologic.thecoffeebar.labels.app.cashdesk.deployment" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.cashdesk.labels }}
+    {{ toYaml .Values.customLabels.cashdesk.labels | nindent 4 }}
+    {{- end }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount.cashdesk.replicas }}
   selector:
     matchLabels:
       app: {{ include "sumologic.thecoffeebar.selectorLabels.cashdesk" . }}
       {{- include "sumologic.thecoffeebar.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-    {{- with .Values.podAnnotations }}
+    {{- with .Values.podAnnotations.cashdesk.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
     {{- end }}
@@ -58,16 +61,19 @@ spec:
             initialDelaySeconds: {{ .Values.healthChecks.pythonApps.readinessProbe.initialDelaySeconds }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources.python.common | nindent 12 }}
+            {{- toYaml .Values.resources.cashdesk | nindent 12 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.affinityRule.cashdesk.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.podPriority.cashdesk.enabled }}
+      priorityClassName: {{ .Values.podPriority.cashdesk.priorityClassName }}
       {{- end }}

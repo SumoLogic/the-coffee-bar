@@ -560,12 +560,24 @@ Create envs
 - name: {{ $name }}
   value: {{ $value | quote -}}
 {{ end }}
+{{- if .Values.extras.reactAppCoffeebarBackendUrl }}
+- name: REACT_APP_COFFEE_BAR_URL
+  value: {{ .Values.extras.reactAppCoffeebarBackendUrl | quote }}
+{{- else }}
 - name: REACT_APP_COFFEE_BAR_URL
   value: {{ printf "http://%s:8082/order" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) | quote }}
+{{- end }}
+
 - name: REACT_APP_COLLECTION_SOURCE_URL
   value: {{ .Values.extras.rumColSourceUrl | quote }}
+
+{{- if .Values.extras.reactAppPropagationCorsUrls }}
+- name: REACT_APP_PROPAGATION_CORS_URLS
+  value: {{ .Values.extras.reactAppPropagationCorsUrls | quote }}
+{{- else }}
 - name: REACT_APP_PROPAGATION_CORS_URLS
   value: {{ printf "[/^http:\\\\/\\\\/%s:8082\\\\/.*/,]" ( include "sumologic.thecoffeebar.metadata.name.bar.service" . ) | quote }}
+{{- end }}
 {{- end }}
 
 {{ define "sumologic.thecoffeebar.envs.bar" }}

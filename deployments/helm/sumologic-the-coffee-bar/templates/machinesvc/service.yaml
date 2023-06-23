@@ -5,6 +5,9 @@ metadata:
   labels:
     app: {{ include "sumologic.thecoffeebar.labels.app.machinesvc.service" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.machinesvc.labels }}
+    {{ toYaml .Values.customLabels.machinesvc.labels | nindent 4 }}
+    {{- end }}
 spec:
   type: ClusterIP
   ports:

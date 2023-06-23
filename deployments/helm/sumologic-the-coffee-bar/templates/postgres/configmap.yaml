@@ -5,6 +5,9 @@ metadata:
   labels:
     db: {{ include "sumologic.thecoffeebar.labels.app.postgres.configmap" . }}
     {{- include "sumologic.thecoffeebar.labels.common" . | nindent 4 }}
+    {{- if .Values.customLabels.postgres.labels }}
+    {{ toYaml .Values.customLabels.postgres.labels | nindent 4 }}
+    {{- end }}
 data:
   init-sql: |
     ALTER SYSTEM SET log_checkpoints = on;
@@ -20,7 +23,7 @@ data:
     CREATE DATABASE account;
     GRANT ALL PRIVILEGES ON DATABASE account TO account;
     \c account;
-    
+
     CREATE TABLE IF NOT EXISTS account (
                                         id SERIAL PRIMARY KEY,
                                         product VARCHAR(255),
