@@ -413,16 +413,16 @@ podPriority:
 ## added REACT_APP_ENVIRONMENT_NAME: "default" & OTEL_TRACES_EXPORTER: "otlp_proto_http" in frontend service
 envs:
   bar:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_SERVICE_NAME: "the-coffee-bar"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_METRICS_EXPORTER: "none"
   calculatorsvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_SERVICE_NAME: "calculator-svc"
     OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
   cashdesk:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_SERVICE_NAME: "the-cashdesk"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_METRICS_EXPORTER: "none"
@@ -437,18 +437,18 @@ envs:
     SPIKE_DURATION: "300"  # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
     NETWORK_DELAY: "1sec"
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "the-coffee-machine"
     OTEL_METRICS_EXPORTER: "none"
   coffeesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "coffee-svc"
   frontend:
     REACT_APP_RUM_SCRIPT_URL: "https://rum.sumologic.com/sumologic-rum.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
-    REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
+    REACT_APP_APPLICATION_NAME: "the-coffee-bar-app-cspm"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     REACT_APP_DROP_SINGLE_TRACES: 'false'
     REACT_APP_ENVIRONMENT_NAME: "default"
@@ -463,13 +463,13 @@ envs:
     NETWORK_DELAY: "1sec"  # with 100 ms network delay
     OTEL_TRACES_EXPORTER: "otlp_proto_http"
   machinesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "machine-svc"
   postgres:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app,deployment.environment=default"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-cspm,deployment.environment=default"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "water-svc"
 
