@@ -13,6 +13,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.util import undefined
 from cron_descriptor import get_description
 
+log.getLogger('apscheduler.executors.default').setLevel(log.DEBUG)
 
 def magic_cpu_usage_increaser(period: int):
     start_time = time.time()

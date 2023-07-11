@@ -19,7 +19,7 @@ main () {
     build=false
     deploy=false
     invoke=false
-    stack=${STACK-"the-coffee-bar"-$(date +'%s')}
+    stack=${STACK-"the-coffee-bar-k8sdemo"-$(date +'%s')}
     region=${AWS_REGION-$(aws configure get region)}
 
     while getopts "hbdxnlr:t:s:" opt; do

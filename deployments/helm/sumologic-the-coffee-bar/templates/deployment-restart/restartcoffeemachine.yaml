@@ -2,17 +2,15 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: deployment-restart-bar
+  name: deployment-restart-coffeemachine
 spec:
   concurrencyPolicy: Forbid
-  schedule: '{{ .Values.crons.bar }}'
+  schedule: '{{ .Values.crons.coffeemachine }}'
   successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 0
   jobTemplate:
     spec:
-      backoffLimit: 2 # this has very low chance of failing, as all this does
-                      # is prompt kubernetes to schedule new replica set for
-                      # the deployment
+      backoffLimit: 10
       activeDeadlineSeconds: 600 # timeout, makes most sense with
                                  # "waiting for rollout" variant specified below
       template:
@@ -33,4 +31,4 @@ spec:
                 - '{{ .Release.Namespace }}'
                 - 'rollout'
                 - 'restart'
-                - 'deployment/{{ include "sumologic.thecoffeebar.metadata.name.bar.deployment" . }}'
+                - 'deployment/{{ include "sumologic.thecoffeebar.metadata.name.coffeemachine.deployment" . }}'

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import logging as log
 import subprocess
 import time
@@ -15,6 +15,26 @@ def magic_cpu_usage_increaser(period: int):
                       'Too many open files.', period)
     log.error('Thread stuck in kernel module for %s seconds, waiting for file descriptor to be released.'
                       'Too many open files.', period)
+
+
+def is_time_for_crashloopbackoff():
+    current_datetime = datetime.now(timezone.utc)
+    if (current_datetime.minute%10) >= 0 and (current_datetime.minute%10) <= 5:
+        return True
+    else:
+        return False
+
+
+def crashloopbackoff_outage_start():
+
+    if is_time_for_crashloopbackoff():
+        log.info('Deploying new version 1.20.124')
+        log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
+        log.info('Deploying new version 1.20.123')
+        raise Exception("Dependency not Found!")
+    else:
+        log.info('Not yet time for the crashloopbackoff trigger.')
+
 
 def outage_start(period: int, threads: int, interval_days: int, start_date: datetime, interval_based_trigger: str):
 

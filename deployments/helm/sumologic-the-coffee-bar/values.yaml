@@ -12,11 +12,11 @@ image:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: calculator-dotnet-1.4.0-beta.3-1.0.0-rc9.9
   frontend:
-    repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: frontend-v0.1.4
+    repository: public.ecr.aws/v1w2z0h3/k8sdemo
+    tag: frontend-js-0.24.0
   python:
-    repository: public.ecr.aws/sumologic/the-coffee-bar
-    tag: pythonAppsv0.3.1-ot1.14.0-0.35b0
+    repository: public.ecr.aws/v1w2z0h3/k8sdemo
+    tag: python-apps-1.5.0-0.24b0
   ruby:
     repository: public.ecr.aws/sumologic/the-coffee-bar
     tag: rubyAppsv0.2.1-ot1.2.0-0.28.0-0.24.0
@@ -252,16 +252,16 @@ affinity: {}
 
 envs:
   bar:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_SERVICE_NAME: "the-coffee-bar"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_METRICS_EXPORTER: "none"
   calculatorsvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_SERVICE_NAME: "calculator-svc"
     OTEL_EXPORTER_OTLP_PROTOCOL: "http/protobuf"
   cashdesk:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_SERVICE_NAME: "the-cashdesk"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_METRICS_EXPORTER: "none"
@@ -272,22 +272,23 @@ envs:
     SPIKE_INTERVAL_DAYS: "0" # default 0 How many day to skip before next trigger. It will combine with SPIKE_INTERVAL_HOURS to determine next trigger time.
     SPIKE_INTERVAL_HOURS: "1" # default 1 How many hours to skip before next trigger. It will combine with SPIKE_INTERVAL_DAYS to determine next trigger time. Example: To schedule after every 5 days and every 6 hours set SPIKE_INTERVAL_HOURS as 6 and SPIKE_INTERVAL_DAYS as 5
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_START_DATE: "2023-05-01 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # in seconds, Use 3600 for 1 hour
     CPU_SPIKE_PROCESSES: "1"
     NETWORK_DELAY: "1sec"
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "the-coffee-machine"
     OTEL_METRICS_EXPORTER: "none"
   coffeesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "coffee-svc"
   frontend:
     REACT_APP_RUM_SCRIPT_URL: "https://rum.sumologic.com/sumologic-rum.js"
     REACT_APP_SERVICE_NAME: "the-coffee-bar-frontend"
-    REACT_APP_APPLICATION_NAME: "the-coffee-bar-app"
+    REACT_APP_APPLICATION_NAME: "the-coffee-bar-app-k8sdemo"
+    REACT_APP_ENVIRONMENT_NAME: "k8demostaging"
     REACT_APP_DEFAULT_ATTRIBUTES: '{"peer.service":"the-coffee-bar"}'
     REACT_APP_DROP_SINGLE_TRACES: 'false'
     ## Envs to configure CPU Killer and Network Delay
@@ -295,18 +296,18 @@ envs:
     SPIKE_INTERVAL_DAYS: "0" # default 0
     SPIKE_INTERVAL_HOURS: "1" # default 1
     SPIKE_CRON: "0 * * * *"
-    SPIKE_START_DATE: null #  ISO 8601 format example: 2014-05-30 00:00:00
+    SPIKE_START_DATE: "2023-05-01 00:00:00" #  ISO 8601 format example: 2014-05-30 00:00:00
     SPIKE_DURATION: "300" # for 5 minutes
     CPU_SPIKE_PROCESSES: "1" # on 1 process
     NETWORK_DELAY: "1sec" # with 100 ms network delay
   machinesvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "machine-svc"
   postgres:
     POSTGRES_HOST_AUTH_METHOD: trust
   watersvc:
-    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app"
+    OTEL_RESOURCE_ATTRIBUTES: "application=the-coffee-bar-app-k8sdemo,deployment.environment=k8demostaging"
     OTEL_PROPAGATORS: "b3,tracecontext,baggage"
     OTEL_SERVICE_NAME: "water-svc"
 
@@ -315,6 +316,7 @@ crons:
   postgres: '30 */8 * * *' # cron spec of time, here, 8 o'clock
   cashdesk: '30 */8 * * *' # cron spec of time, here, 8 o'clock
   bar: '30 */8 * * *' # cron spec of time, here, 8 o'clock
+  coffeemachine: '30 */1 * * *'
 
 extras:
   otelColHostName: collection-sumologic-otelcol.sumologic
