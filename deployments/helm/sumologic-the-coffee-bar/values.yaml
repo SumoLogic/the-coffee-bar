@@ -478,6 +478,7 @@ crons:
   postgres: '30 */8 * * *' # cron spec of time, here, 8 o'clock
   cashdesk: '30 */4 * * *' # cron spec of time, here, 4 o'clock
   bar: '30 */4 * * *' # cron spec of time, here, 4 o'clock
+  coffeemachine: '30 */1 * * *'
 
 extras:
   otelColHostName: collection-sumologic-otelcol.collection

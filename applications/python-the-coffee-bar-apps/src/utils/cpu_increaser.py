@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import logging as log
 import subprocess
 import time
@@ -46,3 +46,20 @@ def network_outage_start(delay: str, period: int, interval_days: int, start_date
         subprocess.call(['tcdel', 'eth0', '--all'])
     else:
         log.info('Not yet time for the network trigger.')
+
+def is_time_for_crashloopbackoff():
+    current_datetime = datetime.now(timezone.utc)
+    if (current_datetime.minute%10) >= 0 and (current_datetime.minute%10) <= 5:
+        return True
+    else:
+        return False
+
+
+def crashloopbackoff_outage_start():
+    if is_time_for_crashloopbackoff():
+        log.info('Deploying new version 1.20.124')
+        log.info('Upgrade initiated: admin mode by joe@sumocoffee.com')
+        log.info('Deploying new version 1.20.123')
+        raise Exception("Dependency not Found!")
+    else:
+        log.info('Not yet time for the crashloopbackoff trigger.')

@@ -8,7 +8,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 from apscheduler.util import undefined
 from flask import Response
 from src.common.http_server import HttpServer
-from src.utils.cpu_increaser import outage_start, network_outage_start
+from src.utils.cpu_increaser import outage_start, network_outage_start, crashloopbackoff_outage_start
 
 GET_COFFEE_ENDPOINT = '/get_coffee'
 
@@ -71,6 +71,8 @@ class CoffeeMachine(HttpServer):
                                    next_run_time=self.start_date_datetime)
 
         self.scheduler.start()
+        # Todo pass in values.yaml and in command template to make below configurable with duration
+        crashloopbackoff_outage_start()
 
     def add_all_endpoints(self):
         self.add_endpoint(endpoint=GET_COFFEE_ENDPOINT, endpoint_name='espresso', handler=self.prepare_coffee)
