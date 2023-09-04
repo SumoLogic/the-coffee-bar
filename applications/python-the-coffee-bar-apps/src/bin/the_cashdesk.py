@@ -14,6 +14,8 @@ def main():
     parser.add_argument('-P', '--port', type=int, help='HTTP Server Port')
     parser.add_argument('-C', '--calculator-host', type=str, help='Calculator HTTP Server Host')
     parser.add_argument('-D', '--calculator-port', type=int, help='Calculator HTTP Server Port')
+    parser.add_argument('-PH', '--proxy-svc-host', type=str, help='Proxy Service HTTP Server Host')
+    parser.add_argument('-PP', '--proxy-svc-port', type=int, help='Proxy Service HTTP Server Port')
     parser.add_argument('-S', '--connection-string', type=str, help='Storage Connection String')
     parser.add_argument('-c', '--config', type=str, help='Config file path')
     parser.add_argument('-l', '--log-level', type=str, help='Application log level', default='info')
@@ -29,6 +31,8 @@ def main():
     cashdesk = CashDesk(name=APP_NAME, host=configuration['host'], port=configuration['port'],
                         calculator_host=configuration['calculator_host'],
                         calculator_port=configuration['calculator_port'],
+                        proxy_svc_host=configuration['proxy_svc_host'],
+                        proxy_svc_port=configuration['proxy_svc_port'],
                         connection_string=configuration['connection_string'])
 
     cashdesk.run()

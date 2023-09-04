@@ -5,7 +5,7 @@ require('console-stamp')(console);
 
 const UI_URL_ARG = process.argv.slice(2);
 const COFFEE_BAR_UI_URL = UI_URL_ARG[0] || process.env.COFFEE_BAR_UI_URL || 'http://the-coffee-bar-frontend:3000'; // The Coffee Bar UI URL
-const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 5; // Browser sleep interval in seconds
+const DELAY = parseInt(process.env.CLICKER_INTERVAL) || 15; // Browser sleep interval in seconds
 const BROWSER = process.env.PUPPETEER_PRODUCT || 'chrome'
 const DEBUG_DUMPIO_ENV = process.env.DEBUG_DUMPIO || false
 
@@ -287,7 +287,8 @@ const NAVIGATE_RETRY_SECONDS = 60;
             await click(GLOBAL_SELECTORS['checkoutBtn'], DELAY)
 
             // Add bill
-            await clickAndSetFieldValue(GLOBAL_SELECTORS['billInput'], utils.getRandomNumber(1, 20), DELAY);
+            // to ensure no errors of type "Not enough money" are there
+            await clickAndSetFieldValue(GLOBAL_SELECTORS['billInput'], utils.getRandomNumber(15, 20), DELAY);
 
             // Pay
             await click(GLOBAL_SELECTORS['payBtn'], DELAY);

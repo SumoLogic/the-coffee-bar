@@ -187,8 +187,8 @@ class OrderForm extends Component {
 
   handleAddCappuccino = () => {
     this.setState({
-      water: 60,
-      grains: 0,
+      water: 80,
+      grains: 20,
       coffee: 'cappuccino',
       coffee_price: 4,
     });
@@ -196,7 +196,7 @@ class OrderForm extends Component {
 
   handleAddAmericano = () => {
     this.setState({
-      water: 0,
+      water: 20,
       grains: 80,
       coffee: 'americano',
       coffee_price: 3,

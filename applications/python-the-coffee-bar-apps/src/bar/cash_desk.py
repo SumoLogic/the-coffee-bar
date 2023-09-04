@@ -21,10 +21,12 @@ def calculation_order(product: str, price: int, amount: int):
 class CashDesk(HttpServer):
 
     def __init__(self, connection_string: str, name: str = 'Cash Desk', host: str = 'localhost', port: int = 8084,
-                 calculator_host: str = 'calculator-svc', calculator_port: int = 8090):
+                 calculator_host: str = 'calculator-svc', calculator_port: int = 8090, proxy_svc_host: str = 'proxy-svc', proxy_svc_port: int = 9094):
         super().__init__(name, host, port)
         self.calculator_host = calculator_host
         self.calculator_port = calculator_port
+        self.proxy_svc_host = proxy_svc_host
+        self.proxy_svc_port = proxy_svc_port
         self.db = Storage(connection_string=connection_string, stats=self.stats)
         self.add_pay_in_endpoint()
 
@@ -107,10 +109,23 @@ class CashDesk(HttpServer):
                 success = self.update_items_status(data=data, product='coffee')
                 if success is False:
                     return make_response({'reason': 'Database error, check logs'}, 500)
-
-            log.info('Payment processed successfully. Money rest %s', payout)
-
-            return make_response({'result': 'Money rest: %s' % payout}, 200)
+                
+            return self.processPaymentGateway(payout)
         else:
             log.error('Payment failed. Not enough money')
             return make_response({'reason': 'Not enough money'}, 402)
+        
+    def processPaymentGateway(self, payout: int):
+        payment_gateway_url = 'http://{}:{}/charge'.format(self.proxy_svc_host, self.proxy_svc_port)
+        log.info('Sending Request to External Payment Gateway')
+        try:
+            response = requests.post(url=payment_gateway_url)
+            response.raise_for_status()  # Raises an exception for non-2xx status codes
+            res = response.json()
+            log.info('External Payment Gateway :: %s', res['data']['message'])
+            log.info('Payment processed successfully. Money rest %s', payout)
+            return make_response({'result': 'Money rest: %s' % payout}, 200)
+        except requests.exceptions.HTTPError as error:
+            log.error(error)
+            log.error('External Payment Gateway :: %s', response.content)
+            return make_response({'reason': 'Error in External Payment Gateway'}, response.status_code)
