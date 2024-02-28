@@ -1,5 +1,6 @@
-from setuptools import setup, find_packages
+# pylint: disable=line-too-long
 from os import path
+from setuptools import setup, find_packages
 
 here = path.abspath(path.dirname(__file__))
 
@@ -28,26 +29,26 @@ setup(
     packages=find_packages(),
     python_requires='>=3.8, <4',
 
-    install_requires=['APScheduler==3.10.1',
-                      'cron-descriptor==1.3.0',
-                      'Flask==2.3.2',
-                      'flask-cors==3.0.10',
-                      'opentelemetry-distro==0.38b0',
-                      'opentelemetry-exporter-jaeger==1.17.0',
-                      'opentelemetry-exporter-otlp-proto-http==1.17.0',
-                      'opentelemetry-exporter-zipkin==1.17.0',
-                      'opentelemetry-instrumentation==0.38b0',
-                      'opentelemetry-sdk==1.17.0',
+    install_requires=['APScheduler==3.10.4',
+                      'cron-descriptor==1.4.3',
+                      'Flask==3.0.2',
+                      'flask-cors==4.0.0',
+                      'opentelemetry-distro==0.44b0',
+                      'opentelemetry-exporter-jaeger==1.21.0',
+                      'opentelemetry-exporter-otlp-proto-http==1.23.0',
+                      'opentelemetry-exporter-zipkin==1.23.0',
+                      'opentelemetry-instrumentation==0.44b0',
+                      'opentelemetry-sdk==1.23.0',
                       'opentelemetry-propagator-aws-xray==1.0.1',
-                      'opentelemetry-propagator-b3==1.17.0',
-                      'opentelemetry-util-http==0.38b0',
-                      'paste==3.5.3',
-                      'psycopg2==2.9.6',
-                      'pyjson5==1.6.2',
-                      'requests==2.30.0',
+                      'opentelemetry-propagator-b3==1.23.0',
+                      'opentelemetry-util-http==0.44b0',
+                      'paste==3.7.1',
+                      'psycopg2==2.9.9',
+                      'pyjson5==1.6.6',
+                      'requests==2.31.0',
                       'statsd==4.0.1',
                       'tcconfig==0.28.0',
-                      'waitress==2.1.2',
+                      'waitress==3.0.0',
                       ],
     data_files=[],
     entry_points={

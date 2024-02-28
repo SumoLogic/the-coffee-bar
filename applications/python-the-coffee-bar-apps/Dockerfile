@@ -1,4 +1,4 @@
-FROM python:3.10-alpine
+FROM python:3.11-alpine
 
 RUN apk add --no-cache bash net-tools iproute2 build-base gcc pkgconfig postgresql-dev linux-headers tzdata
 
