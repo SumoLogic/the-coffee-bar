@@ -31,7 +31,7 @@ services:
 #    expose:
 #      - 9222
   the-coffee-bar:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.2-ot1.23.0-0.44b0
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.17.0-0.38b0
     container_name: the-coffee-bar
     hostname: the-coffee-bar
     ports:
@@ -43,8 +43,7 @@ services:
               "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
  #             ,"--cakes-url=LAMBDA_URL_HERE"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-bar
@@ -78,7 +77,7 @@ services:
       - REACT_APP_PROPAGATION_CORS_URLS=[/^http:\/\/localhost:8082\/.*/,/^http:\/\/the-coffee-bar:8082\/.*/,]
       - REACT_APP_ENVIRONMENT_NAME=default
   the-coffee-machine:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.2-ot1.23.0-0.44b0
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.17.0-0.38b0
     container_name: the-coffee-machine
     hostname: the-coffee-machine
     ports:
@@ -87,13 +86,12 @@ services:
               "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
               "--machine-svc-port=9090", "--spike-cron=*/2 * * * *", "--spike-duration=60", "--cpu-spike-processes=1", "--interval-based-trigger=true", "--spike-interval-days=0", "--spike-interval-hours=1"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-machine
   the-cashdesk:
-    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.2-ot1.23.0-0.44b0
+    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.17.0-0.38b0
     container_name: the-cashdesk
     hostname: the-cashdesk
     ports:
@@ -102,20 +100,18 @@ services:
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-cashdesk
 #  the-coffee-lover:
-#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.2-ot1.23.0-0.44b0
+#    image: public.ecr.aws/sumologic/the-coffee-bar:pythonAppsv0.3.1-ot1.17.0-0.38b0
 #    container_name: the-coffee-lover
 #    hostname: the-coffee-lover
 #    command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",
 #              "--host=the-coffee-bar", "--port=8082", "--ratio=30"]
 #    environment:
-      # - OTEL_TRACES_EXPORTER=otlp
-      # - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+#      - OTEL_TRACES_EXPORTER=otlp_proto_http
 #      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:55681/v1/traces
 #      - OTEL_RESOURCE_ATTRIBUTES=application=tcb-local,service.name=the-coffee-lover
   machine-svc:
