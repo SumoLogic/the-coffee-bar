@@ -19,11 +19,10 @@ services:
       - 8082:8082
     command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_bar.py",
               "--host=the-coffee-bar", "--port=8082", "--coffeemachine-host=the-coffee-machine",
-              "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084",
+              "--coffeemachine-port=8083", "--cashdesk-host=the-cashdesk", "--cashdesk-port=8084"]
               "--cakes-url=URL_TO_LAMBDA_FUNC"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_SERVICE_NAME=aws-lambda-the-coffee-bar
@@ -38,8 +37,7 @@ services:
               "--host=the-coffee-machine", "--port=8083", "--machine-svc-host=machine-svc",
               "--machine-svc-port=9090"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_SERVICE_NAME=aws-lambda-the-coffee-machine
@@ -54,8 +52,7 @@ services:
               "--host=the-cashdesk", "--port=8084", "--calculator-host=calculator-svc", "--calculator-port=8090",
               "--connection-string=postgresql://account:account@postgres:5432/account"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_SERVICE_NAME=aws-lambda-the-cashdesk
@@ -67,8 +64,7 @@ services:
     command: ["opentelemetry-instrument", "python3", "src/bin/the_coffee_lover.py",
               "--host=the-coffee-bar", "--port=8082", "--ratio=5"]
     environment:
-      - OTEL_TRACES_EXPORTER=otlp
-      - OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+      - OTEL_TRACES_EXPORTER=otlp_proto_http
       - OTEL_METRICS_EXPORTER=none
       - OTEL_EXPORTER_OTLP_TRACES_ENDPOINT=http://otelcol:4318/v1/traces
       - OTEL_SERVICE_NAME=aws-lambda-the-coffee-lover
