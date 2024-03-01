@@ -1,11 +1,11 @@
 source "https://rubygems.org"
 
-gem 'opentelemetry-sdk', '1.2.0'
-gem 'opentelemetry-instrumentation-all', '0.35.0'
-gem 'opentelemetry-exporter-otlp', '0.24.0'
-gem 'opentelemetry-propagator-b3', '0.20.0'
-gem 'sinatra', '3.0.6'
-gem 'sinatra-contrib', '3.0.6'
+gem 'opentelemetry-sdk', '1.4.0'
+gem 'opentelemetry-instrumentation-all', '0.60.0'
+gem 'opentelemetry-exporter-otlp', '0.26.3'
+gem 'opentelemetry-propagator-b3', '0.21.0'
+gem 'sinatra', '4.0.0'
+gem 'sinatra-contrib', '4.0.0'
 gem 'net', '0.3.3'
 gem 'webrick', '1.8.1'
 gem 'rack-access_log'
