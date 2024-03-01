@@ -10,3 +10,5 @@ gem 'net', '0.3.3'
 gem 'webrick', '1.8.1'
 gem 'rack-access_log'
 gem 'remote_syslog_logger'
+
+gem "rackup", "~> 2.1"
