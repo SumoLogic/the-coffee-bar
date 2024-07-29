@@ -31,7 +31,7 @@ setup(
 
     install_requires=['APScheduler==3.10.4',
                       'cron-descriptor==1.4.3',
-                      'Flask==3.0.2=3',
+                      'Flask==3.0.3',
                       'flask-cors==4.0.1',
                       'opentelemetry-distro==0.47b0',
                       'opentelemetry-exporter-jaeger==1.21.0',
